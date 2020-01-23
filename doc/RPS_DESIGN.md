@@ -1,3 +1,5 @@
+Netids: mc608, axo, aqx
+
 **- Discussion Notes for High-Level Design for RPS game**
 
 * Player class: Players are objects in a main class that runs the game and acts like an arbitrator that checks the outcome of a round.
