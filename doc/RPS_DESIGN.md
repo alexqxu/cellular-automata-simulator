@@ -14,8 +14,9 @@ See CRC section below for more information.
 
 **- CRC:**
 
-(put pictures here)
-
+![Main Class](main.jpg)
+![Player](player.jpg)
+![Rules](rules.jpg)
 
 **- Use cases:** 
 * A new game is started with two players, their scores are reset to 0.
