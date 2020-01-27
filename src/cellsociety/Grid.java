@@ -3,6 +3,8 @@ package cellsociety;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Grid {
     private ArrayList<ArrayList<Cell>> grid;
@@ -11,7 +13,7 @@ public class Grid {
         for (int i = 0; i < grid.size(); i++) {
             for (int j = 0; j < grid.get(i).size(); j++) {
                 int[] neighbors = getNeighbors(i, j);
-                grid.get(i).get(j).planUpdate(neighbors);
+                grid.get(i).get(j).planUpdate(neighbors, getEmptyQueue());
             }
         }
         for (int i = 0; i < grid.size(); i++) {
@@ -59,6 +61,18 @@ public class Grid {
 
     private int getHeight() {
         return grid.size();
+    }
+
+    private Queue<Cell> getEmptyQueue() {
+        Queue<Cell> ret = new LinkedList<>();
+        for (ArrayList<Cell> row: grid) {
+            for (Cell cell: row) {
+                if (cell.getState()==0) {
+                    ret.add(cell);
+                }
+            }
+        }
+        return ret;
     }
 
     private int[] getNeighbors(Cell cell) {

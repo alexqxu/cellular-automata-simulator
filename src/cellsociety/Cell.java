@@ -2,8 +2,8 @@ package cellsociety;
 
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Queue;
 
 public abstract class Cell {
     protected int state;
@@ -16,7 +16,7 @@ public abstract class Cell {
         return colorMap.get(state);
     }
 
-    abstract void planUpdate(int[] neighbors);
+    abstract void planUpdate(int[] neighbors, Queue<Cell> emptyQueue);
 
     public void update() {
         if (nextState == -1) {
