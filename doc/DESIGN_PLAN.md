@@ -25,6 +25,10 @@ Finally, a configuration class is responsible for loading and reading from a tex
 First, configuration class is used to create the initial configuration of cells and define what simulation the program will run. The configuration class will load a file the user has specified by interacting with the GUI created in the main class. The main class then runs the simulation (when the user specifies it to do so, by clicking a button). To step through the simulation, the main class calls stepGrid(). update() is then called in the Grid class, which calls planUpdate() and then update(). This updates the cells. The main class/visualizer now requires locations and colors to draw. getColorGrid() returns this information, and the visualization redraws the next frame.
 
 Please see CRC Cards Below for more information regarding these classes.
+![](Visualizer_CRC.png)
+![](Grid_CRC.png)
+![](Cell_CRC.png)
+![](Config_CRC.png)
 
 **2 Different Implementations (for communicating color to the Main):**
 
