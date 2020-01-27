@@ -94,7 +94,7 @@ The user interface of this program will allow a user to control the parameters d
 ![](GUI_Design_Mockup.jpg)
 
 
-## Design Details
+## Design Details (Components)
 
 Our design will contain the four classes as specified in the **Overview section** above:
 
@@ -114,8 +114,6 @@ Another case was how the Config class should access the grid to be able to place
 Furthermore, we considered was how much to hide the data structure we use to contain our Cell objects. One possible option was to standardize the data we pass into each class, by having the Main class only take in List objects and then have our Grid class do computation under the hood in either data structure type (array or list) and then convert it into a List at the end. However, another possible option which would be a bit more complex but allow for a more closed design would be to have the Grid class return the color type of each cell by index (such as getColor(i, j)), so that all the information it shares is the color data to the Main class without either class needing to pass a data structure.
 
 Moreover, another case we considered was which class would be responsible for determining/storing color information depending on cell states. Options include having the visualizer class map certain states to certain colors, having the Grid class have this map instead which the Grid method getColorGrid() would use, or have individual cells keep track of their color depending on their state. We chose the last option because it made intuitive sense in terms of updating a color depending on the cell’s updated state. In addition, we decided that a user could customize cell colors (colors that represent each state) in the XML file.
-
-#### Components
 
 #### Use Cases
 
