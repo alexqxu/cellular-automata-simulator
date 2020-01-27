@@ -73,8 +73,58 @@ Moreover, another case we considered was which class would be responsible for de
     currentCell.update();
     }
     ```
-   
-
+- Apply the rules to an edge cell: set the next state of a cell to live by counting its number of neighbors using the Game of Life rules for a cell on the edge (i.e., with some of its neighbors missing)
+    ```
+    //in Grid.update()
+    //getNeighbors handles the missing neighbors according to game rules (e.g. considers edge cells to be dead for Conway);
+    for( every cell in grid){
+    ArrayList<Cell> neighbors = getNeighbors(currentCell);
+    currentCell.planUpdate(neighbors);
+    currentCell.update();
+    }
+    ```
+- Move to the next generation: update all cells in a simulation from their current state to their next state and display the result graphically
+    ```
+    //in Main.update()
+    stepGrid();
+    drawGrid();
+    ```
+    ```
+    //in Main.stepGrid()
+    grid.update()
+    ```
+    ```
+    //in Grid.update()
+    for( every cell in grid){
+    ArrayList<Cell> neighbors = getNeighbors(currentCell);
+    currentCell.planUpdate(neighbors);
+    currentCell.update();
+    }
+    ```
+    ```
+    //in Main.drawGrid()
+    Color[][] colors = grid.getColorGrid();
+    for(Every color in colors) {
+    	drawCell(x, y, color);
+    }
+    ```
+- Set a simulation parameter: set the value of a global configuration parameter, probCatch, for a simulation, Fire, based on the value given in an XML fire
+    ```
+    //in Config.createGrid()
+    Grid grid = new Grid(width, height);
+    For (every spot in grid){
+    Cell cell = new Cell();
+    cell.setParam(“probCatch”, probCatchValue);
+    grid.placeCell(x, y, cell);
+    }
+    ```
+- Switch simulations: load a new simulation from an XML file, stopping the current running simulation, Segregation, and starting the newly loaded simulation, Wator
+    ```
+    //in Main.update()
+    Main.setSpeed(0);
+    loadConfigFile(“Wator.xml”);
+    Main.setSpeed(DEFAULT_SPEED);
+    ```
 
 ## Team Responsibilities
 
