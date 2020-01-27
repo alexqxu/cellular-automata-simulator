@@ -64,6 +64,17 @@ Moreover, another case we considered was which class would be responsible for de
 
 #### Use Cases
 
+- Apply the rules to a middle cell: set the next state of a cell to dead by counting its number of neighbors using the Game of Life rules for a cell in the middle (i.e., with all its neighbors)
+    ```
+    //in Grid.update()
+    for( every cell in grid){
+    ArrayList<Cell> neighbors = getNeighbors(currentCell);
+    currentCell.planUpdate(neighbors);
+    currentCell.update();
+    }
+    ```
+   
+
 
 ## Team Responsibilities
 
