@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Grid {
     private ArrayList<ArrayList<Cell>> grid;
 
-    public void update(){
+    public void update() {
         for (int i = 0; i < grid.size(); i++) {
             for (int j = 0; j < grid.get(i).size(); j++) {
                 int[] neighbors = getNeighbors(i, j);
@@ -23,34 +23,56 @@ public class Grid {
 
 
     //FIXME grid needs to be toroidal for some cells (prey, conway) but empty boundaries for others (fire)
+    //FIXME this method is awful and you're a bad person for writing it
     /**
      * Returns the neighbors of the cell at r,c in North-East-South-West order.
      * Acts as though the grid is toroidal
+     *
      * @param r
      * @param c
      * @return
      */
-    private int[] getNeighbors(int r, int c){
+    private int[] getNeighbors(int r, int c) {
         int[] ret = new int[4];
+        int defaultEdge = getCell(r, c).getState();
         if (r == 0) {
-            ret[0] = grid.get(grid.size()-1).get(c).getState();
+            ret[0] = getCell(grid.size() - 1, c).getState();
         } else {
-            ret[0] = grid.get(r-1).get(c).getState();
+            if (defaultEdge == -1) {
+                ret[0] = getCell(r - 1, c).getState();
+            } else {
+                ret[0] = defaultEdge;
+            }
         }
+
         if (c == grid.get(r).size()) {
-            ret[1] = grid.get(r).get(0).getState();
+            ret[1] = getCell(r, 0).getState();
         } else {
-            ret[1] = grid.get(r).get(c+1).getState();
+            if (defaultEdge == -1) {
+                ret[1] = getCell(r, c + 1).getState();
+            } else {
+                ret[1] = defaultEdge;
+            }
         }
+
         if (r == grid.size()) {
-            ret[2] = grid.get(0).get(c).getState();
+            ret[2] = getCell(0, c).getState();
         } else {
-            ret[2] = grid.get(r+1).get(c).getState();
+            if (defaultEdge == -1) {
+                ret[2] = getCell(r + 1, c).getState();
+            } else {
+                ret[2] = defaultEdge;
+            }
         }
+        
         if (c == 0) {
-            ret[3] = grid.get(r).get(grid.get(r).size()-1).getState();
+            ret[3] = getCell(r, grid.get(r).size() - 1).getState();
         } else {
-            ret[3] = grid.get(r).get(c-1).getState();
+            if (defaultEdge == -1) {
+                ret[3] = getCell(r, c - 1).getState();
+            } else {
+                ret[3] = defaultEdge;
+            }
         }
         return ret;
     }
@@ -65,6 +87,10 @@ public class Grid {
         throw new RuntimeException("cell wasn't in the grid");
     }
 
+    private Cell getCell(int r, int c) {
+        return grid.get(r).get(c);
+    }
+
     public Color getColor(int r, int c) {
         return grid.get(r).get(c).getColor();
     }
@@ -73,13 +99,13 @@ public class Grid {
         Color[][] ret = new Color[grid.size()][grid.get(0).size()];
         for (int r = 0; r < ret.length; r++) {
             for (int c = 0; c < ret[c].length; c++) {
-                ret[r][c] = getColor(r,c);
+                ret[r][c] = getColor(r, c);
             }
         }
         return ret;
     }
 
     public void placeCell(int r, int c, Cell cell) {
-        grid.get(r).set(c,cell);
+        grid.get(r).set(c, cell);
     }
 }

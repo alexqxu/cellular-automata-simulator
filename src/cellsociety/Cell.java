@@ -10,6 +10,7 @@ public abstract class Cell {
     protected int nextState;
     protected HashMap<Integer, Color> colorMap;
     protected HashMap<String, Double> paramMap;
+    protected int defaultEdge = -1;
 
     public Color getColor() {
         return colorMap.get(state);
@@ -39,6 +40,10 @@ public abstract class Cell {
 
     public int getState() {
         return state;
+    }
+
+    public int getDefaultEdge(){
+        return defaultEdge;
     }
 
 }

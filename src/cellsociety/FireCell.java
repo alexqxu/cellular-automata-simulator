@@ -7,6 +7,7 @@ import java.util.Random;
 public class FireCell extends Cell {
     public FireCell() {
         super();
+        defaultEdge = 0;
         setStateColor(0, Color.YELLOW); //Empty
         setStateColor(1, Color.GREEN); //Tree
         setStateColor(2, Color.ORANGE); //Burning
