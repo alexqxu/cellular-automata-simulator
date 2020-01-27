@@ -21,6 +21,8 @@ public class Grid {
         }
     }
 
+
+    //FIXME grid needs to be toroidal for some cells (prey, conway) but empty boundaries for others (fire)
     /**
      * Returns the neighbors of the cell at r,c in North-East-South-West order.
      * Acts as though the grid is toroidal

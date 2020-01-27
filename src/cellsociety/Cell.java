@@ -33,6 +33,10 @@ public abstract class Cell {
         paramMap.put(param, value);
     }
 
+    public double getParam(String param) {
+        return paramMap.get(param);
+    }
+
     public int getState() {
         return state;
     }

@@ -12,8 +12,8 @@ public class ConwayCell extends Cell {
      */
     public ConwayCell(){
         super();
-        colorMap.put(0, Color.BLACK);
-        colorMap.put(1, Color.WHITE);
+        setStateColor(0, Color.BLACK);
+        setStateColor(1, Color.WHITE);
     }
 
 
