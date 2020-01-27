@@ -50,6 +50,16 @@ Our design will contain the four classes as specified in the Overview section ab
 
 ## Design Considerations
 
+We talked at length about where the various data should live such that the code is sufficiently compartmentalized, with each section of the code handling its own responsibilities and as few dependencies as possible.
+
+One such case of this was where we wanted to hold the rules for the game. We considered having Grid be a superclass, with its subclasses holding the rules for the various types of simulation. However, we decided on Cell being this superclass, as the grid should just hold the cells, and the cells are the actors in the environment.
+
+Another case was how the Config class should access the grid to be able to place the correct types of Cell in the correct locations. We initially wanted to have the class access the grid instance variable in main, either through a getter method or by passing the object into the class, but this would create an additional dependency. We decided on having the Config.loadFile() method return a grid object, such that the class did not need to access the instance variable.
+
+Furthermore, we considered was how much to hide the data structure we use to contain our Cell objects. One possible option was to standardize the data we pass into each class, by having the Main class only take in List objects and then have our Grid class do computation under the hood in either data structure type (array or list) and then convert it into a List at the end. However, another possible option which would be a bit more complex but allow for a more closed design would be to have the Grid class return the color type of each cell by index (such as getColor(i, j)), so that all the information it shares is the color data to the Main class without either class needing to pass a data structure.
+
+Moreover, another case we considered was which class would be responsible for determining/storing color information depending on cell states. Options include having the visualizer class map certain states to certain colors, having the Grid class have this map instead which the Grid method getColorGrid() would use, or have individual cells keep track of their color depending on their state. We chose the last option because it made intuitive sense in terms of updating a color depending on the cell’s updated state. In addition, we decided that a user could customize cell colors (colors that represent each state) in the XML file.
+
 #### Components
 
 #### Use Cases
@@ -57,9 +67,14 @@ Our design will contain the four classes as specified in the Overview section ab
 
 ## Team Responsibilities
 
- * Team Member #1
+ * Maverick Chung
+    * Primary responsibilities: Cell, Grid
+    * Secondary responsibilities: Configuration
+ * Alex Oesterling
+    * Primary responsibilities: Visualizer
+    * Secondary responsibilities: Cell, Grid
 
- * Team Member #2
-
- * Team Member #3
+ * Alex Xu
+    * Primary responsibilities: Configuration
+    * Secondary responsibilities: Visualizer
 
