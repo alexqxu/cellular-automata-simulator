@@ -23,10 +23,9 @@ public class Grid {
 
 
     //FIXME grid needs to be toroidal for some cells (prey, conway) but empty boundaries for others (fire)
-    //FIXME this method is awful and you're a bad person for writing it
     //FIXME some cells need 8 neighbors (like conway)
     /**
-     * Returns the neighbors of the cell at r,c in North-East-South-West order.
+     * Returns the 8 neighbors of the cell at r,c starting with North and rotating clockwise
      * Acts as though the grid is toroidal
      *
      * @param r
@@ -34,48 +33,21 @@ public class Grid {
      * @return
      */
     private int[] getNeighbors(int r, int c) {
-        int[] ret = new int[4];
-        int defaultEdge = getCell(r, c).getState();
-        if (r == 0) {
-            ret[0] = getCell(grid.size() - 1, c).getState();
-        } else {
-            if (defaultEdge == -1) {
-                ret[0] = getCell(r - 1, c).getState();
-            } else {
-                ret[0] = defaultEdge;
-            }
-        }
-
-        if (c == grid.get(r).size()) {
-            ret[1] = getCell(r, 0).getState();
-        } else {
-            if (defaultEdge == -1) {
-                ret[1] = getCell(r, c + 1).getState();
-            } else {
-                ret[1] = defaultEdge;
-            }
-        }
-
-        if (r == grid.size()) {
-            ret[2] = getCell(0, c).getState();
-        } else {
-            if (defaultEdge == -1) {
-                ret[2] = getCell(r + 1, c).getState();
-            } else {
-                ret[2] = defaultEdge;
-            }
-        }
-
-        if (c == 0) {
-            ret[3] = getCell(r, grid.get(r).size() - 1).getState();
-        } else {
-            if (defaultEdge == -1) {
-                ret[3] = getCell(r, c - 1).getState();
-            } else {
-                ret[3] = defaultEdge;
-            }
+        int[] ret = new int[8];
+        int[] dr = {-1,-1,0,1,1,1,0,-1};
+        int[] dc = {0,1,1,1,0,-1,-1,-1};
+        for (int i = 0; i < ret.length; i++) {
+            ret[i] = grid.get((r+dr[i]+getHeight())%getHeight()).get((c+dc[i]+getWidth())%getWidth()).getState(); 
         }
         return ret;
+    }
+
+    private int getWidth() {
+        return grid.get(0).size();
+    }
+
+    private int getHeight() {
+        return grid.size();
     }
 
     private int[] getNeighbors(Cell cell) {
