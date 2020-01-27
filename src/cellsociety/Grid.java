@@ -24,6 +24,7 @@ public class Grid {
 
     //FIXME grid needs to be toroidal for some cells (prey, conway) but empty boundaries for others (fire)
     //FIXME this method is awful and you're a bad person for writing it
+    //FIXME some cells need 8 neighbors (like conway)
     /**
      * Returns the neighbors of the cell at r,c in North-East-South-West order.
      * Acts as though the grid is toroidal
@@ -64,7 +65,7 @@ public class Grid {
                 ret[2] = defaultEdge;
             }
         }
-        
+
         if (c == 0) {
             ret[3] = getCell(r, grid.get(r).size() - 1).getState();
         } else {
