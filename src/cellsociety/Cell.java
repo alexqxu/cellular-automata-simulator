@@ -15,7 +15,7 @@ public abstract class Cell {
         return colorMap.get(state);
     }
 
-    abstract void planUpdate(ArrayList<Cell> neighbors);
+    abstract void planUpdate(int[] neighbors);
 
     public void update() {
         if (nextState == -1) {
@@ -31,6 +31,10 @@ public abstract class Cell {
 
     public void setParam(String param, double value){
         paramMap.put(param, value);
+    }
+
+    public int getState() {
+        return state;
     }
 
 }
