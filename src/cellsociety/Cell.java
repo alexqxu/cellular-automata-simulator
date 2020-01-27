@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class Cell {
-    private int state;
-    private int nextState;
-    private HashMap<Integer, Color> colorMap;
-    private HashMap<String, Double> paramMap;
+    protected int state;
+    protected int nextState;
+    protected HashMap<Integer, Color> colorMap;
+    protected HashMap<String, Double> paramMap;
 
     public Color getColor() {
         return colorMap.get(state);
