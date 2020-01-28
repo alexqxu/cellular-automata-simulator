@@ -30,12 +30,16 @@ public abstract class Cell {
         colorMap.put(state, color);
     }
 
-    public void setParam(String param, double value){
+    public void setParam(String param, double value) {
         paramMap.put(param, value);
     }
 
     public double getParam(String param) {
-        return paramMap.get(param);
+        Double ret = paramMap.get(param);
+        if (ret == null) {
+            throw new RuntimeException("param ("+param+") asked for but not set.");
+        }
+        return ret;
     }
 
     public int getState() {
@@ -46,7 +50,11 @@ public abstract class Cell {
         state = stat;
     }
 
-    public int getDefaultEdge(){
+    public void setNextState(int state) {
+        nextState = state;
+    }
+
+    public int getDefaultEdge() {
         return defaultEdge;
     }
 

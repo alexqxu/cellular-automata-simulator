@@ -14,7 +14,6 @@ public class ConwayCell extends Cell {
      */
     public ConwayCell(){
         super();
-        System.out.println("Conway is currently nonfunctional! please don't use.");
         defaultEdge = -1;
         setStateColor(0, Color.WHITE);
         setStateColor(1, Color.BLACK);

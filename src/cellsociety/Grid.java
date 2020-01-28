@@ -13,10 +13,11 @@ public class Grid {
     }
 
     public void update() {
+        Queue emptyQueue = getEmptyQueue();
         for (int i = 0; i < grid.size(); i++) {
             for (int j = 0; j < grid.get(i).size(); j++) {
                 int[] neighbors = getNeighbors(i, j);
-                grid.get(i).get(j).planUpdate(neighbors, getEmptyQueue());
+                grid.get(i).get(j).planUpdate(neighbors, emptyQueue);
             }
         }
         for (int i = 0; i < grid.size(); i++) {
@@ -25,10 +26,6 @@ public class Grid {
             }
         }
     }
-
-
-    //FIXME grid needs to be toroidal for some cells (prey, conway) but empty boundaries for others (fire)
-    //FIXME some cells need 8 neighbors (like conway)
 
     /**
      * Returns the 8 neighbors of the cell at r,c starting with North and rotating clockwise
