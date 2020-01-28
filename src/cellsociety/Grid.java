@@ -8,6 +8,10 @@ import java.util.*;
 public class Grid {
     private ArrayList<ArrayList<Cell>> grid;
 
+    public Grid() {
+        grid = new ArrayList<ArrayList<Cell>>();
+    }
+
     public void update() {
         for (int i = 0; i < grid.size(); i++) {
             for (int j = 0; j < grid.get(i).size(); j++) {
@@ -54,7 +58,7 @@ public class Grid {
         return ret;
     }
 
-    public static Grid getRandomGrid(String className, Map<String, Double> paramMap, double[] stateChances,
+    public void setRandomGrid(String className, Map<String, Double> paramMap, double[] stateChances,
                                      int rows, int cols){
         ArrayList<ArrayList<Cell>> ret = new ArrayList<>();
         for (int i = 0; i < rows; i++) {
@@ -64,6 +68,7 @@ public class Grid {
             }
             ret.add(row);
         }
+        grid = ret;
     }
 
     private static Cell getRandomCell(String className, Map<String, Double> paramMap, double[] stateChances) {
