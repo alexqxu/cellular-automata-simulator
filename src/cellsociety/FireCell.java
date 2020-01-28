@@ -20,7 +20,7 @@ public class FireCell extends Cell {
     }
 
     @Override
-    void planUpdate(int[] neighbors, Queue<Cell> emptyQueue) {
+    void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
         if (getState() == 0) {
             nextState = 0;
         }
@@ -30,7 +30,7 @@ public class FireCell extends Cell {
         if (getState() == 1) {
             boolean canBurn = false;
             for (int i = 0; i < neighbors.length; i+=2) {
-                if (neighbors[i] == 2) canBurn = true;
+                if (neighbors[i].getState() == 2) canBurn = true;
             }
             Random rand = new Random();
             if (canBurn && rand.nextDouble()<getParam("probCatch")) {

@@ -13,10 +13,10 @@ public class PercolationCell extends Cell {
     }
 
     @Override
-    void planUpdate(int[] neighbors, Queue<Cell> emptyQueue) {
+    void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
         if (getState() == 1) {
             for (int i = 0; i < neighbors.length; i += 2) {
-                if (neighbors[i] == 2) {
+                if (neighbors[i].getState() == 2) {
                     nextState = 2;
                 }
             }

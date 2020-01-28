@@ -16,7 +16,7 @@ public abstract class Cell {
         return colorMap.get(state);
     }
 
-    abstract void planUpdate(int[] neighbors, Queue<Cell> emptyQueue);
+    abstract void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue);
 
     public void update() {
         if (nextState == -1) {

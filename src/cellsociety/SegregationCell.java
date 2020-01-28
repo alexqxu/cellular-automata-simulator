@@ -19,12 +19,13 @@ public class SegregationCell extends Cell {
     }
 
     @Override
-    void planUpdate(int[] neighbors, Queue<Cell> emptyQueue) {
+    void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
         if (getState() != 0) {
             if (!happy(neighbors)){
                 Cell empty = emptyQueue.remove();
                 empty.setNextState(getState());
                 setNextState(0);
+                emptyQueue.add(this);
             }
         }
         if (nextState == -1) {
@@ -32,12 +33,12 @@ public class SegregationCell extends Cell {
         }
     }
 
-    private boolean happy(int[] neighbors) {
+    private boolean happy(Cell[] neighbors) {
         double total = 0;
         double same = 0;
         for (int i = 0; i < neighbors.length; i++) {
-            if (neighbors[i]>0) total++;
-            if (neighbors[i]==getState()) same++;
+            if (neighbors[i].getState()>0) total++;
+            if (neighbors[i].getState()==getState()) same++;
         }
         return (same/total)>getParam("happinessThresh");
     }

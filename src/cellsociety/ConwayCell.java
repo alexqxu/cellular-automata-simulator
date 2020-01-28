@@ -21,10 +21,10 @@ public class ConwayCell extends Cell {
 
 
     @Override
-    void planUpdate(int[] neighbors, Queue<Cell> emptyQueue) {
+    void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
         int sum = 0;
         for (int i = 0; i < neighbors.length; i++) {
-            sum += neighbors[i];
+            sum += neighbors[i].getState();
         }
         if (getState() == 0){
             if (sum == 3) {
