@@ -2,9 +2,8 @@ package cellsociety;
 
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 public class Grid {
     private ArrayList<ArrayList<Cell>> grid;
@@ -53,6 +52,44 @@ public class Grid {
             }
         }
         return ret;
+    }
+
+    public static Grid getRandomGrid(String className, Map<String, Double> paramMap, double[] stateChances,
+                                     int rows, int cols){
+        ArrayList<ArrayList<Cell>> ret = new ArrayList<>();
+        for (int i = 0; i < rows; i++) {
+            ArrayList<Cell> row = new ArrayList<>();
+            for (int j = 0; j < cols; j++) {
+                row.add(getRandomCell(className, paramMap, stateChances));
+            }
+            ret.add(row);
+        }
+    }
+
+    private static Cell getRandomCell(String className, Map<String, Double> paramMap, double[] stateChances) {
+        Class cellClass = null;
+        Cell cell = null;
+        try {
+            cellClass = Class.forName("cellsociety."+className);
+            cell = (Cell)(cellClass.getConstructor().newInstance());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                NoSuchMethodException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        for (String param: paramMap.keySet()) {
+            cell.setParam(param, paramMap.get(param));
+        }
+        double chanceSum = 0;
+        for (int i = 0; i < stateChances.length; i++) {
+            chanceSum += stateChances[i];
+        }
+        Random rand = new Random();
+        double roll = rand.nextDouble()*chanceSum;
+        for (int i = 0; i < stateChances.length; i++) {
+            roll -= stateChances[i];
+            if (roll <= 0) cell.setState(i);
+        }
+        return cell;
     }
 
     private int getWidth() {

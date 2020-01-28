@@ -42,6 +42,10 @@ public abstract class Cell {
         return state;
     }
 
+    public void setState(int stat) {
+        state = stat;
+    }
+
     public int getDefaultEdge(){
         return defaultEdge;
     }
