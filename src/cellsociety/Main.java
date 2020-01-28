@@ -3,9 +3,11 @@ package cellsociety;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.w3c.dom.css.Rect;
@@ -24,6 +26,8 @@ public class Main extends Application {
 
     private Stage myStage;
     private Grid myGrid;
+    private Configuration config;
+    private Group root;
     private ArrayList<ArrayList<Rectangle>> cellGrid;
 
 
@@ -44,18 +48,20 @@ public class Main extends Application {
         animation.getKeyFrames().add(frame);
         animation.play();
     }
-
+    //FIXME is filename necessary here or should I have instance var
     private Scene createScene(String filename){
+        root = new Group;
         instantiateCellGrid();
+        config = new Configuration();
         loadConfigFile(filename);
         drawGrid();
-        Scene scene = new Scene();
+
+        Scene scene = new Scene(root, SIZE, SIZE, Color.AZURE);
         return scene;
     }
     //FIXME how do we figure out the size of the cellgrid?
     private void instantiateCellGrid() {
         cellGrid = new ArrayList<ArrayList<Rectangle>>();
-
     }
 
     private void update(double elapsedTime){
@@ -67,7 +73,7 @@ public class Main extends Application {
     }
 
     public void loadConfigFile(String filename){
-        Grid =
+        myGrid = config.loadFile(filename);
         return;
     }
 
@@ -78,11 +84,14 @@ public class Main extends Application {
             for(int j = 0; j < colorgrid[i].length; j++){
                 Rectangle cell = new Rectangle();
                 cell.setFill(colorgrid[i][j]);
+                cell.setStrokeType(StrokeType.INSIDE);
+                cell.setStroke(Color.GRAY);
                 cell.setWidth(SIZE/colorgrid[i].length);
                 cell.setHeight(SIZE/colorgrid.length);
                 cell.setX(j*cell.getWidth());
                 cell.setY(i*cell.getHeight());
                 cellGrid.get(i).add(cell);
+                root.getChildren().add(cell);
             }
         }
         return;
