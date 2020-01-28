@@ -1,13 +1,26 @@
 package cellsociety;
 
+import javafx.application.Application;
+import javafx.stage.Stage;
+
 /**
- * Feel free to completely change this code or delete it entirely. 
+ * @author: Alex Oesterling, axo
  */
-public class Main {
+public class Main extends Application {
+    private Stage myStage;
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        myStage = stage;
+        
+    }
+
     /**
-     * Start of the program.
+     * Runner method, actually runs the game when a user presses
+     * play in the IDE
+     * @param args
      */
-    public static void main (String[] args) {
-        System.out.println("Hello world");
+    public static void main (String[] args)  {
+        launch(args);
     }
 }
