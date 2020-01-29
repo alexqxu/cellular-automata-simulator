@@ -5,6 +5,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -62,10 +63,21 @@ public class Main extends Application {
         loadConfigFile(filename);
         instantiateCellGrid();
         running = false;
-        
+        Button playpause = new Button("Play");
+        playpause.setOnAction(e -> handlePlayPause(playpause));
         Scene scene = new Scene(root, SIZE, SIZE, Color.AZURE);
         return scene;
     }
+
+    private void handlePlayPause(Button button) {
+        running = !running;
+        if(running){
+            button.setText("Pause");
+        } else {
+            button.setText("Play");
+        }
+    }
+
     //FIXME how do we figure out the size of the cellgrid?
     private void instantiateCellGrid() {
         cellGrid = new ArrayList<ArrayList<Rectangle>>();
@@ -89,7 +101,7 @@ public class Main extends Application {
 
     private void update(double elapsedTime){
         secondsElapsed += elapsedTime;
-        if(secondsElapsed > speed){
+        if(running && secondsElapsed > speed){
             secondsElapsed = 0;
             stepGrid();
             drawGrid();
