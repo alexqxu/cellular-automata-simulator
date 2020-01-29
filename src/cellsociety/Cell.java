@@ -59,4 +59,9 @@ public abstract class Cell {
         return defaultEdge;
     }
 
+    @Override
+    public String toString() {
+        return ""+getState();
+    }
+
 }
