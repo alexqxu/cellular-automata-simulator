@@ -49,7 +49,7 @@ public class Main extends Application {
         instantiateCellGrid();
         loadConfigFile(filename);
         drawGrid();
-        Scene scene = new Scene();
+        Scene scene = new Scene(null); //
         return scene;
     }
     //FIXME how do we figure out the size of the cellgrid?
@@ -67,14 +67,14 @@ public class Main extends Application {
     }
 
     public void loadConfigFile(String filename){
-        Grid =
+        //Grid =
         return;
     }
 
     public void drawGrid(){
         Color[][] colorgrid = myGrid.getColorGrid();
         for(int i = 0; i < colorgrid.length; i++){
-            cellGrid.add(new ArrayList<Rectangle>);
+            cellGrid.add(new ArrayList<Rectangle>());
             for(int j = 0; j < colorgrid[i].length; j++){
                 Rectangle cell = new Rectangle();
                 cell.setFill(colorgrid[i][j]);
