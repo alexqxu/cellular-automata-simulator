@@ -1,23 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Simulation>
     <Config>
-        <Name>Game of Life</Name>
-        <Size>
-            <Width>600</Width>
-            <Height>600</Height>
-        </Size>
-        <Color>
-            <State id = "1">WHITE</State>
-            <State id = "2">BLACK</State>
-        </Color>
+        <Title>Game of Life</Title>
+
+        <Dimensions>
+            <Width>5</Width>
+            <Height>5</Height>
+        </Dimensions>
+
+        <States>
+            <State id = "1" default = "TRUE"> <!-- Default is the cells that are filled if there are not enough cells -->
+                <Name>DEAD</Name>
+                <Color>WHITE</Color>
+            </State>
+
+            <State id = "2">
+                <Name>ALIVE</Name>
+                <Color>BLACK</Color>
+            </State>
+        </States>
     </Config>
 
     <Cells>
-        <Cell>
-            <State>DEAD</State>
-        </Cell>
-        <Cell>
-            <State>ALIVE</State>
-        </Cell>
+        <Row numbr = "1">
+            <Cell>
+                <State>ALIVE</State>
+            </Cell>
+            <Cell>
+                <State>ALIVE</State>
+            </Cell>
+        </Row>
+        <Row numbr = "2">
+            <Cell>
+                <State>ALIVE</State>
+            </Cell>
+        </Row>
+        <Row numbr = "3">
+            <Cell>
+                <State>ALIVE</State>
+            </Cell>
+        </Row>
+        <Row numbr = "4">
+            <Cell>
+                <State>ALIVE</State>
+            </Cell>
+        </Row>
+        <Row numbr = "5">
+            <Cell>
+                <State>ALIVE</State>
+            </Cell>
+        </Row>
     </Cells>
 </Simulation>
