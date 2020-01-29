@@ -7,8 +7,8 @@
             <Height>600</Height>
         </Size>
         <Color>
-            <State1>WHITE</State1>
-            <State2>BLACK</State2>
+            <State id = "1">WHITE</State>
+            <State id = "2">BLACK</State>
         </Color>
     </Config>
 
