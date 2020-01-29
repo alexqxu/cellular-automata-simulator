@@ -75,7 +75,7 @@ public class Grid {
         grid = ret;
     }
 
-    private static Cell getRandomCell(String className, Map<String, Double> paramMap, double[] stateChances) {
+    public static Cell getRandomCell(String className, Map<String, Double> paramMap, double[] stateChances) {
         Class cellClass = null;
         Cell cell = null;
         try {
