@@ -75,7 +75,7 @@ public class Grid {
         grid = ret;
     }
 
-    private static Cell getRandomCell(String className, Map<String, Double> paramMap, double[] stateChances) {
+    public static Cell getRandomCell(String className, Map<String, Double> paramMap, double[] stateChances) {
         Class cellClass = null;
         Cell cell = null;
         try {
@@ -96,7 +96,10 @@ public class Grid {
         double roll = rand.nextDouble()*chanceSum;
         for (int i = 0; i < stateChances.length; i++) {
             roll -= stateChances[i];
-            if (roll <= 0) cell.setState(i);
+            if (roll <= 0){
+                cell.setState(i);
+                break;
+            }
         }
         return cell;
     }
@@ -142,7 +145,7 @@ public class Grid {
     public Color[][] getColorGrid() {
         Color[][] ret = new Color[grid.size()][grid.get(0).size()];
         for (int r = 0; r < ret.length; r++) {
-            for (int c = 0; c < ret[c].length; c++) {
+            for (int c = 0; c < ret[r].length; c++) {
                 ret[r][c] = getColor(r, c);
             }
         }
