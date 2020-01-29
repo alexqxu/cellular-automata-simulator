@@ -42,6 +42,7 @@ public class Main extends Application {
         myStage.setScene(createScene("file"));
         stage.setTitle(TITLE);
         stage.show();
+
         KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->update(SECOND_DELAY));
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
@@ -65,6 +66,7 @@ public class Main extends Application {
     }
 
     private void update(double elapsedTime){
+
         stepGrid();
     }
 
