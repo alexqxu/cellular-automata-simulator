@@ -92,7 +92,7 @@ public class Main extends Application {
 
     public void loadConfigFile(String filename){
         myGrid = new Grid();
-        myGrid.setRandomGrid("ConwayCell", new HashMap<String, Double>(), new double[]{5, .5}, 10, 10);
+        myGrid.setRandomGrid("ConwayCell", new HashMap<String, Double>(), new double[]{.5, .5}, 10, 10);
         return;
     }
 
