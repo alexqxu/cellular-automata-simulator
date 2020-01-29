@@ -47,6 +47,8 @@ public class Main extends Application {
         stage.setTitle(TITLE);
         stage.show();
 
+        setSpeed(.5); // FIXME added by Maverick
+
         KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->update(SECOND_DELAY));
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
@@ -100,7 +102,7 @@ public class Main extends Application {
 
     public void loadConfigFile(String filename){
         myGrid = new Grid();
-        myGrid.setRandomGrid("ConwayCell", new HashMap<String, Double>(), new double[]{.5, .5}, 10, 10);
+        myGrid.setRandomGrid("ConwayCell", new HashMap<String, Double>(), new double[]{.8, .2}, 20, 20);
         return;
     }
 

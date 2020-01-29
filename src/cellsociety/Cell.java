@@ -3,13 +3,14 @@ package cellsociety;
 import javafx.scene.paint.Color;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Queue;
 
 public abstract class Cell {
     protected int state;
     protected int nextState;
-    protected HashMap<Integer, Color> colorMap;
-    protected HashMap<String, Double> paramMap;
+    protected Map<Integer, Color> colorMap = new HashMap<>();
+    protected Map<String, Double> paramMap = new HashMap<>();
     protected int defaultEdge = -1;
 
     public Color getColor() {
