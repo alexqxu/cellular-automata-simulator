@@ -65,6 +65,7 @@ public class Main extends Application {
         running = false;
         Button playpause = new Button("Play");
         playpause.setOnAction(e -> handlePlayPause(playpause));
+        root.getChildren().add(playpause);
         Scene scene = new Scene(root, SIZE, SIZE, Color.AZURE);
         return scene;
     }
