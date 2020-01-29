@@ -30,6 +30,9 @@ public class Main extends Application {
     private Configuration config;
     private Group root;
     private ArrayList<ArrayList<Rectangle>> cellGrid;
+    private double secondsElapsed;
+    private double speed;
+    private boolean running;
 
 
     /**
@@ -56,6 +59,8 @@ public class Main extends Application {
         config = new Configuration();
         loadConfigFile(filename);
         instantiateCellGrid();
+        running = false;
+        
         Scene scene = new Scene(root, SIZE, SIZE, Color.AZURE);
         return scene;
     }
@@ -81,12 +86,16 @@ public class Main extends Application {
     }
 
     private void update(double elapsedTime){
-        stepGrid();
-        drawGrid();
+        secondsElapsed += elapsedTime;
+        if(secondsElapsed > speed){
+            secondsElapsed = 0;
+            stepGrid();
+            drawGrid();
+        }
     }
 
-    public void setSpeed(){
-        return;
+    public void setSpeed(double s){
+        speed = s;
     }
 
     public void loadConfigFile(String filename){
