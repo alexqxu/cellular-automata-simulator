@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Simulation>
+    <Config>
+        <Name>Game of Life</Name>
+        <Size>
+            <Width>600</Width>
+            <Height>600</Height>
+        </Size>
+        <Color>
+            <State1>WHITE</State1>
+            <State2>BLACK</State2>
+        </Color>
+    </Config>
+
+    <Cells>
+        <Cell>
+            <State>DEAD</State>
+        </Cell>
+        <Cell>
+            <State>ALIVE</State>
+        </Cell>
+    </Cells>
+</Simulation>

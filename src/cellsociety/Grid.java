@@ -16,7 +16,7 @@ public class Grid {
         Queue emptyQueue = getEmptyQueue();
         for (int i = 0; i < grid.size(); i++) {
             for (int j = 0; j < grid.get(i).size(); j++) {
-                int[] neighbors = getNeighbors(i, j);
+                Cell[] neighbors = getNeighbors(i, j);
                 grid.get(i).get(j).planUpdate(neighbors, emptyQueue);
             }
         }
@@ -35,20 +35,27 @@ public class Grid {
      * @param c
      * @return
      */
-    private int[] getNeighbors(int r, int c) {
-        int[] ret = new int[8];
+    private Cell[] getNeighbors(int r, int c) {
+        Cell[] ret = new Cell[8];
         int[] dr = {-1, -1, 0, 1, 1, 1, 0, -1};
         int[] dc = {0, 1, 1, 1, 0, -1, -1, -1};
         if (getCell(r, c).getDefaultEdge() == -1) {
             for (int i = 0; i < ret.length; i++) {
-                ret[i] = grid.get((r + dr[i] + getHeight()) % getHeight()).get((c + dc[i] + getWidth()) % getWidth()).getState();
+                ret[i] = grid.get((r + dr[i] + getHeight()) % getHeight()).get((c + dc[i] + getWidth()) % getWidth());
             }
         } else {
             for (int i = 0; i < ret.length; i++) {
                 try {
-                    ret[i] = grid.get(r+dr[i]).get(c+dc[i]).getState();
+                    ret[i] = grid.get(r+dr[i]).get(c+dc[i]);
                 } catch (IndexOutOfBoundsException e) {
-                    ret[i] = getCell(r, c).getDefaultEdge();
+                    Cell cell = null;
+                    try {
+                        cell = getCell(r,c).getClass().getConstructor().newInstance();
+                    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+                        ex.printStackTrace();
+                    }
+                    cell.setState(getCell(r,c).getDefaultEdge());
+                    ret[i] = cell;
                 }
             }
         }
@@ -114,7 +121,7 @@ public class Grid {
         return ret;
     }
 
-    private int[] getNeighbors(Cell cell) {
+    private Cell[] getNeighbors(Cell cell) {
         for (int r = 0; r < grid.size(); r++) {
             int c = grid.get(r).indexOf(cell);
             if (c != -1) {

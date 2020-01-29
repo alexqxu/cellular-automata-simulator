@@ -55,7 +55,6 @@ public class Main extends Application {
         config = new Configuration();
         loadConfigFile(filename);
         drawGrid();
-
         Scene scene = new Scene(root, SIZE, SIZE, Color.AZURE);
         return scene;
     }
