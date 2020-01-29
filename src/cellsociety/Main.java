@@ -50,7 +50,7 @@ public class Main extends Application {
     }
     //FIXME is filename necessary here or should I have instance var
     private Scene createScene(String filename){
-        root = new Group;
+        root = new Group();
         instantiateCellGrid();
         config = new Configuration();
         loadConfigFile(filename);
@@ -80,7 +80,7 @@ public class Main extends Application {
     public void drawGrid(){
         Color[][] colorgrid = myGrid.getColorGrid();
         for(int i = 0; i < colorgrid.length; i++){
-            cellGrid.add(new ArrayList<Rectangle>);
+            cellGrid.add(new ArrayList<Rectangle>());
             for(int j = 0; j < colorgrid[i].length; j++){
                 Rectangle cell = new Rectangle();
                 cell.setFill(colorgrid[i][j]);
