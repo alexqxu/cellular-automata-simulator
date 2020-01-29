@@ -13,6 +13,7 @@ import javafx.util.Duration;
 import org.w3c.dom.css.Rect;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author: Alex Oesterling, axo
@@ -52,9 +53,9 @@ public class Main extends Application {
     //FIXME is filename necessary here or should I have instance var
     private Scene createScene(String filename){
         root = new Group();
-        instantiateCellGrid();
         config = new Configuration();
         loadConfigFile(filename);
+        instantiateCellGrid();
         drawGrid();
         Scene scene = new Scene(root, SIZE, SIZE, Color.AZURE);
         return scene;
@@ -62,27 +63,10 @@ public class Main extends Application {
     //FIXME how do we figure out the size of the cellgrid?
     private void instantiateCellGrid() {
         cellGrid = new ArrayList<ArrayList<Rectangle>>();
-    }
-
-    private void update(double elapsedTime){
-
-        stepGrid();
-    }
-
-    public void setSpeed(){
-        return;
-    }
-
-    public void loadConfigFile(String filename){
-        myGrid = config.loadFile(filename);
-        return;
-    }
-
-    public void drawGrid(){
         Color[][] colorgrid = myGrid.getColorGrid();
-        for(int i = 0; i < colorgrid.length; i++){
+        for(int i = 0; i < colorgrid.length; i++) {
             cellGrid.add(new ArrayList<Rectangle>());
-            for(int j = 0; j < colorgrid[i].length; j++){
+            for (int j = 0; j < colorgrid[i].length; j++) {
                 Rectangle cell = new Rectangle();
                 cell.setFill(colorgrid[i][j]);
                 cell.setStrokeType(StrokeType.INSIDE);
@@ -95,12 +79,44 @@ public class Main extends Application {
                 root.getChildren().add(cell);
             }
         }
+    }
+
+    private void update(double elapsedTime){
+        stepGrid();
+        drawGrid();
+    }
+
+    public void setSpeed(){
         return;
     }
 
+    public void loadConfigFile(String filename){
+        myGrid = new Grid();
+        myGrid.setRandomGrid("ConwayCell", new HashMap<String, Double>(), new double[]{5, .5}, 10, 10);
+        return;
+    }
+
+    public void drawGrid(){
+        Color[][] colorgrid = myGrid.getColorGrid();
+        for(int i = 0; i < colorgrid.length; i++){
+            for(int j = 0; j < colorgrid[i].length; j++){
+                Rectangle cell = cellGrid.get(i).get(j);
+                cell.setFill(colorgrid[i][j]);
+                cell.setStrokeType(StrokeType.INSIDE);
+                cell.setStroke(Color.GRAY);
+                cell.setWidth(SIZE/colorgrid[i].length);
+                cell.setHeight(SIZE/colorgrid.length);
+                cell.setX(j*cell.getWidth());
+                cell.setY(i*cell.getHeight());
+            }
+        }
+    }
+    /*
     public void drawCell(int x, int y, Color color){
         return;
     }
+
+     */
 
     public void stepGrid(){
         myGrid.update();
