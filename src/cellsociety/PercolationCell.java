@@ -12,11 +12,13 @@ public class PercolationCell extends Cell {
         setStateColor(0, Color.BLACK); //Blocked
         setStateColor(1, Color.WHITE); //Open
         setStateColor(2, Color.BLUE); //Percolated
-        defaultEdge = 0;
+        setStateColor(3, Color.ORANGE); //Edge, should never show on screen
+        defaultEdge = 3;
     }
 
     @Override
     void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
+        if (neighbors[0].getState() == 3) neighbors[0].setState(2); //this is okay because cells with state 3 are dummy cells
         if (getState() == 1) {
             for (int i = 0; i < neighbors.length; i += 2) {
                 if (neighbors[i].getState() == 2) {
