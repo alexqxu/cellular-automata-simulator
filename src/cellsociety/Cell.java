@@ -48,7 +48,7 @@ public abstract class Cell {
     }
 
     public void setState(int stat) {
-        state = stat;
+        this.state = stat;
     }
 
     public void setNextState(int state) {

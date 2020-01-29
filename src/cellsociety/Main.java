@@ -104,7 +104,8 @@ public class Main extends Application {
         myGrid = new Grid();
         HashMap<String, Double> paramMap = new HashMap<>();
         paramMap.put("probCatch", 0.8);
-        myGrid.setRandomGrid("PercolationCell", paramMap, new double[]{.3, .7, .0}, 20, 20);
+        paramMap.put("happinessThresh", .3);
+        myGrid.setRandomGrid("SegregationCell", paramMap, new double[]{.3, .2, .6}, 20, 20);
         return;
     }
 
