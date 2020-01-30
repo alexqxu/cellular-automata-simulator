@@ -3,9 +3,12 @@ package cellsociety;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -48,7 +51,7 @@ public class Main extends Application {
         stage.setTitle(TITLE);
         stage.show();
 
-        setSpeed(1); // FIXME added by Maverick
+
 
         KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->update(SECOND_DELAY));
         Timeline animation = new Timeline();
@@ -63,9 +66,30 @@ public class Main extends Application {
         loadConfigFile(filename);
         instantiateCellGrid();
         running = false;
+        //extract to create UI components?
         Button playpause = new Button("Play");
         playpause.setOnAction(e -> handlePlayPause(playpause));
         root.getChildren().add(playpause);
+        Slider slider = new Slider();
+        slider.setMin(0);
+        slider.setMax(100);
+        slider.setValue(50);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setMajorTickUnit(50);
+        slider.setMinorTickCount(5);
+        slider.setBlockIncrement(10);
+        slider.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                                Number old_val, Number new_val) {
+                setSpeed(new_val.doubleValue()/100);
+                System.out.println(new_val.doubleValue()/100);
+            }
+        });
+        slider.setLayoutX(100);
+        root.getChildren().add(slider);
+        setSpeed(.5); // FIXME added by Maverick
+
         Scene scene = new Scene(root, SIZE, SIZE, Color.AZURE);
         return scene;
     }
@@ -109,8 +133,13 @@ public class Main extends Application {
         }
     }
 
-    public void setSpeed(double s){
-        speed = s;
+    /**
+     * Takes in a double representing a percent value. This reflects a percent of the max speed.
+     * @param s the percent of the max speed to which to set the simulation
+     */
+    public void setSpeed(double percentSpeed){
+        percentSpeed*=2;
+        speed = 2-percentSpeed;
     }
 
     public void loadConfigFile(String filename){
@@ -118,7 +147,7 @@ public class Main extends Application {
         HashMap<String, Double> paramMap = new HashMap<>();
         paramMap.put("probCatch", 0.8);
         paramMap.put("happinessThresh", .3);
-        myGrid.setRandomGrid("SegregationCell", paramMap, new double[]{.3, .2, .6}, 20, 20);
+        myGrid.setRandomGrid("FireCell", paramMap, new double[]{0, .2, .01}, 20, 20);
         return;
     }
 
