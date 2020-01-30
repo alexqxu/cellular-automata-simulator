@@ -11,7 +11,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.w3c.dom.css.Rect;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
