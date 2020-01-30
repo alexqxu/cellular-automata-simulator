@@ -48,7 +48,7 @@ public abstract class Cell {
     }
 
     public void setState(int stat) {
-        state = stat;
+        this.state = stat;
     }
 
     public void setNextState(int state) {
@@ -57,6 +57,11 @@ public abstract class Cell {
 
     public int getDefaultEdge() {
         return defaultEdge;
+    }
+
+    @Override
+    public String toString() {
+        return ""+getState();
     }
 
 }
