@@ -2,7 +2,7 @@ package cellsociety;
 
 import javafx.scene.paint.Color;
 
-import java.util.Queue;
+import java.util.*;
 
 public class SegregationCell extends Cell {
     public SegregationCell() {
@@ -20,16 +20,22 @@ public class SegregationCell extends Cell {
 
     @Override
     void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
+        Collections.shuffle((LinkedList<Cell>)emptyQueue);
         if (getState() != 0) {
             if (!happy(neighbors)){
                 Cell empty = emptyQueue.remove();
-                empty.setNextState(getState());
-                setNextState(0);
+                empty.nextState = state;
+                nextState = 0;
                 emptyQueue.add(this);
+                return;
+            }
+            else {
+                nextState = state;
+                return;
             }
         }
         if (nextState == -1) {
-            nextState = getState();
+            nextState = 0;
         }
     }
 
@@ -40,6 +46,6 @@ public class SegregationCell extends Cell {
             if (neighbors[i].getState()>0) total++;
             if (neighbors[i].getState()==getState()) same++;
         }
-        return (same/total)>getParam("happinessThresh");
+        return total == 0 || (same/total)>getParam("happinessThresh");
     }
 }

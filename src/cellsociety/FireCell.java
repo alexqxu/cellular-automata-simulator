@@ -36,7 +36,7 @@ public class FireCell extends Cell {
             if (canBurn && rand.nextDouble()<getParam("probCatch")) {
                 nextState = 2;
             } else {
-                nextState = 0;
+                nextState = 1;
             }
         }
     }
