@@ -6,9 +6,13 @@ import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -28,11 +32,13 @@ public class Main extends Application {
     public static final int FRAMES_PER_SECOND = 120;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+    private static final String RESOURCES = "resources";
+    public static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
+    public static final String STYLESHEET = "default.css";
 
     private Stage myStage;
     private Grid myGrid;
     private Configuration config;
-    private Group root;
     private ArrayList<ArrayList<Rectangle>> cellGrid;
     private double secondsElapsed;
     private double speed;
@@ -61,15 +67,30 @@ public class Main extends Application {
     }
     //FIXME is filename necessary here or should I have instance var
     private Scene createScene(String filename){
-        root = new Group();
-        config = new Configuration();
+        BorderPane frame = new BorderPane();
+        config = new Configuration(); //FIXME Instance class?
         loadConfigFile(filename);
-        instantiateCellGrid();
+
+        //instantiateCellGrid();
         running = false;
         //extract to create UI components?
+        frame.setTop(setToolBar());
+        frame.setBottom(instantiateCellGrid());
+
+        setSpeed(.5); // FIXME added by Maverick
+
+        Scene scene = new Scene(frame, SIZE, SIZE, Color.AZURE);
+        scene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
+        return scene;
+    }
+
+    private Node setToolBar() {
+        HBox toolbar = new HBox();
+        //FIXME instance variable buttons/sliders?
         Button playpause = new Button("Play");
         playpause.setOnAction(e -> handlePlayPause(playpause));
-        root.getChildren().add(playpause);
+
+        toolbar.getChildren().add(playpause);
         Slider slider = new Slider();
         slider.setMin(0);
         slider.setMax(100);
@@ -83,15 +104,11 @@ public class Main extends Application {
             public void changed(ObservableValue<? extends Number> ov,
                                 Number old_val, Number new_val) {
                 setSpeed(new_val.doubleValue()/100);
-                System.out.println(new_val.doubleValue()/100);
             }
         });
-        slider.setLayoutX(100);
-        root.getChildren().add(slider);
-        setSpeed(.5); // FIXME added by Maverick
 
-        Scene scene = new Scene(root, SIZE, SIZE, Color.AZURE);
-        return scene;
+        toolbar.getChildren().add(slider);
+        return toolbar;
     }
 
     private void handlePlayPause(Button button) {
@@ -104,7 +121,8 @@ public class Main extends Application {
     }
 
     //FIXME how do we figure out the size of the cellgrid?
-    private void instantiateCellGrid() {
+    private Node instantiateCellGrid() {
+        GridPane gridpane = new GridPane();
         cellGrid = new ArrayList<ArrayList<Rectangle>>();
         Color[][] colorgrid = myGrid.getColorGrid();
         for(int i = 0; i < colorgrid.length; i++) {
@@ -119,9 +137,10 @@ public class Main extends Application {
                 cell.setX(j*cell.getWidth());
                 cell.setY(i*cell.getHeight());
                 cellGrid.get(i).add(cell);
-                root.getChildren().add(cell);
+                gridpane.add(cell, i, j);
             }
         }
+        return gridpane;
     }
 
     private void update(double elapsedTime){
@@ -135,7 +154,7 @@ public class Main extends Application {
 
     /**
      * Takes in a double representing a percent value. This reflects a percent of the max speed.
-     * @param s the percent of the max speed to which to set the simulation
+     * @param percentSpeed the percent of the max speed to which to set the simulation
      */
     public void setSpeed(double percentSpeed){
         percentSpeed*=2;
@@ -145,9 +164,9 @@ public class Main extends Application {
     public void loadConfigFile(String filename){
         myGrid = new Grid();
         HashMap<String, Double> paramMap = new HashMap<>();
-        paramMap.put("probCatch", 0.8);
+        paramMap.put("probCatch", 1.0);
         paramMap.put("happinessThresh", .3);
-        myGrid.setRandomGrid("FireCell", paramMap, new double[]{0, .2, .01}, 20, 20);
+        myGrid.setRandomGrid("ConwayCell", paramMap, new double[]{.2, .2, .01}, 20, 20);
         return;
     }
 
