@@ -2,6 +2,7 @@
 <Simulation>
     <Config>
         <Title>Game of Life</Title>
+        <Author>Alex Xu, aqx</Author>
 
         <Dimensions>
             <Width>5</Width>
@@ -9,7 +10,8 @@
         </Dimensions>
 
         <States>
-            <State id = "1" default = "TRUE"> <!-- Default is the cells that are filled if there are not enough cells -->
+            <!-- Default is the cells that are filled if there are not enough cells -->
+            <State id = "1" default = "TRUE">
                 <Name>DEAD</Name>
                 <Color>WHITE</Color>
             </State>
@@ -29,6 +31,9 @@
             <Cell>
                 <State>ALIVE</State>
             </Cell>
+            <Cell>
+                <State>ALIVE</State>
+            </Cell>
         </Row>
         <Row numbr = "2">
             <Cell>
@@ -41,6 +46,9 @@
             </Cell>
         </Row>
         <Row numbr = "4">
+            <Cell>
+                <State>ALIVE</State>
+            </Cell>
             <Cell>
                 <State>ALIVE</State>
             </Cell>
