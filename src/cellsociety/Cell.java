@@ -7,11 +7,24 @@ import java.util.LinkedList;
 import java.util.Map;
 
 public abstract class Cell {
+    protected String[] params;
     protected int state;
     protected int nextState;
     protected Map<Integer, Color> colorMap = new HashMap<>();
     protected Map<String, Double> paramMap = new HashMap<>();
     protected int defaultEdge = -1;
+
+    public Cell() {
+        setParams();
+    }
+
+    protected void setParams() {
+        params = new String[0];
+    }
+
+    public String[] getParams() {
+        return params;
+    }
 
     public Color getColor() {
         return colorMap.get(state);
