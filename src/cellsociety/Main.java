@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -99,6 +100,11 @@ public class Main extends Application {
         Scene scene = new Scene(frame, Color.AZURE);
         scene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
 
+        scene.setOnKeyPressed(e->{
+            if(e.getCode() == KeyCode.SPACE){
+                handlePlayPause(playpause);
+            }
+        });
         return scene;
     }
 
@@ -127,8 +133,8 @@ public class Main extends Application {
         slider.setMin(0);
         slider.setMax(100);
         slider.setValue(50);
-        slider.setShowTickLabels(true);
-        slider.setShowTickMarks(true);
+        //slider.setShowTickLabels(true);
+        //slider.setShowTickMarks(true);
         slider.setMajorTickUnit(50);
         slider.setMinorTickCount(5);
         slider.setBlockIncrement(10);
@@ -164,6 +170,7 @@ public class Main extends Application {
                 cell.setFill(colorgrid[i][j]);
                 cell.setStrokeType(StrokeType.INSIDE);
                 cell.setStroke(Color.GRAY);
+                cell.setStrokeWidth(.5);
                 cell.setWidth(SIZE/colorgrid[i].length);
                 cell.setHeight(SIZE/colorgrid.length);
                 cell.setX(j*cell.getWidth());
@@ -224,6 +231,7 @@ public class Main extends Application {
                 cell.setFill(colorgrid[i][j]);
                 cell.setStrokeType(StrokeType.INSIDE);
                 cell.setStroke(Color.GRAY);
+                cell.setStrokeWidth(.5);
                 cell.setWidth(SIZE/colorgrid[i].length);
                 cell.setHeight(SIZE/colorgrid.length);
                 cell.setX(j*cell.getWidth());
