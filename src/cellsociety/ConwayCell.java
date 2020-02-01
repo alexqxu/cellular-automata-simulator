@@ -2,7 +2,7 @@ package cellsociety;
 
 import javafx.scene.paint.Color;
 
-import java.util.Queue;
+import java.util.LinkedList;
 
 public class ConwayCell extends Cell {
 
@@ -20,7 +20,7 @@ public class ConwayCell extends Cell {
 
 
     @Override
-    void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
+    void planUpdate(Cell[] neighbors, LinkedList<Cell> emptyQueue) {
         int sum = 0;
         for (int i = 0; i < neighbors.length; i++) {
             sum += neighbors[i].getState();

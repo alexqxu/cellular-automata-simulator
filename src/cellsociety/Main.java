@@ -25,7 +25,7 @@ import java.util.HashMap;
 public class Main extends Application {
     public static final String TITLE = "Cell Simulator";
     public static final int SIZE = 400;
-    public static final int FRAMES_PER_SECOND = 120;
+    public static final int FRAMES_PER_SECOND = 60; //FIXME Maverick changed to 60 from 120 for testing
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 
@@ -135,7 +135,7 @@ public class Main extends Application {
 
     /**
      * Takes in a double representing a percent value. This reflects a percent of the max speed.
-     * @param s the percent of the max speed to which to set the simulation
+     * @param percentSpeed the percent of the max speed to which to set the simulation
      */
     public void setSpeed(double percentSpeed){
         percentSpeed*=2;
@@ -145,10 +145,13 @@ public class Main extends Application {
     public void loadConfigFile(String filename){
         myGrid = new Grid();
         HashMap<String, Double> paramMap = new HashMap<>();
-        paramMap.put("probCatch", 0.8);
+        paramMap.put("probCatch", 0.7);
         paramMap.put("happinessThresh", .3);
-        myGrid.setRandomGrid("FireCell", paramMap, new double[]{0, .2, .01}, 20, 20);
-        return;
+        paramMap.put("fishBreedTime", 5.0);
+        paramMap.put("sharkBreedTime", 40.0);
+        paramMap.put("fishFeedEnergy", 2.0);
+        paramMap.put("sharkStartEnergy", 5.0);
+        myGrid.setRandomGrid("WaTorCell", paramMap, new double[]{.2,.7,.1}, 50, 50);
     }
 
     public void drawGrid(){
