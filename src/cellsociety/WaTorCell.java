@@ -7,6 +7,10 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class WaTorCell extends Cell {
+    public static final String FISH_BREED_TIME = "fishBreedTime";
+    public static final String SHARK_BREED_TIME = "sharkBreedTime";
+    public static final String FISH_FEED_ENERGY = "fishFeedEnergy";
+    public static final String SHARK_START_ENERGY = "sharkStartEnergy";
     private double reproductionTimer;
     private double energy;
     private WaTorCell movedTo;
@@ -18,15 +22,10 @@ public class WaTorCell extends Cell {
         setStateColor(2, Color.YELLOW); //Shark
     }
 
-    //FIXME many sharks will try to move into the same space (see below) - maybe move each on their own update?
-    /*
-    00000
-    02220
-    02120
-    02220
-    00000
-    All sharks want to move into the fish space
-     */
+    @Override
+    protected void setParams() {
+        params = new String[] {FISH_BREED_TIME, SHARK_BREED_TIME, FISH_FEED_ENERGY, SHARK_START_ENERGY};
+    }
 
     @Override
     void planUpdate(Cell[] neighbors, LinkedList<Cell> emptyQueue) {
@@ -68,15 +67,15 @@ public class WaTorCell extends Cell {
                 return;
             }
             if (movedTo.state == 1) {
-                energy += getParam("fishFeedEnergy");
+                energy += getParam(FISH_FEED_ENERGY);
             }
             swap(this, movedTo);
             this.nextState = 0;
             if (movedTo.reproductionTimer <= 0) {
                 nextState = 2;
-                energy = getParam("sharkStartEnergy");
-                reproductionTimer = getParam("sharkBreedTime");
-                movedTo.reproductionTimer = getParam("sharkBreedTime");
+                energy = getParam(SHARK_START_ENERGY);
+                reproductionTimer = getParam(SHARK_BREED_TIME);
+                movedTo.reproductionTimer = getParam(SHARK_START_ENERGY);
             }
             return;
         }
@@ -97,8 +96,8 @@ public class WaTorCell extends Cell {
             if (movedTo.reproductionTimer <= 0) {
                 nextState = 1;
                 movedTo.nextState = 1;
-                reproductionTimer = getParam("fishBreedTime");
-                movedTo.reproductionTimer = getParam("fishBreedTime");
+                reproductionTimer = getParam(FISH_BREED_TIME);
+                movedTo.reproductionTimer = getParam(FISH_BREED_TIME);
             }
             return;
         }
@@ -128,18 +127,17 @@ public class WaTorCell extends Cell {
     @Override
     public boolean isEmpty() {
         return true;
-        //return state == 0 || state == 1;
     }
 
     @Override
     public void setState(int stat) {
         super.setState(stat);
         if (stat == 1) {
-            reproductionTimer = getParam("fishBreedTime");
+            reproductionTimer = getParam(FISH_BREED_TIME);
         }
         if (stat == 2) {
-            energy = getParam("sharkStartEnergy");
-            reproductionTimer = getParam("sharkBreedTime");
+            energy = getParam(SHARK_START_ENERGY);
+            reproductionTimer = getParam(SHARK_BREED_TIME);
         }
     }
 }

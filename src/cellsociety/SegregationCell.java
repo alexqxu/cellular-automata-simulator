@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import java.util.*;
 
 public class SegregationCell extends Cell {
+    public static final String HAPPINESS_THRESH = "happinessThresh";
     public SegregationCell() {
         super();
         defaultEdge = 0;
@@ -15,7 +16,12 @@ public class SegregationCell extends Cell {
 
     public SegregationCell(double happinessThresh) {
         this();
-        setParam("happinessThresh", happinessThresh);
+        setParam(HAPPINESS_THRESH, happinessThresh);
+    }
+
+    @Override
+    protected void setParams() {
+        params = new String[] {HAPPINESS_THRESH};
     }
 
     @Override
@@ -50,6 +56,6 @@ public class SegregationCell extends Cell {
             if (neighbors[i].getState()>0) total++;
             if (neighbors[i].getState()==getState()) same++;
         }
-        return total == 0 || (same/total)>getParam("happinessThresh");
+        return total == 0 || (same/total)>getParam(HAPPINESS_THRESH);
     }
 }

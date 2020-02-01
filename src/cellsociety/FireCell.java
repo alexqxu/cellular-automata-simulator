@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class FireCell extends Cell {
+    public static final String PROB_CATCH = "probCatch";
     public FireCell() {
         super();
         defaultEdge = 0;
@@ -16,7 +17,12 @@ public class FireCell extends Cell {
 
     public FireCell(double probCatch) {
         this();
-        setParam("probCatch", probCatch);
+        setParam(PROB_CATCH, probCatch);
+    }
+
+    @Override
+    protected void setParams() {
+        params = new String[] {PROB_CATCH};
     }
 
     @Override
@@ -33,7 +39,7 @@ public class FireCell extends Cell {
                 if (neighbors[i].getState() == 2) canBurn = true;
             }
             Random rand = new Random();
-            if (canBurn && rand.nextDouble()<getParam("probCatch")) {
+            if (canBurn && rand.nextDouble()<getParam(PROB_CATCH)) {
                 nextState = 2;
             } else {
                 nextState = 1;

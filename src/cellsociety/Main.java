@@ -232,23 +232,23 @@ public class Main extends Application {
 
         myGrid = new Grid();
         HashMap<String, Double> paramMap = new HashMap<>();
-        paramMap.put("probCatch", 0.7);
-        paramMap.put("happinessThresh", .3);
-        paramMap.put("fishBreedTime", 5.0);
-        paramMap.put("sharkBreedTime", 40.0);
-        paramMap.put("fishFeedEnergy", 2.0);
-        paramMap.put("sharkStartEnergy", 5.0);
+        paramMap.put(FireCell.PROB_CATCH, 0.7);
+        paramMap.put(SegregationCell.HAPPINESS_THRESH, .3);
+        paramMap.put(WaTorCell.FISH_BREED_TIME, 5.0);
+        paramMap.put(WaTorCell.SHARK_BREED_TIME, 40.0);
+        paramMap.put(WaTorCell.FISH_FEED_ENERGY, 2.0);
+        paramMap.put(WaTorCell.SHARK_START_ENERGY, 5.0);
         myGrid.setRandomGrid("WaTorCell", paramMap, new double[]{.2,.7,.1}, 50, 50);
     }
     public void loadConfigFile2(File file){
         myGrid = new Grid();
         HashMap<String, Double> paramMap = new HashMap<>();
-        paramMap.put("probCatch", 0.7);
-        paramMap.put("happinessThresh", .3);
-        paramMap.put("fishBreedTime", 5.0);
-        paramMap.put("sharkBreedTime", 40.0);
-        paramMap.put("fishFeedEnergy", 2.0);
-        paramMap.put("sharkStartEnergy", 5.0);
+        paramMap.put(FireCell.PROB_CATCH, 0.7);
+        paramMap.put(SegregationCell.HAPPINESS_THRESH, .3);
+        paramMap.put(WaTorCell.FISH_BREED_TIME, 5.0);
+        paramMap.put(WaTorCell.SHARK_BREED_TIME, 40.0);
+        paramMap.put(WaTorCell.FISH_FEED_ENERGY, 2.0);
+        paramMap.put(WaTorCell.SHARK_START_ENERGY, 5.0);
         myGrid.setRandomGrid("FireCell", paramMap, new double[]{.2,.7,.1}, 50, 50);
     }
 
