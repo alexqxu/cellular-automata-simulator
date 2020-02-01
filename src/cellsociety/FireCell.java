@@ -2,7 +2,7 @@ package cellsociety;
 
 import javafx.scene.paint.Color;
 
-import java.util.Queue;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class FireCell extends Cell {
@@ -20,7 +20,7 @@ public class FireCell extends Cell {
     }
 
     @Override
-    void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
+    void planUpdate(Cell[] neighbors, LinkedList<Cell> emptyQueue) {
         if (getState() == 0) {
             nextState = 0;
         }

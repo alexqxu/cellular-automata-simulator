@@ -3,8 +3,8 @@ package cellsociety;
 import javafx.scene.paint.Color;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
 
 public abstract class Cell {
     protected int state;
@@ -17,7 +17,7 @@ public abstract class Cell {
         return colorMap.get(state);
     }
 
-    abstract void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue);
+    abstract void planUpdate(Cell[] neighbors, LinkedList<Cell> emptyQueue);
 
     public void update() {
         if (nextState == -1) {
@@ -41,6 +41,10 @@ public abstract class Cell {
             throw new RuntimeException("param ("+param+") asked for but not set.");
         }
         return ret;
+    }
+
+    public boolean isEmpty() {
+        return state == 0;
     }
 
     public int getState() {

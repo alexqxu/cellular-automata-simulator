@@ -19,10 +19,14 @@ public class SegregationCell extends Cell {
     }
 
     @Override
-    void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
-        Collections.shuffle((LinkedList<Cell>)emptyQueue);
+    void planUpdate(Cell[] neighbors, LinkedList<Cell> emptyQueue) {
+        Collections.shuffle(emptyQueue);
         if (getState() != 0) {
             if (!happy(neighbors)){
+                if (emptyQueue.size()==0) {
+                    nextState = state;
+                    return;
+                }
                 Cell empty = emptyQueue.remove();
                 empty.nextState = state;
                 nextState = 0;

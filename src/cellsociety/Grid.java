@@ -13,7 +13,7 @@ public class Grid {
     }
 
     public void update() {
-        Queue emptyQueue = getEmptyQueue();
+        LinkedList<Cell> emptyQueue = getEmptyQueue();
         for (int i = 0; i < grid.size(); i++) {
             for (int j = 0; j < grid.get(i).size(); j++) {
                 Cell[] neighbors = getNeighbors(i, j);
@@ -94,6 +94,7 @@ public class Grid {
         }
         Random rand = new Random();
         double roll = rand.nextDouble()*chanceSum;
+        int state = 0;
         for (int i = 0; i < stateChances.length; i++) {
             roll -= stateChances[i];
             if (roll <= 0){
@@ -112,11 +113,11 @@ public class Grid {
         return grid.size();
     }
 
-    private Queue<Cell> getEmptyQueue() {
-        Queue<Cell> ret = new LinkedList<>();
+    private LinkedList<Cell> getEmptyQueue() {
+        LinkedList<Cell> ret = new LinkedList<>();
         for (ArrayList<Cell> row: grid) {
             for (Cell cell: row) {
-                if (cell.getState()==0) {
+                if (cell.isEmpty()) {
                     ret.add(cell);
                 }
             }
