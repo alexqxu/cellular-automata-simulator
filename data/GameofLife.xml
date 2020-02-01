@@ -11,15 +11,15 @@
         </Dimensions>
 
         <States>
-            <!-- Default is the cells that are filled if there are not enough cells -->
+            <!-- Default is the cells that are filled if there are not enough cells. Color names must be standard HTML Names -->
             <State id = "1" default = "TRUE">
                 <Name>DEAD</Name>
-                <Color>WHITE</Color>
+                <Color>white</Color>
             </State>
 
             <State id = "2">
                 <Name>ALIVE</Name>
-                <Color>BLACK</Color>
+                <Color>black</Color>
             </State>
         </States>
     </ConfigInfo>

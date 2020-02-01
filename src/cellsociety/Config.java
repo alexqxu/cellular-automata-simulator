@@ -54,6 +54,7 @@ public class Config {
         extractConfigInfo();
     }
 
+    //FIXME: Change to take File object instead of a String
     private void setupDocument() throws IOException, SAXException, ParserConfigurationException {
         xmlFile = new File(myFilePath);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -97,6 +98,19 @@ public class Config {
         }
     }
 
+    private void extractStates(Element startingElement){
+        NodeList statesNodeList = startingElement.getElementsByTagName("States");
+        for(int i=0; i<statesNodeList.getLength(); i++) {
+            Node stateNode = statesNodeList.item(i);
+            if (stateNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element stateElement = (Element) stateNode;
+                String stateName = stateElement.getElementsByTagName("Name").item(0).getTextContent();
+                String stateColor = stateElement.getElementsByTagName("Color").item(0).getTextContent();
+                myStates.put(stateName, Color.web(stateColor));
+            }
+        }
+    }
+
     private void extractSpeed(Element dimensionsElement) {
         mySpeed = Integer.parseInt(dimensionsElement.getElementsByTagName("Speed").item(0).getTextContent().trim());
     }
@@ -108,11 +122,6 @@ public class Config {
     private void extractHeight(Element dimensionsElement) {
         myHeight = Integer.parseInt(dimensionsElement.getElementsByTagName("Height").item(0).getTextContent().trim());
     }
-
-    private void extractStates(Element startingElement){
-        
-    }
-
 
 
     public String getTitle(){
