@@ -159,7 +159,7 @@ public class Config {
     }
 
 
-    public Grid loadFile(String path){
+    public Grid loadFile(){
         Grid newGrid = new Grid();
         return newGrid;
     }
