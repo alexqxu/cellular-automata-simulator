@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -40,6 +41,9 @@ public class Main extends Application {
     private Grid myGrid;
     private Configuration config;
     private ArrayList<ArrayList<Rectangle>> cellGrid;
+    private Slider slider;
+    private Button playpause;
+    private FileChooser fileChooser;
     private double secondsElapsed;
     private double speed;
     private boolean running;
@@ -65,6 +69,11 @@ public class Main extends Application {
         animation.getKeyFrames().add(frame);
         animation.play();
     }
+    private String chooseFile(){
+        fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose Simulation File");
+        fileChooser.showOpenDialog(myStage);
+    }
     //FIXME is filename necessary here or should I have instance var
     private Scene createScene(String filename){
         BorderPane frame = new BorderPane();
@@ -78,19 +87,20 @@ public class Main extends Application {
         frame.setBottom(instantiateCellGrid());
 
         setSpeed(.5); // FIXME added by Maverick
-        Scene scene = new Scene(frame, SIZE, SIZE, Color.AZURE);
+        Scene scene = new Scene(frame, Color.AZURE);
         scene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
+
         return scene;
     }
 
     private Node setToolBar() {
         HBox toolbar = new HBox();
         //FIXME instance variable buttons/sliders?
-        Button playpause = new Button("Play");
+        playpause = new Button("Play");
         playpause.setOnAction(e -> handlePlayPause(playpause));
 
         toolbar.getChildren().add(playpause);
-        Slider slider = new Slider();
+        slider = new Slider();
         slider.setMin(0);
         slider.setMax(100);
         slider.setValue(50);
