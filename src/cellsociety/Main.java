@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -43,6 +44,7 @@ public class Main extends Application {
     private ArrayList<ArrayList<Rectangle>> cellGrid;
     private Slider slider;
     private Button playpause;
+    private Button loadFile;
     private FileChooser fileChooser;
     private double secondsElapsed;
     private double speed;
@@ -72,17 +74,22 @@ public class Main extends Application {
     private String chooseFile(){
         fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Simulation File");
-        fileChooser.showOpenDialog(myStage);
+        File file = fileChooser.showOpenDialog(myStage);
+        if(file!=null){
+            System.out.println(file.getPath());
+            return file.getPath();
+        }else{
+            System.out.println("Error: File not found");
+        }
+        return "";
     }
     //FIXME is filename necessary here or should I have instance var
     private Scene createScene(String filename){
         BorderPane frame = new BorderPane();
         config = new Configuration(); //FIXME Instance class?
-        loadConfigFile(filename);
+        loadConfigFile(chooseFile());
 
-        //instantiateCellGrid();
         running = false;
-        //extract to create UI components?
         frame.setTop(setToolBar());
         frame.setBottom(instantiateCellGrid());
 
@@ -98,6 +105,9 @@ public class Main extends Application {
         //FIXME instance variable buttons/sliders?
         playpause = new Button("Play");
         playpause.setOnAction(e -> handlePlayPause(playpause));
+
+        loadFile = new Button("Load File");
+        loadFile.setOnAction(e -> chooseFile());
 
         toolbar.getChildren().add(playpause);
         slider = new Slider();
