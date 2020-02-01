@@ -10,9 +10,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.awt.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
 
@@ -26,14 +24,15 @@ public class Config {
 
     private Grid myGrid;
 
-    private String myFilePath;
-    private File xmlFile;
+    //private String myFilePath;
+    private File myFile;
     private Document doc;
 
     private String myTitle;
     private String myAuthor;
 
     private Map<String, Color> myStates;
+    private Map<String, Integer> myParameters;
     private String defaultState;
 
     private int mySpeed;
@@ -42,13 +41,13 @@ public class Config {
 
     /**
      * Constructor for the Config object. Sets the filepath and sets up the documentBuilder.
-     * @param filePath
+     * @param xmlFile File object passed in, in XML format
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
      */
-    public Config(String filePath) throws ParserConfigurationException, SAXException, IOException {
-        myFilePath = filePath;
+    public Config(File xmlFile) throws ParserConfigurationException, SAXException, IOException {
+        myFile = xmlFile;
         setupDocument();
         System.out.println("Document Setup Complete");                                                                  //Debugging Purposes Only.
         extractConfigInfo();
@@ -56,10 +55,9 @@ public class Config {
 
     //FIXME: Change to take File object instead of a String
     private void setupDocument() throws IOException, SAXException, ParserConfigurationException {
-        xmlFile = new File(myFilePath);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        doc = builder.parse(xmlFile);
+        doc = builder.parse(myFile);
         doc.getDocumentElement().normalize();                                                                           //optional, might remove later.
     }
 
@@ -76,6 +74,7 @@ public class Config {
             extractAuthor(configElement);
             extractDimensions(configElement);
             extractStates(configElement);
+            extractParameters(configElement);
         }
     }
 
@@ -86,6 +85,10 @@ public class Config {
     private void extractAuthor(Element startingElement){
         myAuthor = startingElement.getElementsByTagName("Author").item(0).getTextContent();
         System.out.println("Author: "+ myAuthor);
+    }
+
+    private void extractParameters(Element configElement) {
+        NodeList
     }
 
     private void extractDimensions(Element startingElement){
