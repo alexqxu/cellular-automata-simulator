@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Simulation>
-    <Config>
+    <ConfigInfo>
         <Title>Game of Life</Title>
         <Author>Alex Xu, aqx</Author>
 
@@ -22,7 +22,7 @@
                 <Color>BLACK</Color>
             </State>
         </States>
-    </Config>
+    </ConfigInfo>
 
     <Cells>
         <Row numbr = "1">
