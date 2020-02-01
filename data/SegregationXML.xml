@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Simulation>
+    <ConfigInfo>
+        <Title>Segregation</Title>
+        <Author>Alex Xu, aqx</Author>
+
+        <Dimensions>
+            <Width>5</Width>
+            <Height>5</Height>
+            <Speed>60</Speed>
+        </Dimensions>
+
+        <SpecialParameters>
+            <Parameter name = "Satisfaction">0.4</Parameter>
+        </SpecialParameters>
+
+        <States>
+            <!-- Default is the cells that are filled if there are not enough cells. Color names must be standard HTML Names -->
+            <State id = "1" default = "TRUE">
+                <Name>EMPTY</Name>
+                <Color>white</Color>
+            </State>
+
+            <State id = "2">
+                <Name>SATISFIED</Name>
+                <Color>green</Color>
+            </State>
+
+            <State id = "3">
+                <Name>UNSATISFIED</Name>
+                <Color>red</Color>
+            </State>
+
+        </States>
+    </ConfigInfo>
+
+    <Cells>
+        <Row numbr = "1">
+            <Cell>
+                <State>ALIVE</State>
+            </Cell>
+            <Cell>
+                <State>ALIVE</State>
+            </Cell>
+            <Cell>
+                <State>ALIVE</State>
+            </Cell>
+        </Row>
+        <Row numbr = "2">
+            <Cell>
+                <State>ALIVE</State>
+            </Cell>
+        </Row>
+        <Row numbr = "3">
+            <Cell>
+                <State>ALIVE</State>
+            </Cell>
+        </Row>
+        <Row numbr = "4">
+            <Cell>
+                <State>ALIVE</State>
+            </Cell>
+            <Cell>
+                <State>ALIVE</State>
+            </Cell>
+        </Row>
+        <Row numbr = "5">
+            <Cell>
+                <State>ALIVE</State>
+            </Cell>
+        </Row>
+    </Cells>
+</Simulation>
