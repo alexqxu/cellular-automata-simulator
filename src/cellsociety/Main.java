@@ -45,7 +45,9 @@ public class Main extends Application {
     private Slider slider;
     private Button playpause;
     private Button loadFile;
+    private Button reset;
     private FileChooser fileChooser;
+    private String currentFile;
     private double secondsElapsed;
     private double speed;
     private boolean running;
@@ -63,8 +65,6 @@ public class Main extends Application {
         stage.setTitle(TITLE);
         stage.show();
 
-
-
         KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->update(SECOND_DELAY));
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
@@ -74,9 +74,11 @@ public class Main extends Application {
     private String chooseFile(){
         fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Simulation File");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         File file = fileChooser.showOpenDialog(myStage);
         if(file!=null){
             System.out.println(file.getPath());
+            currentFile = file.getPath();
             return file.getPath();
         }else{
             System.out.println("Error: File not found");
@@ -107,8 +109,19 @@ public class Main extends Application {
         playpause.setOnAction(e -> handlePlayPause(playpause));
 
         loadFile = new Button("Load File");
-        loadFile.setOnAction(e -> chooseFile());
+        loadFile.setOnAction(e -> {
+            loadConfigFile2(chooseFile());
+            drawGrid();
+        });
 
+        reset = new Button("Reset");
+        reset.setOnAction(e->{
+            loadConfigFile(currentFile);
+            drawGrid();
+        });
+
+        toolbar.getChildren().add(reset);
+        toolbar.getChildren().add(loadFile);
         toolbar.getChildren().add(playpause);
         slider = new Slider();
         slider.setMin(0);
@@ -190,6 +203,17 @@ public class Main extends Application {
         paramMap.put("fishFeedEnergy", 2.0);
         paramMap.put("sharkStartEnergy", 5.0);
         myGrid.setRandomGrid("WaTorCell", paramMap, new double[]{.2,.7,.1}, 50, 50);
+    }
+    public void loadConfigFile2(String filename){
+        myGrid = new Grid();
+        HashMap<String, Double> paramMap = new HashMap<>();
+        paramMap.put("probCatch", 0.7);
+        paramMap.put("happinessThresh", .3);
+        paramMap.put("fishBreedTime", 5.0);
+        paramMap.put("sharkBreedTime", 40.0);
+        paramMap.put("fishFeedEnergy", 2.0);
+        paramMap.put("sharkStartEnergy", 5.0);
+        myGrid.setRandomGrid("FireCell", paramMap, new double[]{.2,.7,.1}, 50, 50);
     }
 
     public void drawGrid(){
