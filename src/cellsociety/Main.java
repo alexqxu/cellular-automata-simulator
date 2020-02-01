@@ -78,7 +78,6 @@ public class Main extends Application {
         frame.setBottom(instantiateCellGrid());
 
         setSpeed(.5); // FIXME added by Maverick
-
         Scene scene = new Scene(frame, SIZE, SIZE, Color.AZURE);
         scene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
         return scene;

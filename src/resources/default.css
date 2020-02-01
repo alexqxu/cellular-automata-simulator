@@ -24,7 +24,7 @@
     -fx-background-radius: 20;
 }
 .slider .track {
-    -fx-background-color: #000000;
+    /*-fx-background-color: #000000;*/
     -fx-background-insets: 0 0 -1 0, 0, 1;
     -fx-background-radius: 0.25em, 0.25em, 0.166667em; /* 3 3 2 */
     -fx-padding: 0.25em; /* 3 */ /* linear-gradient(#33cc33, #ff3300); */
