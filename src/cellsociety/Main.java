@@ -5,11 +5,15 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -22,9 +26,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.ResourceBundle;
 
 /**
  * @author: Alex Oesterling, axo
@@ -37,8 +43,11 @@ public class Main extends Application {
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private static final String RESOURCES = "resources";
     public static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
+    public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
+    public static final String RESOURCE_PACKAGE = "Image";
     public static final String STYLESHEET = "default.css";
 
+    private ResourceBundle myResources;
     private Stage myStage;
     private Grid myGrid;
     private Configuration config;
@@ -47,8 +56,9 @@ public class Main extends Application {
     private Button playpause;
     private Button loadFile;
     private Button reset;
+    private Button step;
     private FileChooser fileChooser;
-    private String currentFile;
+    private File currentFile;
     private double secondsElapsed;
     private double speed;
     private boolean running;
@@ -62,6 +72,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) { //throws exception?
         myStage = stage;
+        myResources = ResourceBundle.getBundle(RESOURCE_PACKAGE);
         myStage.setScene(createScene("file"));
         stage.setTitle(TITLE);
         stage.show();
@@ -72,19 +83,19 @@ public class Main extends Application {
         animation.getKeyFrames().add(frame);
         animation.play();
     }
-    private String chooseFile(){
+    private File chooseFile(){
         fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Simulation File");
         fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         File file = fileChooser.showOpenDialog(myStage);
         if(file!=null){
             System.out.println(file.getPath());
-            currentFile = file.getPath();
-            return file.getPath();
+            currentFile = file;
+            return file;
         }else{
             System.out.println("Error: File not found");
         }
-        return "";
+        return null;
     }
     //FIXME is filename necessary here or should I have instance var
     private Scene createScene(String filename){
@@ -98,7 +109,7 @@ public class Main extends Application {
 
         setSpeed(.5); // FIXME added by Maverick
         Scene scene = new Scene(frame, Color.AZURE);
-        scene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
+        scene.getStylesheets().add(getClass().getClassLoader().getResource(STYLESHEET).toExternalForm());
 
         scene.setOnKeyPressed(e->{
             if(e.getCode() == KeyCode.SPACE){
@@ -110,18 +121,12 @@ public class Main extends Application {
 
     private Node setToolBar() {
         HBox toolbar = new HBox();
-        //FIXME instance variable buttons/sliders?
-        playpause = new Button("Play");
-        playpause.setOnAction(e -> handlePlayPause(playpause));
-
-        loadFile = new Button("Load File");
-        loadFile.setOnAction(e -> {
+        playpause = makeButton("Play", e -> handlePlayPause(playpause));
+        loadFile = makeButton("Load", e -> {
             loadConfigFile2(chooseFile());
             drawGrid();
         });
-
-        reset = new Button("Reset");
-        reset.setOnAction(e->{
+        reset = makeButton("Reset", e->{
             loadConfigFile(currentFile);
             drawGrid();
         });
@@ -129,6 +134,7 @@ public class Main extends Application {
         toolbar.getChildren().add(reset);
         toolbar.getChildren().add(loadFile);
         toolbar.getChildren().add(playpause);
+
         slider = new Slider();
         slider.setMin(0);
         slider.setMax(100);
@@ -147,6 +153,22 @@ public class Main extends Application {
 
         toolbar.getChildren().add(slider);
         return toolbar;
+    }
+
+    private Button makeButton (String property, EventHandler<ActionEvent> handler) {
+        // represent all supported image suffixes
+        final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
+        Button result = new Button();
+        String label = myResources.getString(property);
+        System.out.println(DEFAULT_RESOURCE_FOLDER + label);
+        if (label.matches(IMAGEFILE_SUFFIXES)) {
+            result.setGraphic(new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(label))));
+        }
+        else {
+            result.setText(label);
+        }
+        result.setOnAction(handler);
+        return result;
     }
 
     private void handlePlayPause(Button button) {
@@ -200,7 +222,7 @@ public class Main extends Application {
         speed = 2-percentSpeed;
     }
 
-    public void loadConfigFile(String filename){
+    public void loadConfigFile(File file){
         myGrid = new Grid();
         HashMap<String, Double> paramMap = new HashMap<>();
         paramMap.put("probCatch", 0.7);
@@ -211,7 +233,7 @@ public class Main extends Application {
         paramMap.put("sharkStartEnergy", 5.0);
         myGrid.setRandomGrid("WaTorCell", paramMap, new double[]{.2,.7,.1}, 50, 50);
     }
-    public void loadConfigFile2(String filename){
+    public void loadConfigFile2(File file){
         myGrid = new Grid();
         HashMap<String, Double> paramMap = new HashMap<>();
         paramMap.put("probCatch", 0.7);
