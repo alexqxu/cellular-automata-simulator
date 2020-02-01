@@ -116,6 +116,7 @@ public class Main extends Application {
                 handlePlayPause(playpause);
             }
         });
+        
         return scene;
     }
 
@@ -160,7 +161,6 @@ public class Main extends Application {
         final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
         Button result = new Button();
         String label = myResources.getString(property);
-        System.out.println(DEFAULT_RESOURCE_FOLDER + label);
         if (label.matches(IMAGEFILE_SUFFIXES)) {
             result.setGraphic(new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(label))));
         }
@@ -180,7 +180,6 @@ public class Main extends Application {
         } else {
             label = myResources.getString("Play");
         }
-        System.out.println(DEFAULT_RESOURCE_FOLDER + label);
         if (label.matches(IMAGEFILE_SUFFIXES)) {
             button.setGraphic(new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(label))));
         }
