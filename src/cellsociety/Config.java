@@ -88,7 +88,16 @@ public class Config {
     }
 
     private void extractParameters(Element configElement) {
-        NodeList
+        NodeList parametersNodeList = configElement.getElementsByTagName("SpecialParameters");
+        for(int i=0; i<parametersNodeList.getLength(); i++) {
+            Node parameterNode = parametersNodeList.item(i);
+            if (parameterNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element paramterElement = (Element) parameterNode;
+                //String parameterName = stateElement.getElementsByTagName("Name").item(0).getTextContent();
+                //String stateColor = stateElement.getElementsByTagName("Color").item(0).getTextContent();
+                //myStates.put(stateName, Color.web(stateColor));
+            }
+        }
     }
 
     private void extractDimensions(Element startingElement){
