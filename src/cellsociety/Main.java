@@ -50,7 +50,7 @@ public class Main extends Application {
     private ResourceBundle myResources;
     private Stage myStage;
     private Grid myGrid;
-    private Configuration config;
+    private Config config;
     private ArrayList<ArrayList<Rectangle>> cellGrid;
     private Slider slider;
     private Button playpause;
@@ -100,7 +100,7 @@ public class Main extends Application {
     //FIXME is filename necessary here or should I have instance var
     private Scene createScene(String filename){
         BorderPane frame = new BorderPane();
-        config = new Configuration(); //FIXME Instance class?
+        //FIXME Instance class?
         loadConfigFile(chooseFile());
 
         running = false;
@@ -173,10 +173,16 @@ public class Main extends Application {
 
     private void handlePlayPause(Button button) {
         running = !running;
+        final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
+        String label = "";
         if(running){
-            button.setText("Pause");
+            label = myResources.getString("Pause");
         } else {
-            button.setText("Play");
+            label = myResources.getString("Play");
+        }
+        System.out.println(DEFAULT_RESOURCE_FOLDER + label);
+        if (label.matches(IMAGEFILE_SUFFIXES)) {
+            button.setGraphic(new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(label))));
         }
     }
 
@@ -223,6 +229,8 @@ public class Main extends Application {
     }
 
     public void loadConfigFile(File file){
+        //config = new Config("asdf");
+
         myGrid = new Grid();
         HashMap<String, Double> paramMap = new HashMap<>();
         paramMap.put("probCatch", 0.7);
