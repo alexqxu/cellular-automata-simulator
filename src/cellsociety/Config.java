@@ -107,13 +107,21 @@ public class Config {
 
             for(int i = 0; i<parametersNodeList.getLength(); i++){
                 Node singleParameterNode = parametersNodeList.item(i);
-                if(singleParameterNode.getNodeType() == Node.TEXT_NODE){
+                if(singleParameterNode.getNodeType() == Node.ELEMENT_NODE){
                     Element singleParameterElement = (Element) singleParameterNode;
                     String parameterName = singleParameterElement.getAttribute("name");
                     Double parameterValue = Double.valueOf(singleParameterElement.getTextContent());
                     myParameters.put(parameterName, parameterValue);
                 }
             }
+        }
+        printParameters();
+    }
+
+    private void printParameters() {                                                                                    //For Debug Purposes
+        System.out.println("All Parameters Set (Debug):");
+        for (Map.Entry me : myParameters.entrySet()) {
+            System.out.println("Name: "+me.getKey() + " & Value: " + me.getValue());
         }
     }
 
@@ -128,13 +136,21 @@ public class Config {
 
             for(int i=0; i<statesNodeList.getLength(); i++) {
                 Node singleStateNode = statesNodeList.item(i);
-                if (singleStateNode.getNodeType() == Node.TEXT_NODE) {
+                if (singleStateNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element singleStateElement = (Element) singleStateNode;
                     Integer stateID = Integer.valueOf(singleStateElement.getElementsByTagName("ID").item(0).getTextContent());
                     String stateColor = singleStateElement.getElementsByTagName("Color").item(0).getTextContent();
                     myStates.put(stateID, Color.web(stateColor));
                 }
             }
+        }
+        printStates();
+    }
+
+    private void printStates() {
+        System.out.println("All States (Debug):");
+        for (Map.Entry me : myStates.entrySet()) {
+            System.out.println("State: "+me.getKey() + " & Value: " + me.getValue());
         }
     }
 
@@ -145,6 +161,10 @@ public class Config {
             extractHeight(dimensionsElement);
             extractWidth(dimensionsElement);
             extractSpeed(dimensionsElement);
+
+            System.out.println("Height:" + myHeight);                                                                       //Debug
+            System.out.println("Width:" + myWidth);                                                                       //Debug
+            System.out.println("Speed:" + mySpeed);                                                                       //Debug
         }
     }
 
@@ -173,7 +193,7 @@ public class Config {
     public int getHeight(){
         return myHeight;
     }
-    public Map<String, Color> getStates(){
+    public Map<Integer, Color> getStates(){
         return myStates;
     }
     /*
@@ -196,6 +216,6 @@ public class Config {
         //setStateColors();                       //use set statecolor (Cell Class)
         //setCellStates();                        //use Cell.setState
 
-        myGrid.setRandomGrid(myTitle, myParameters, new double[]{.2,.7,0}, 50, 50); //Random Grid, for testing purposes.
+        myGrid.setRandomGrid(myTitle, myParameters, new double[]{.2,.7,0}, myWidth, myHeight); //Random Grid, for testing purposes.
     }
 }
