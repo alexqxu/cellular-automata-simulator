@@ -32,7 +32,7 @@ public class Config {
     private String myAuthor;
 
     private Map<String, Color> myStates;
-    private Map<String, Integer> myParameters;
+    private Map<String, Double> myParameters;
     private String defaultState;
 
     private int mySpeed;
@@ -87,15 +87,22 @@ public class Config {
         System.out.println("Author: "+ myAuthor);
     }
 
+    //Note to self: VERY SIMILAR CODE TO EXTRACT STATES
     private void extractParameters(Element configElement) {
-        NodeList parametersNodeList = configElement.getElementsByTagName("SpecialParameters");
-        for(int i=0; i<parametersNodeList.getLength(); i++) {
-            Node parameterNode = parametersNodeList.item(i);
-            if (parameterNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element paramterElement = (Element) parameterNode;
-                //String parameterName = stateElement.getElementsByTagName("Name").item(0).getTextContent();
-                //String stateColor = stateElement.getElementsByTagName("Color").item(0).getTextContent();
-                //myStates.put(stateName, Color.web(stateColor));
+        Node parametersNode = configElement.getElementsByTagName("SpecialParameters").item(0);
+        if(parametersNode.getNodeType() == Node.ELEMENT_NODE){
+            Element parametersElement = (Element) parametersNode;
+
+            NodeList parametersNodeList = parametersElement.getElementsByTagName("Parameter");                          //Gets the list of Nodes
+
+            for(int i = 0; i<parametersNodeList.getLength(); i++){
+                Node singleParameterNode = parametersNodeList.item(i);
+                if(singleParameterNode.getNodeType() == Node.TEXT_NODE){
+                    Element singleParameterElement = (Element) singleParameterNode;
+                    String parameterName = singleParameterElement.getAttribute("name");
+                    Double parameterValue = Double.valueOf(singleParameterElement.getTextContent());
+                    myParameters.put(parameterName, parameterValue);
+                }
             }
         }
     }
@@ -110,6 +117,7 @@ public class Config {
         }
     }
 
+    //FIXME: Must extract the higher level node first.
     private void extractStates(Element startingElement){
         NodeList statesNodeList = startingElement.getElementsByTagName("States");
         for(int i=0; i<statesNodeList.getLength(); i++) {

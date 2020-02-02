@@ -12,6 +12,7 @@
 
         <SpecialParameters>
             <Parameter name = "Satisfaction">0.4</Parameter>
+            <Parameter name = "probCatch">0.1</Parameter>
         </SpecialParameters>
 
         <States>
