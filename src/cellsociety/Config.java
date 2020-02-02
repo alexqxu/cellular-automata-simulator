@@ -106,7 +106,7 @@ public class Config {
             }
         }
     }
-    
+
     private void extractStates(Element startingElement){
         Node statesNode = startingElement.getElementsByTagName("States").item(0);
         if(statesNode.getNodeType() == Node.ELEMENT_NODE){
@@ -122,19 +122,6 @@ public class Config {
                     String stateColor = singleStateElement.getElementsByTagName("Color").item(0).getTextContent();
                     myStates.put(stateName, Color.web(stateColor));
                 }
-            }
-        }
-
-
-
-        NodeList statesNodeList = startingElement.getElementsByTagName("State");
-        for(int i=0; i<statesNodeList.getLength(); i++) {
-            Node stateNode = statesNodeList.item(i);
-            if (stateNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element stateElement = (Element) stateNode;
-                String stateName = stateElement.getElementsByTagName("Name").item(0).getTextContent();
-                String stateColor = stateElement.getElementsByTagName("Color").item(0).getTextContent();
-                myStates.put(stateName, Color.web(stateColor));
             }
         }
     }
@@ -186,7 +173,7 @@ public class Config {
 
 
     public Grid loadFile(){
-        Grid newGrid = new Grid();
+        Grid newGrid = createGrid();
         return newGrid;
     }
 
