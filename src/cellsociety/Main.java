@@ -7,14 +7,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -74,7 +72,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException, SAXException, ParserConfigurationException { //throws exception?
         myStage = stage;
         myResources = ResourceBundle.getBundle(RESOURCE_PACKAGE);
-        myStage.setScene(createScene("file"));
+        myStage.setScene(createScene());
         stage.setTitle(TITLE);
         stage.show();
 
@@ -85,13 +83,16 @@ public class Main extends Application {
         animation.play();
     }
 
+    /**
+     * Opens a file navigator dialogue and allows the user to select an .xml file for importing into the simulation
+     * @return the File object representing the .xml file to be used by the simulation
+     */
     private File chooseFile(){
         fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Simulation File");
         fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         File file = fileChooser.showOpenDialog(myStage);
         if(file!=null){
-            System.out.println(file.getPath());
             currentFile = file;
             return file;
         }else{
@@ -101,22 +102,34 @@ public class Main extends Application {
     }
 
     //FIXME is filename necessary here or should I have instance var
-    private Scene createScene(String filename) throws ParserConfigurationException, SAXException, IOException {
+
+    /**
+     * Creates the scene for the visualization. Calls the loading of an .xml file, and uses that data to create
+     * the UI and graphical components and assemble them into a GUI.
+     * @return the scene to be placed in the stage
+     * @throws ParserConfigurationException //FIXME
+     * @throws SAXException FIXME
+     * @throws IOException FIXME
+     */
+    private Scene createScene() throws ParserConfigurationException, SAXException, IOException {
         BorderPane frame = new BorderPane();
-        //FIXME Instance class?
         loadConfigFile2(chooseFile());
 
         running = false;
         frame.setTop(setToolBar());
         frame.setBottom(instantiateCellGrid());
 
-        setSpeed(.5); // FIXME added by Maverick
+        setSpeed(.5); // FIXME set speed in loadconfigfile
         Scene scene = new Scene(frame, Color.AZURE);
         scene.getStylesheets().add(getClass().getClassLoader().getResource(STYLESHEET).toExternalForm());
         
         return scene;
     }
 
+    /**
+     * Creates the toolbar with UI components (buttons, sliders) to be rendered in the scene.
+     * @return A toolbar node containing all the buttons, sliders, and UI components which are interacted with by the user.
+     */
     private Node setToolBar() {
         HBox toolbar = new HBox();
         final Pane spacer = new Pane();
@@ -131,7 +144,7 @@ public class Main extends Application {
             drawGrid();
         });
         step = makeButton("Step", e->{
-           stepGrid();
+           myGrid.update();
            drawGrid();
         });
 
@@ -139,8 +152,6 @@ public class Main extends Application {
         slider.setMin(0);
         slider.setMax(100);
         slider.setValue(50);
-        //slider.setShowTickLabels(true);
-        //slider.setShowTickMarks(true);
         slider.setMajorTickUnit(50);
         slider.setMinorTickCount(5);
         slider.setBlockIncrement(10);
@@ -160,8 +171,14 @@ public class Main extends Application {
         return toolbar;
     }
 
+    /**
+     * Handles the creation of button objects for the UI. Checks if there is a valid image file referenced in the Image.properties
+     * file in the resources folder, and if so renders an image for the button. If not, adds a simple label.
+     * @param property - A string referencing a property in the Image.properties file, or just the label to be placed on the button
+     * @param handler - The EventHandler to be triggered when the button is pressed.
+     * @return A button object to be rendered in the scene
+     */
     private Button makeButton (String property, EventHandler<ActionEvent> handler) {
-        // represent all supported image suffixes
         final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
         Button result = new Button();
         String label = myResources.getString(property);
@@ -170,12 +187,16 @@ public class Main extends Application {
         }
         else {
             result.setText(label);
-
         }
         result.setOnAction(handler);
         return result;
     }
 
+    /**
+     * Handles the toggling of the play/pause button. Switches the image rendered on the play/pause button as well
+     * as toggling whether the simulation is running or not.
+     * @param button - the play/pause button to be rerendered with a new image.
+     */
     private void handlePlayPause(Button button) {
         running = !running;
         final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
@@ -191,7 +212,12 @@ public class Main extends Application {
         }
     }
 
-    //FIXME how do we figure out the size of the cellgrid?
+    /**
+     * Instantiates a grid of rectangles in a gridpane to be rendered by the scene. Takes color data
+     * from the Grid class and uses it to create scaled rectangles at the correct size and dimension
+     * and collects these rectangles into a gridpane.
+     * @return A gridpane containing all the rectangles in the simulation
+     */
     private Node instantiateCellGrid() {
         GridPane gridpane = new GridPane();
         cellGrid = new ArrayList<ArrayList<Rectangle>>();
@@ -215,11 +241,18 @@ public class Main extends Application {
         return gridpane;
     }
 
+    /**
+     * Update method which calls the model to update the states of all the cells on the backend, and redraws
+     * the rectangles with their new color values.
+     * Calls the inner update methods at a rate dependent on the speed of the simulation (specified in the .xml config file
+     * and controlled by the slider).
+     * @param elapsedTime - The elapsed time between frame calls made in the default start() method of the Application
+     */
     private void update(double elapsedTime){
         secondsElapsed += elapsedTime;
         if(running && secondsElapsed > speed){
             secondsElapsed = 0;
-            stepGrid();
+            myGrid.update();
             drawGrid();
         }
     }
@@ -250,24 +283,18 @@ public class Main extends Application {
         paramMap.put(WaTorCell.SHARK_BREED_TIME, 40.0);
         paramMap.put(WaTorCell.FISH_FEED_ENERGY, 2.0);
         paramMap.put(WaTorCell.SHARK_START_ENERGY, 5.0);
-        myGrid.setRandomGrid("FireCell", paramMap, new double[]{.2,.7,.1}, 50, 50);
+        myGrid.setRandomGrid("PercolationCell", paramMap, new double[]{.2,.7,0}, 50, 50);
     }
 
-
-
+    /**
+     * Updates the colors of the rectangles rendered in the scene. Rechecks the Grid object for color data,
+     * and then passes this color data into each cell.
+     */
     public void drawGrid(){
         Color[][] colorgrid = myGrid.getColorGrid();
         for(int i = 0; i < colorgrid.length; i++){
             for(int j = 0; j < colorgrid[i].length; j++){
-                Rectangle cell = cellGrid.get(i).get(j);
-                cell.setFill(colorgrid[i][j]);
-                cell.setStrokeType(StrokeType.INSIDE);
-                cell.setStroke(Color.GRAY);
-                cell.setStrokeWidth(.5);
-                cell.setWidth(SIZE/colorgrid[i].length);
-                cell.setHeight(SIZE/colorgrid.length);
-                cell.setX(j*cell.getWidth());
-                cell.setY(i*cell.getHeight());
+                cellGrid.get(i).get(j).setFill(colorgrid[i][j]);
             }
         }
     }
@@ -275,12 +302,7 @@ public class Main extends Application {
     public void drawCell(int x, int y, Color color){
         return;
     }
-
      */
-
-    public void stepGrid(){
-        myGrid.update();
-    }
 
     /**
      * Runner method, actually runs the game when a user presses
