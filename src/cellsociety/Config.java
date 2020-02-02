@@ -106,20 +106,28 @@ public class Config {
             }
         }
     }
-
-    private void extractDimensions(Element startingElement){
-        Node dimensionsNode = startingElement.getElementsByTagName("Dimensions").item(0);
-        if(dimensionsNode.getNodeType() == Node.ELEMENT_NODE){
-            Element dimensionsElement = (Element) dimensionsNode;
-            extractHeight(dimensionsElement);
-            extractWidth(dimensionsElement);
-            extractSpeed(dimensionsElement);
-        }
-    }
-
-    //FIXME: Must extract the higher level node first.
+    
     private void extractStates(Element startingElement){
-        NodeList statesNodeList = startingElement.getElementsByTagName("States");
+        Node statesNode = startingElement.getElementsByTagName("States").item(0);
+        if(statesNode.getNodeType() == Node.ELEMENT_NODE){
+            Element statesElement = (Element) statesNode;
+
+            NodeList statesNodeList = statesElement.getElementsByTagName("State");
+
+            for(int i=0; i<statesNodeList.getLength(); i++) {
+                Node singleStateNode = statesNodeList.item(i);
+                if (singleStateNode.getNodeType() == Node.TEXT_NODE) {
+                    Element singleStateElement = (Element) singleStateNode;
+                    String stateName = singleStateElement.getElementsByTagName("Name").item(0).getTextContent();
+                    String stateColor = singleStateElement.getElementsByTagName("Color").item(0).getTextContent();
+                    myStates.put(stateName, Color.web(stateColor));
+                }
+            }
+        }
+
+
+
+        NodeList statesNodeList = startingElement.getElementsByTagName("State");
         for(int i=0; i<statesNodeList.getLength(); i++) {
             Node stateNode = statesNodeList.item(i);
             if (stateNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -128,6 +136,16 @@ public class Config {
                 String stateColor = stateElement.getElementsByTagName("Color").item(0).getTextContent();
                 myStates.put(stateName, Color.web(stateColor));
             }
+        }
+    }
+
+    private void extractDimensions(Element startingElement){
+        Node dimensionsNode = startingElement.getElementsByTagName("Dimensions").item(0);
+        if(dimensionsNode.getNodeType() == Node.ELEMENT_NODE){
+            Element dimensionsElement = (Element) dimensionsNode;
+            extractHeight(dimensionsElement);
+            extractWidth(dimensionsElement);
+            extractSpeed(dimensionsElement);
         }
     }
 
