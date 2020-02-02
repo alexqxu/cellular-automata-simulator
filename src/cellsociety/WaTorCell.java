@@ -28,9 +28,9 @@ public class WaTorCell extends Cell {
     }
 
     @Override
-    void planUpdate(Cell[] neighbors, LinkedList<Cell> emptyQueue) {
-        if (!emptyQueue.contains(this)) return;
-        emptyQueue.remove(this);
+    void planUpdate(Cell[] neighbors, LinkedList<Cell> updatedQueue) {
+        if (!updatedQueue.contains(this)) return;
+        updatedQueue.remove(this);
         ArrayList<Cell> open = new ArrayList<>();
         ArrayList<Cell> fish = new ArrayList<>();
         for (int i = 0; i < neighbors.length; i+=2) {
@@ -39,19 +39,19 @@ public class WaTorCell extends Cell {
         }
         reproductionTimer--;
         if (state == 1) {
-            fishPlanUpdate(emptyQueue, open);
+            fishPlanUpdate(updatedQueue, open);
         }
         if (state == 2) {
             if (--energy <= 0) {
                 nextState = 0;
                 return;
             }
-            sharkPlanUpdate(emptyQueue, open, fish);
+            sharkPlanUpdate(updatedQueue, open, fish);
         }
         if (state == 0 && nextState == -1) nextState = 0;
     }
 
-    private void sharkPlanUpdate(LinkedList<Cell> emptyQueue, ArrayList<Cell> open, ArrayList<Cell> fish) {
+    private void sharkPlanUpdate(LinkedList<Cell> updatedQueue, ArrayList<Cell> open, ArrayList<Cell> fish) {
         Random rand = new Random();
         if (fish.size() > 0 || open.size()>0) {
             if (fish.size() > 0) {
@@ -61,7 +61,7 @@ public class WaTorCell extends Cell {
                 int nextLoc = rand.nextInt(open.size());
                 movedTo = (WaTorCell) open.get(nextLoc);
             }
-            emptyQueue.remove(movedTo);
+            updatedQueue.remove(movedTo);
             if (movedTo.nextState > 1) {
                 nextState = state;
                 return;
@@ -82,12 +82,12 @@ public class WaTorCell extends Cell {
         nextState = 2;
     }
 
-    private void fishPlanUpdate(LinkedList<Cell> emptyQueue, ArrayList<Cell> open) {
+    private void fishPlanUpdate(LinkedList<Cell> updatedQueue, ArrayList<Cell> open) {
         Random rand = new Random();
         if (open.size() > 0) {
             int nextLoc = rand.nextInt(open.size());
             movedTo = (WaTorCell) open.get(nextLoc);
-            emptyQueue.remove(movedTo);
+            updatedQueue.remove(movedTo);
             if (movedTo.nextState > 0) {
                 nextState = state;
                 return;
