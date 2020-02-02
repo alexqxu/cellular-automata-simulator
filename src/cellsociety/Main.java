@@ -234,6 +234,12 @@ public class Main extends Application {
                 cell.setHeight(SIZE/colorgrid.length);
                 cell.setX(j*cell.getWidth());
                 cell.setY(i*cell.getHeight());
+                final int r = i;
+                final int c = j;
+                cell.setOnMouseClicked(e->{
+                    myGrid.incrementCellState(r, c);
+                    drawGrid();
+                });
                 cellGrid.get(i).add(cell);
                 gridpane.add(cell, i, j);
             }
