@@ -113,7 +113,7 @@ public class Main extends Application {
      */
     private Scene createScene() throws ParserConfigurationException, SAXException, IOException {
         BorderPane frame = new BorderPane();
-        loadConfigFile2(chooseFile());
+        loadConfigFile(chooseFile());
 
         running = false;
         frame.setTop(setToolBar());
@@ -136,11 +136,27 @@ public class Main extends Application {
         HBox.setHgrow(spacer, Priority.ALWAYS);
         playpause = makeButton("Play", e -> handlePlayPause(playpause));
         loadFile = makeButton("Load", e -> {
-            loadConfigFile2(chooseFile());
+            try {
+                loadConfigFile(chooseFile());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } catch (SAXException ex) {
+                ex.printStackTrace();
+            } catch (ParserConfigurationException ex) {
+                ex.printStackTrace();
+            }
             drawGrid();
         });
         reset = makeButton("Reset", e->{ //FIXME add intentional exceptions
-            loadConfigFile2(currentFile);
+            try {
+                loadConfigFile(currentFile);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } catch (SAXException ex) {
+                ex.printStackTrace();
+            } catch (ParserConfigurationException ex) {
+                ex.printStackTrace();
+            }
             drawGrid();
         });
         step = makeButton("Step", e->{
@@ -271,14 +287,13 @@ public class Main extends Application {
         percentSpeed*=2;
         speed = 2-percentSpeed;
     }
-/*
-    public void loadConfigFile(File file) throws IOException, SAXException, ParserConfigurationException {
 
+    public void loadConfigFile(File file) throws IOException, SAXException, ParserConfigurationException {
         config = new Config(file);
         myGrid = config.loadFile();
     }
 
- */
+
 
     public void loadConfigFile2(File file){
         myGrid = new Grid();

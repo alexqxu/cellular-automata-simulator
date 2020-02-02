@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Simulation>
     <ConfigInfo>
-        <Title>Game of Life</Title>
+        <Title>ConwayCell</Title>
         <Author>Alex Xu, aqx</Author>
 
         <Dimensions>
@@ -9,6 +9,11 @@
             <Height>5</Height>
             <Speed>60</Speed>
         </Dimensions>
+
+        <SpecialParameters>
+            <Parameter name = "Satisfaction">0.4</Parameter>
+            <Parameter name = "probCatch">0.1</Parameter>
+        </SpecialParameters>
 
         <States>
             <!-- Default is the cells that are filled if there are not enough cells. Color names must be standard HTML Names -->
