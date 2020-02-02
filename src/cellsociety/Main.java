@@ -250,7 +250,7 @@ public class Main extends Application {
         paramMap.put(WaTorCell.SHARK_BREED_TIME, 40.0);
         paramMap.put(WaTorCell.FISH_FEED_ENERGY, 2.0);
         paramMap.put(WaTorCell.SHARK_START_ENERGY, 5.0);
-        myGrid.setRandomGrid("FireCell", paramMap, new double[]{.2,.7,.1}, 50, 50);
+        myGrid.setRandomGrid("PercolationCell", paramMap, new double[]{.2,.7,0}, 50, 50);
     }
 
 
