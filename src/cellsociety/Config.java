@@ -30,8 +30,8 @@ public class Config {
     private String myTitle;
     private String myAuthor;
 
-    private Map<String, Color> myStates;
-    private Map<Integer, Double> myParameters;
+    private Map<Integer, Color> myStates;
+    private Map<String, Double> myParameters;
     //private String defaultState;
 
     private int mySpeed;
@@ -109,9 +109,9 @@ public class Config {
                 Node singleParameterNode = parametersNodeList.item(i);
                 if(singleParameterNode.getNodeType() == Node.TEXT_NODE){
                     Element singleParameterElement = (Element) singleParameterNode;
-                    Integer parameterID = Integer.valueOf(singleParameterElement.getAttribute("ID"));
+                    String parameterName = singleParameterElement.getAttribute("name");
                     Double parameterValue = Double.valueOf(singleParameterElement.getTextContent());
-                    myParameters.put(parameterID, parameterValue);
+                    myParameters.put(parameterName, parameterValue);
                 }
             }
         }
@@ -130,9 +130,9 @@ public class Config {
                 Node singleStateNode = statesNodeList.item(i);
                 if (singleStateNode.getNodeType() == Node.TEXT_NODE) {
                     Element singleStateElement = (Element) singleStateNode;
-                    String stateName = singleStateElement.getElementsByTagName("Name").item(0).getTextContent();
+                    Integer stateID = Integer.valueOf(singleStateElement.getElementsByTagName("ID").item(0).getTextContent());
                     String stateColor = singleStateElement.getElementsByTagName("Color").item(0).getTextContent();
-                    myStates.put(stateName, Color.web(stateColor));
+                    myStates.put(stateID, Color.web(stateColor));
                 }
             }
         }
