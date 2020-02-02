@@ -15,19 +15,20 @@ import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.xml.sax.SAXException;
 
 
 import javax.imageio.ImageIO;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -70,7 +71,7 @@ public class Main extends Application {
      * @throws Exception
      */
     @Override
-    public void start(Stage stage) { //throws exception?
+    public void start(Stage stage) throws IOException, SAXException, ParserConfigurationException { //throws exception?
         myStage = stage;
         myResources = ResourceBundle.getBundle(RESOURCE_PACKAGE);
         myStage.setScene(createScene("file"));
@@ -83,6 +84,7 @@ public class Main extends Application {
         animation.getKeyFrames().add(frame);
         animation.play();
     }
+
     private File chooseFile(){
         fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Simulation File");
@@ -97,11 +99,12 @@ public class Main extends Application {
         }
         return null;
     }
+
     //FIXME is filename necessary here or should I have instance var
-    private Scene createScene(String filename){
+    private Scene createScene(String filename) throws ParserConfigurationException, SAXException, IOException {
         BorderPane frame = new BorderPane();
         //FIXME Instance class?
-        loadConfigFile(chooseFile());
+        loadConfigFile2(chooseFile());
 
         running = false;
         frame.setTop(setToolBar());
@@ -110,31 +113,27 @@ public class Main extends Application {
         setSpeed(.5); // FIXME added by Maverick
         Scene scene = new Scene(frame, Color.AZURE);
         scene.getStylesheets().add(getClass().getClassLoader().getResource(STYLESHEET).toExternalForm());
-
-        scene.setOnKeyPressed(e->{
-            if(e.getCode() == KeyCode.SPACE){
-                handlePlayPause(playpause);
-            }
-        });
         
         return scene;
     }
 
     private Node setToolBar() {
         HBox toolbar = new HBox();
+        final Pane spacer = new Pane();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
         playpause = makeButton("Play", e -> handlePlayPause(playpause));
         loadFile = makeButton("Load", e -> {
             loadConfigFile2(chooseFile());
             drawGrid();
         });
-        reset = makeButton("Reset", e->{
-            loadConfigFile(currentFile);
+        reset = makeButton("Reset", e->{ //FIXME add intentional exceptions
+            loadConfigFile2(currentFile);
             drawGrid();
         });
-
-        toolbar.getChildren().add(reset);
-        toolbar.getChildren().add(loadFile);
-        toolbar.getChildren().add(playpause);
+        step = makeButton("Step", e->{
+           stepGrid();
+           drawGrid();
+        });
 
         slider = new Slider();
         slider.setMin(0);
@@ -152,6 +151,11 @@ public class Main extends Application {
             }
         });
 
+        toolbar.getChildren().add(playpause);
+        toolbar.getChildren().add(step);
+        toolbar.getChildren().add(reset);
+        toolbar.getChildren().add(loadFile);
+        toolbar.getChildren().add(spacer);
         toolbar.getChildren().add(slider);
         return toolbar;
     }
@@ -166,6 +170,7 @@ public class Main extends Application {
         }
         else {
             result.setText(label);
+
         }
         result.setOnAction(handler);
         return result;
@@ -182,6 +187,7 @@ public class Main extends Application {
         }
         if (label.matches(IMAGEFILE_SUFFIXES)) {
             button.setGraphic(new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(label))));
+
         }
     }
 
@@ -226,20 +232,15 @@ public class Main extends Application {
         percentSpeed*=2;
         speed = 2-percentSpeed;
     }
+/*
+    public void loadConfigFile(File file) throws IOException, SAXException, ParserConfigurationException {
 
-    public void loadConfigFile(File file){
-        //config = new Config("asdf");
-
-        myGrid = new Grid();
-        HashMap<String, Double> paramMap = new HashMap<>();
-        paramMap.put(FireCell.PROB_CATCH, 0.7);
-        paramMap.put(SegregationCell.HAPPINESS_THRESH, .3);
-        paramMap.put(WaTorCell.FISH_BREED_TIME, 5.0);
-        paramMap.put(WaTorCell.SHARK_BREED_TIME, 40.0);
-        paramMap.put(WaTorCell.FISH_FEED_ENERGY, 2.0);
-        paramMap.put(WaTorCell.SHARK_START_ENERGY, 5.0);
-        myGrid.setRandomGrid("WaTorCell", paramMap, new double[]{.2,.7,.1}, 50, 50);
+        config = new Config(file);
+        myGrid = config.loadFile();
     }
+
+ */
+
     public void loadConfigFile2(File file){
         myGrid = new Grid();
         HashMap<String, Double> paramMap = new HashMap<>();
@@ -251,6 +252,8 @@ public class Main extends Application {
         paramMap.put(WaTorCell.SHARK_START_ENERGY, 5.0);
         myGrid.setRandomGrid("FireCell", paramMap, new double[]{.2,.7,.1}, 50, 50);
     }
+
+
 
     public void drawGrid(){
         Color[][] colorgrid = myGrid.getColorGrid();
