@@ -17,52 +17,48 @@
 
         <States>
             <!-- Default is the cells that are filled if there are not enough cells. Color names must be standard HTML Names -->
-            <State id = "1" default = "TRUE">
-                <Name>DEAD</Name>
+            <State>
+                <ID>0</ID>
                 <Color>white</Color>
             </State>
 
-            <State id = "2">
-                <Name>ALIVE</Name>
+            <State>
+                <ID>1</ID>
                 <Color>black</Color>
             </State>
+
         </States>
     </ConfigInfo>
 
     <Cells>
         <Row numbr = "1">
-            <Cell>
-                <State>ALIVE</State>
-            </Cell>
-            <Cell>
-                <State>ALIVE</State>
-            </Cell>
-            <Cell>
-                <State>ALIVE</State>
-            </Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
         </Row>
         <Row numbr = "2">
-            <Cell>
-                <State>ALIVE</State>
-            </Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
         </Row>
         <Row numbr = "3">
-            <Cell>
-                <State>ALIVE</State>
-            </Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
         </Row>
         <Row numbr = "4">
-            <Cell>
-                <State>ALIVE</State>
-            </Cell>
-            <Cell>
-                <State>ALIVE</State>
-            </Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
         </Row>
         <Row numbr = "5">
-            <Cell>
-                <State>ALIVE</State>
-            </Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
         </Row>
     </Cells>
 </Simulation>

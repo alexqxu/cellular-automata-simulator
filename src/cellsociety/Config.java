@@ -31,7 +31,7 @@ public class Config {
     private String myAuthor;
 
     private Map<String, Color> myStates;
-    private Map<String, Double> myParameters;
+    private Map<Integer, Double> myParameters;
     //private String defaultState;
 
     private int mySpeed;
@@ -109,9 +109,9 @@ public class Config {
                 Node singleParameterNode = parametersNodeList.item(i);
                 if(singleParameterNode.getNodeType() == Node.TEXT_NODE){
                     Element singleParameterElement = (Element) singleParameterNode;
-                    String parameterName = singleParameterElement.getAttribute("name");
+                    Integer parameterID = Integer.valueOf(singleParameterElement.getAttribute("ID"));
                     Double parameterValue = Double.valueOf(singleParameterElement.getTextContent());
-                    myParameters.put(parameterName, parameterValue);
+                    myParameters.put(parameterID, parameterValue);
                 }
             }
         }
