@@ -15,6 +15,12 @@ public class PercolationCell extends Cell {
     }
 
     @Override
+    protected int getHighestState() {
+        int ret = super.getHighestState();
+        return --ret;
+    }
+
+    @Override
     void planUpdate(Cell[] neighbors, LinkedList<Cell> emptyQueue) {
         if (neighbors[6].getState() == 3) neighbors[0].setState(2); //this is okay because cells with state 3 are dummy cells
         if (getState() == 1) {

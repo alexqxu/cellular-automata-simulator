@@ -111,4 +111,16 @@ public abstract class Cell {
         return ""+getState();
     }
 
+    protected int getHighestState() {
+        int max = 0;
+        for (int st: colorMap.keySet()) {
+            max = Math.max(max, st);
+        }
+        return ++max;
+    }
+
+    public void incrementState() {
+        int max = getHighestState();
+        state = (state+1)%max;
+    }
 }

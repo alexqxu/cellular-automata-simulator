@@ -27,6 +27,10 @@ public class Grid {
         }
     }
 
+    public void incrementCellState(int r, int c) {
+        grid.get(r).get(c).incrementState();
+    }
+
     /**
      * Returns the 8 neighbors of the cell at r,c starting with North and rotating clockwise
      * Acts as though the grid is toroidal
