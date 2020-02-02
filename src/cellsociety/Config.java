@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -19,21 +20,19 @@ import java.util.Map;
  * @author Alex Xu aqx
  */
 public class Config {
-    //public static final String XML_CONFIG_FILEPATH = "GameofLife.xml"; //Delete Later, since the filepath is now passed in.
     private String ConfigNodeName = "ConfigInfo";
 
     private Grid myGrid;
 
-    //private String myFilePath;
     private File myFile;
     private Document doc;
 
     private String myTitle;
     private String myAuthor;
 
-    private Map<String, Color> myStates;
-    private Map<String, Integer> myParameters;
-    private String defaultState;
+    private Map<Integer, Color> myStates;
+    private Map<String, Double> myParameters;
+    //private String defaultState;
 
     private int mySpeed;
     private int myWidth;
@@ -51,9 +50,18 @@ public class Config {
         setupDocument();
         System.out.println("Document Setup Complete");                                                                  //Debugging Purposes Only.
         extractConfigInfo();
+        System.out.println("Config Info Load Complete");                                                                     //Debugging Purposes Only.
     }
 
-    //FIXME: Change to take File object instead of a String
+    /**
+     * Create and set up the Grid based on stored information, and then return it.
+     * @return
+     */
+    public Grid loadFile(){
+        createGrid();
+        return myGrid;
+    }
+
     private void setupDocument() throws IOException, SAXException, ParserConfigurationException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -87,16 +95,62 @@ public class Config {
         System.out.println("Author: "+ myAuthor);
     }
 
+                                                                                                                        //Note to self: VERY SIMILAR CODE TO EXTRACT STATES
     private void extractParameters(Element configElement) {
-        NodeList parametersNodeList = configElement.getElementsByTagName("SpecialParameters");
-        for(int i=0; i<parametersNodeList.getLength(); i++) {
-            Node parameterNode = parametersNodeList.item(i);
-            if (parameterNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element paramterElement = (Element) parameterNode;
-                //String parameterName = stateElement.getElementsByTagName("Name").item(0).getTextContent();
-                //String stateColor = stateElement.getElementsByTagName("Color").item(0).getTextContent();
-                //myStates.put(stateName, Color.web(stateColor));
+        myParameters = new HashMap<>();
+
+        Node parametersNode = configElement.getElementsByTagName("SpecialParameters").item(0);
+        if(parametersNode.getNodeType() == Node.ELEMENT_NODE){
+            Element parametersElement = (Element) parametersNode;
+
+            NodeList parametersNodeList = parametersElement.getElementsByTagName("Parameter");                          //Gets the list of Nodes
+
+            for(int i = 0; i<parametersNodeList.getLength(); i++){
+                Node singleParameterNode = parametersNodeList.item(i);
+                if(singleParameterNode.getNodeType() == Node.ELEMENT_NODE){
+                    Element singleParameterElement = (Element) singleParameterNode;
+                    String parameterName = singleParameterElement.getAttribute("name");
+                    Double parameterValue = Double.valueOf(singleParameterElement.getTextContent());
+                    myParameters.put(parameterName, parameterValue);
+                }
             }
+        }
+        printParameters();
+    }
+
+    private void printParameters() {                                                                                    //For Debug Purposes
+        System.out.println("All Parameters Set (Debug):");
+        for (Map.Entry me : myParameters.entrySet()) {
+            System.out.println("Name: "+me.getKey() + " & Value: " + me.getValue());
+        }
+    }
+
+    private void extractStates(Element startingElement){
+        myStates = new HashMap<>();
+
+        Node statesNode = startingElement.getElementsByTagName("States").item(0);
+        if(statesNode.getNodeType() == Node.ELEMENT_NODE){
+            Element statesElement = (Element) statesNode;
+
+            NodeList statesNodeList = statesElement.getElementsByTagName("State");
+
+            for(int i=0; i<statesNodeList.getLength(); i++) {
+                Node singleStateNode = statesNodeList.item(i);
+                if (singleStateNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element singleStateElement = (Element) singleStateNode;
+                    Integer stateID = Integer.valueOf(singleStateElement.getElementsByTagName("ID").item(0).getTextContent());
+                    String stateColor = singleStateElement.getElementsByTagName("Color").item(0).getTextContent();
+                    myStates.put(stateID, Color.web(stateColor));
+                }
+            }
+        }
+        printStates();
+    }
+
+    private void printStates() {
+        System.out.println("All States (Debug):");
+        for (Map.Entry me : myStates.entrySet()) {
+            System.out.println("State: "+me.getKey() + " & Value: " + me.getValue());
         }
     }
 
@@ -107,24 +161,15 @@ public class Config {
             extractHeight(dimensionsElement);
             extractWidth(dimensionsElement);
             extractSpeed(dimensionsElement);
-        }
-    }
 
-    private void extractStates(Element startingElement){
-        NodeList statesNodeList = startingElement.getElementsByTagName("States");
-        for(int i=0; i<statesNodeList.getLength(); i++) {
-            Node stateNode = statesNodeList.item(i);
-            if (stateNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element stateElement = (Element) stateNode;
-                String stateName = stateElement.getElementsByTagName("Name").item(0).getTextContent();
-                String stateColor = stateElement.getElementsByTagName("Color").item(0).getTextContent();
-                myStates.put(stateName, Color.web(stateColor));
-            }
+            System.out.println("Height:" + myHeight);                                                                       //Debug
+            System.out.println("Width:" + myWidth);                                                                       //Debug
+            System.out.println("Speed:" + mySpeed);                                                                       //Debug
         }
     }
 
     private void extractSpeed(Element dimensionsElement) {
-        mySpeed = Integer.parseInt(dimensionsElement.getElementsByTagName("Speed").item(0).getTextContent().trim());
+        mySpeed = Integer.parseInt(dimensionsElement.getElementsByTagName("Speed").item(0).getTextContent().trim());        //REFACTOR These 3 later on.
     }
 
     private void extractWidth(Element dimensionsElement) {
@@ -148,20 +193,16 @@ public class Config {
     public int getHeight(){
         return myHeight;
     }
-    public Map<String, Color> getStates(){
+    public Map<Integer, Color> getStates(){
         return myStates;
     }
+    /*
     public String getDefaultState(){
         return defaultState;
     }
+    */
     public int getSpeed(){
         return mySpeed;
-    }
-
-
-    public Grid loadFile(){
-        Grid newGrid = new Grid();
-        return newGrid;
     }
 
     //Take file input in
@@ -169,8 +210,12 @@ public class Config {
 
     //}
 
-    private Grid createGrid(){
-        Grid newGrid = new Grid();
-        return newGrid;
+    private void createGrid(){
+        myGrid = new Grid();
+        //setParameters();                        //use set parameter (Cell Class)
+        //setStateColors();                       //use set statecolor (Cell Class)
+        //setCellStates();                        //use Cell.setState
+
+        myGrid.setRandomGrid(myTitle, myParameters, new double[]{.2,.7,0}, myWidth, myHeight); //Random Grid, for testing purposes.
     }
 }

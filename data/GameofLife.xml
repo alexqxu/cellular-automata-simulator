@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Simulation>
     <ConfigInfo>
-        <Title>Game of Life</Title>
+        <Title>ConwayCell</Title>
         <Author>Alex Xu, aqx</Author>
 
         <Dimensions>
@@ -10,54 +10,60 @@
             <Speed>60</Speed>
         </Dimensions>
 
+        <!-- There can be extra parameters, only those relevant will be used. -->
+        <SpecialParameters>
+            <Parameter name = "probCatch">0.1</Parameter>
+            <Parameter name = "happinessThresh">0.5</Parameter>
+            <Parameter name = "sharkBreedTime">0.5</Parameter>
+            <Parameter name = "fishBreedTime">0.5</Parameter>
+            <Parameter name = "fishFeedEnergy">0.5</Parameter>
+            <Parameter name = "sharkStartEnergy">0.5</Parameter>
+        </SpecialParameters>
+
+        <!-- Default is the cells that are filled if there are not enough cells. Color names must be standard HTML Names -->
         <States>
-            <!-- Default is the cells that are filled if there are not enough cells. Color names must be standard HTML Names -->
-            <State id = "1" default = "TRUE">
-                <Name>DEAD</Name>
+            <State>
+                <ID>0</ID>
                 <Color>white</Color>
             </State>
 
-            <State id = "2">
-                <Name>ALIVE</Name>
+            <State>
+                <ID>1</ID>
                 <Color>black</Color>
             </State>
+
         </States>
     </ConfigInfo>
 
     <Cells>
         <Row numbr = "1">
-            <Cell>
-                <State>ALIVE</State>
-            </Cell>
-            <Cell>
-                <State>ALIVE</State>
-            </Cell>
-            <Cell>
-                <State>ALIVE</State>
-            </Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
         </Row>
         <Row numbr = "2">
-            <Cell>
-                <State>ALIVE</State>
-            </Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
         </Row>
         <Row numbr = "3">
-            <Cell>
-                <State>ALIVE</State>
-            </Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
         </Row>
         <Row numbr = "4">
-            <Cell>
-                <State>ALIVE</State>
-            </Cell>
-            <Cell>
-                <State>ALIVE</State>
-            </Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
         </Row>
         <Row numbr = "5">
-            <Cell>
-                <State>ALIVE</State>
-            </Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
         </Row>
     </Cells>
 </Simulation>
