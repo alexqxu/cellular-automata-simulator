@@ -2,7 +2,7 @@
     -fx-font-size: 14pt;
     -fx-font-family: "Arial";
     -fx-base: #6699ff;
-    -fx-background: #0000ff;
+    -fx-background: #808080;
 }
 
 .button {
@@ -11,6 +11,7 @@
     -fx-border-radius: 10;
     -fx-background-radius: 10;
     -fx-padding: 8;
+    -fx-min-height: 50;
 }
 
 .button:hover {
@@ -19,7 +20,7 @@
 
 .slider {
     -fx-color: #0000ff;
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: #808080;
     -fx-border-radius: 20;
     -fx-background-radius: 20;
     -fx-max-height: 50;
