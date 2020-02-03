@@ -200,17 +200,18 @@ public class Config {
             NodeList cellsNodeList = singleRowElement.getElementsByTagName("Cell");
 
             for(int k = 0; k<cellsNodeList.getLength(); k++){
+
                 Node singleCellNode = cellsNodeList.item(k);
                 Integer cellState = Integer.valueOf(singleCellNode.getTextContent());
 
                 Cell myCell = makeCell(cellState);
-                myGrid.placeCell(row, col, myCell);
+                myGrid.placeCell(col, row, myCell);
 
                 col++;
             }
             while(col < myWidth){
                 Cell myCell = makeCell(defaultState);
-                myGrid.placeCell(row, col, myCell);
+                myGrid.placeCell(col, row, myCell);
                 col++;
             }
             row++;
