@@ -27,6 +27,7 @@ import javax.imageio.ImageIO;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -70,7 +71,7 @@ public class Main extends Application {
      * @throws Exception
      */
     @Override
-    public void start(Stage stage) throws IOException, SAXException, ParserConfigurationException { //throws exception?
+    public void start(Stage stage) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException { //throws exception?
         myStage = stage;
         myResources = ResourceBundle.getBundle(RESOURCE_PACKAGE);
         myStage.setScene(createScene());
@@ -112,8 +113,8 @@ public class Main extends Application {
      * @throws SAXException FIXME
      * @throws IOException FIXME
      */
-    private Scene createScene() throws ParserConfigurationException, SAXException, IOException {
-        frame = new BorderPane();
+    private Scene createScene() throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        BorderPane frame = new BorderPane();
         loadConfigFile(chooseFile());
 
         running = false;
@@ -144,6 +145,16 @@ public class Main extends Application {
                 ex.printStackTrace();
             } catch (ParserConfigurationException ex) {
                 ex.printStackTrace();
+            } catch (InstantiationException ex) {
+                ex.printStackTrace();
+            } catch (InvocationTargetException ex) {
+                ex.printStackTrace();
+            } catch (NoSuchMethodException ex) {
+                ex.printStackTrace();
+            } catch (IllegalAccessException ex) {
+                ex.printStackTrace();
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
             }
             drawGrid();
         });
@@ -155,6 +166,16 @@ public class Main extends Application {
             } catch (SAXException ex) {
                 ex.printStackTrace();
             } catch (ParserConfigurationException ex) {
+                ex.printStackTrace();
+            } catch (InstantiationException ex) {
+                ex.printStackTrace();
+            } catch (InvocationTargetException ex) {
+                ex.printStackTrace();
+            } catch (NoSuchMethodException ex) {
+                ex.printStackTrace();
+            } catch (IllegalAccessException ex) {
+                ex.printStackTrace();
+            } catch (ClassNotFoundException ex) {
                 ex.printStackTrace();
             }
             drawGrid();
@@ -288,7 +309,7 @@ public class Main extends Application {
         speed = 2-percentSpeed;
     }
 
-    public void loadConfigFile(File file) throws IOException, SAXException, ParserConfigurationException {
+    public void loadConfigFile(File file) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         config = new Config(file);
         myGrid = config.loadFile();
         frame.setBottom(instantiateCellGrid());

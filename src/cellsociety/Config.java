@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import java.util.Map;
  */
 public class Config {
     private String ConfigNodeName = "ConfigInfo";
+    private String CellsNodeName = "Cells";
 
     private Grid myGrid;
 
@@ -32,7 +34,7 @@ public class Config {
 
     private Map<Integer, Color> myStates;
     private Map<String, Double> myParameters;
-    //private String defaultState;
+    private int defaultState = 0;
 
     private int mySpeed;
     private int myWidth;
@@ -49,16 +51,17 @@ public class Config {
         myFile = xmlFile;
         setupDocument();
         System.out.println("Document Setup Complete");                                                                  //Debugging Purposes Only.
-        extractConfigInfo();
-        System.out.println("Config Info Load Complete");                                                                     //Debugging Purposes Only.
     }
 
     /**
      * Create and set up the Grid based on stored information, and then return it.
      * @return
      */
-    public Grid loadFile(){
+    public Grid loadFile() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        extractConfigInfo();
+        System.out.println("Config Info Load Complete");                                                                //Debugging Purposes Only.
         createGrid();
+        System.out.println("Grid Created");                                                                //Debugging Purposes Only.
         return myGrid;
     }
 
@@ -162,9 +165,9 @@ public class Config {
             extractWidth(dimensionsElement);
             extractSpeed(dimensionsElement);
 
-            System.out.println("Height:" + myHeight);                                                                       //Debug
-            System.out.println("Width:" + myWidth);                                                                       //Debug
-            System.out.println("Speed:" + mySpeed);                                                                       //Debug
+            System.out.println("Height:" + myHeight);                                                                   //Debug
+            System.out.println("Width:" + myWidth);                                                                     //Debug
+            System.out.println("Speed:" + mySpeed);                                                                     //Debug
         }
     }
 
@@ -180,42 +183,56 @@ public class Config {
         myHeight = Integer.parseInt(dimensionsElement.getElementsByTagName("Height").item(0).getTextContent().trim());
     }
 
-
-    public String getTitle(){
-        return myTitle;
-    }
-    public String getAuthor(){
-        return myAuthor;
-    }
-    public int getWidth(){
-        return myWidth;
-    }
-    public int getHeight(){
-        return myHeight;
-    }
-    public Map<Integer, Color> getStates(){
-        return myStates;
-    }
-    /*
-    public String getDefaultState(){
-        return defaultState;
-    }
-    */
     public int getSpeed(){
         return mySpeed;
     }
 
-    //Take file input in
-    //private void readFile throws FileNotFoundException(String path){
-
-    //}
-
-    private void createGrid(){
+    private void createGrid() throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
         myGrid = new Grid();
-        //setParameters();                        //use set parameter (Cell Class)
-        //setStateColors();                       //use set statecolor (Cell Class)
-        //setCellStates();                        //use Cell.setState
+        int row = 0;
 
-        myGrid.setRandomGrid(myTitle, myParameters, new double[]{.2,.7,0}, myWidth, myHeight); //Random Grid, for testing purposes.
+        NodeList rowNodeList = doc.getElementsByTagName("Row");
+
+        for(int i = 0; i<rowNodeList.getLength(); i++){
+            int col = 0;
+            Node singleRowNode = rowNodeList.item(i);
+            Element singleRowElement = (Element) singleRowNode;
+            NodeList cellsNodeList = singleRowElement.getElementsByTagName("Cell");
+
+            for(int k = 0; k<cellsNodeList.getLength(); k++) {
+                if (k < myWidth){
+                    Node singleCellNode = cellsNodeList.item(k);
+                    Integer cellState = Integer.valueOf(singleCellNode.getTextContent());
+
+                    Cell myCell = makeCell(cellState);
+                    myGrid.placeCell(col, row, myCell);
+
+                    col++;
+                }
+            }
+            while(col < myWidth){
+                Cell myCell = makeCell(defaultState);
+                myGrid.placeCell(col, row, myCell);
+                col++;
+            }
+            row++;
+        }
+        //myGrid.setRandomGrid(myTitle, myParameters, new double[]{.2,.7,0}, myWidth, myHeight); //Random Grid, for testing purposes.
+    }
+
+    private Cell makeCell(int state) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
+        Class cellClass = Class.forName("cellsociety."+myTitle);
+        Cell cell = (Cell)(cellClass.getConstructor().newInstance());
+
+        for (Map.Entry<String, Double> parameterEntry : myParameters.entrySet()) {
+            cell.setParam(parameterEntry.getKey(), parameterEntry.getValue());
+        }
+
+        for(Map.Entry<Integer, Color> stateEntry: myStates.entrySet()){
+            cell.setStateColor(stateEntry.getKey(), stateEntry.getValue());
+        }
+
+        cell.setState(state);
+        return cell;
     }
 }

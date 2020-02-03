@@ -157,7 +157,13 @@ public class Grid {
         return ret;
     }
 
-    public void placeCell(int r, int c, Cell cell) {
-        grid.get(r).set(c, cell);
+    public void placeCell(int c, int r, Cell cell) {
+        while(c >= grid.size()){
+            grid.add(new ArrayList<>());
+        }
+        while(r >= grid.get(c).size()){
+            grid.get(c).add(cell);
+        }
+        grid.get(c).set(r, cell);
     }
 }
