@@ -50,6 +50,7 @@ public class Main extends Application {
     private Stage myStage;
     private Grid myGrid;
     private Config config;
+    private BorderPane frame;
     private ArrayList<ArrayList<Rectangle>> cellGrid;
     private Slider slider;
     private Button playpause;
@@ -112,12 +113,11 @@ public class Main extends Application {
      * @throws IOException FIXME
      */
     private Scene createScene() throws ParserConfigurationException, SAXException, IOException {
-        BorderPane frame = new BorderPane();
+        frame = new BorderPane();
         loadConfigFile(chooseFile());
 
         running = false;
         frame.setTop(setToolBar());
-        frame.setBottom(instantiateCellGrid());
 
         setSpeed(.5); // FIXME set speed in loadconfigfile
         Scene scene = new Scene(frame, Color.AZURE);
@@ -291,10 +291,11 @@ public class Main extends Application {
     public void loadConfigFile(File file) throws IOException, SAXException, ParserConfigurationException {
         config = new Config(file);
         myGrid = config.loadFile();
+        frame.setBottom(instantiateCellGrid());
     }
 
 
-
+/*
     public void loadConfigFile2(File file){
         myGrid = new Grid();
         HashMap<String, Double> paramMap = new HashMap<>();
@@ -306,6 +307,8 @@ public class Main extends Application {
         paramMap.put(WaTorCell.SHARK_START_ENERGY, 5.0);
         myGrid.setRandomGrid("PercolationCell", paramMap, new double[]{.2,.7,0}, 50, 50);
     }
+
+ */
 
     /**
      * Updates the colors of the rectangles rendered in the scene. Rechecks the Grid object for color data,
