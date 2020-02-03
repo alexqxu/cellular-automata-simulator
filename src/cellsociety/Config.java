@@ -217,7 +217,6 @@ public class Config {
             }
             row++;
         }
-
         //myGrid.setRandomGrid(myTitle, myParameters, new double[]{.2,.7,0}, myWidth, myHeight); //Random Grid, for testing purposes.
     }
 
@@ -236,5 +235,4 @@ public class Config {
         cell.setState(state);
         return cell;
     }
-
 }
