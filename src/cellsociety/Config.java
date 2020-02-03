@@ -199,15 +199,16 @@ public class Config {
             Element singleRowElement = (Element) singleRowNode;
             NodeList cellsNodeList = singleRowElement.getElementsByTagName("Cell");
 
-            for(int k = 0; k<cellsNodeList.getLength(); k++){
+            for(int k = 0; k<cellsNodeList.getLength(); k++) {
+                if (k < myWidth){
+                    Node singleCellNode = cellsNodeList.item(k);
+                    Integer cellState = Integer.valueOf(singleCellNode.getTextContent());
 
-                Node singleCellNode = cellsNodeList.item(k);
-                Integer cellState = Integer.valueOf(singleCellNode.getTextContent());
+                    Cell myCell = makeCell(cellState);
+                    myGrid.placeCell(col, row, myCell);
 
-                Cell myCell = makeCell(cellState);
-                myGrid.placeCell(col, row, myCell);
-
-                col++;
+                    col++;
+                }
             }
             while(col < myWidth){
                 Cell myCell = makeCell(defaultState);
