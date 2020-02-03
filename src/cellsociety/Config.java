@@ -36,7 +36,7 @@ public class Config {
     private Map<String, Double> myParameters;
     private int defaultState = 0;
 
-    private int mySpeed;
+    private double mySpeed;
     private int myWidth;
     private int myHeight;
 
@@ -172,7 +172,7 @@ public class Config {
     }
 
     private void extractSpeed(Element dimensionsElement) {
-        mySpeed = Integer.parseInt(dimensionsElement.getElementsByTagName("Speed").item(0).getTextContent().trim());        //REFACTOR These 3 later on.
+        mySpeed = Double.parseDouble(dimensionsElement.getElementsByTagName("Speed").item(0).getTextContent().trim());        //REFACTOR These 3 later on.
     }
 
     private void extractWidth(Element dimensionsElement) {
@@ -183,7 +183,7 @@ public class Config {
         myHeight = Integer.parseInt(dimensionsElement.getElementsByTagName("Height").item(0).getTextContent().trim());
     }
 
-    public int getSpeed(){
+    public double getSpeed(){
         return mySpeed;
     }
 
