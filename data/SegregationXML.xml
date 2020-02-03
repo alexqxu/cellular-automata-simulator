@@ -29,7 +29,12 @@
 
             <State>
                 <ID>1</ID>
-                <Color>black</Color>
+                <Color>red</Color>
+            </State>
+
+            <State>
+                <ID>2</ID>
+                <Color>blue</Color>
             </State>
 
         </States>
@@ -38,31 +43,31 @@
     <Cells>
         <Row numbr = "1">
             <Cell>1</Cell>
+            <Cell>2</Cell>
             <Cell>1</Cell>
+            <Cell>2</Cell>
             <Cell>1</Cell>
-            <Cell>1</Cell>
-            <Cell>1</Cell>
-            <Cell>1</Cell>
+            <Cell>2</Cell>
         </Row>
         <Row numbr = "2">
+            <Cell>2</Cell>
             <Cell>1</Cell>
-            <Cell>1</Cell>
-            <Cell>1</Cell>
+            <Cell>2</Cell>
             <Cell>1</Cell>
         </Row>
         <Row numbr = "3">
             <Cell>1</Cell>
-            <Cell>1</Cell>
+            <Cell>2</Cell>
             <Cell>1</Cell>
         </Row>
         <Row numbr = "4">
+            <Cell>2</Cell>
             <Cell>1</Cell>
-            <Cell>1</Cell>
-            <Cell>1</Cell>
+            <Cell>2</Cell>
         </Row>
         <Row numbr = "5">
             <Cell>1</Cell>
-            <Cell>1</Cell>
+            <Cell>2</Cell>
             <Cell>1</Cell>
         </Row>
     </Cells>
