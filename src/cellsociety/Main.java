@@ -114,7 +114,7 @@ public class Main extends Application {
      * @throws IOException FIXME
      */
     private Scene createScene() throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        BorderPane frame = new BorderPane();
+        frame = new BorderPane();
         loadConfigFile(chooseFile());
 
         running = false;
