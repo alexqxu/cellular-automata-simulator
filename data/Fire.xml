@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Simulation>
     <ConfigInfo>
-        <Title>ConwayCell</Title>
+        <Title>FireCell</Title>
         <Author>Alex Xu, aqx</Author>
 
         <Dimensions>
@@ -24,12 +24,17 @@
         <States>
             <State>
                 <ID>0</ID>
-                <Color>white</Color>
+                <Color>yellow</Color>
             </State>
 
             <State>
                 <ID>1</ID>
-                <Color>black</Color>
+                <Color>green</Color>
+            </State>
+
+            <State>
+                <ID>2</ID>
+                <Color>orange</Color>
             </State>
 
         </States>
@@ -41,23 +46,79 @@
             <Cell>1</Cell>
             <Cell>0</Cell>
             <Cell>0</Cell>
+            <Cell>2</Cell>
             <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
             <Cell>1</Cell>
         </Row>
         <Row numbr = "1">
             <Cell>1</Cell>
             <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
             <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
             <Cell>1</Cell>
         </Row>
         <Row numbr = "2">
             <Cell>1</Cell>
             <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
             <Cell>1</Cell>
         </Row>
         <Row numbr = "3">
             <Cell>1</Cell>
             <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
             <Cell>1</Cell>
         </Row>
         <Row numbr = "4">
@@ -74,6 +135,23 @@
         </Row>
         <Row numbr = "8">
             <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
+            <Cell>1</Cell>
         </Row>
         <Row numbr = "9">
             <Cell>1</Cell>
@@ -88,6 +166,23 @@
             <Cell>1</Cell>
         </Row>
         <Row numbr = "13">
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>2</Cell>
             <Cell>1</Cell>
         </Row>
         <Row numbr = "14">
