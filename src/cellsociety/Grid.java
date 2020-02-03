@@ -158,6 +158,12 @@ public class Grid {
     }
 
     public void placeCell(int r, int c, Cell cell) {
+        while(r >= grid.size()){
+            grid.add(new ArrayList<>());
+        }
+        while(c >= grid.get(r).size()){
+            grid.get(r).add(cell);
+        }
         grid.get(r).set(c, cell);
     }
 }
