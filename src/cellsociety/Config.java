@@ -108,7 +108,9 @@ public class Config {
         if(configNode.getNodeType() == Node.ELEMENT_NODE) {
             Element configElement = (Element) configNode;
             extractTitle(configElement);
+            printTitle();
             extractAuthor(configElement);
+            printAuthor();
             extractDimensions(configElement);
             extractStates(configElement);
             extractParameters(configElement);
@@ -171,27 +173,29 @@ public class Config {
     }
 
     private void extractTitle(Element startingElement){
-        myTitle = startingElement.getElementsByTagName(titleNodeName).item(0).getTextContent();
-        System.out.println("Simulation Name: "+ myTitle);
+        myTitle = extractElementValue(startingElement, titleNodeName);
     }
     private void extractAuthor(Element startingElement){
-        myAuthor = startingElement.getElementsByTagName(authorNodeName).item(0).getTextContent();
-        System.out.println("Author: "+ myAuthor);
+        myAuthor = extractElementValue(startingElement, authorNodeName);
     }
 
     private void extractSpeed(Element dimensionsElement) {
-        mySpeed = Double.parseDouble(dimensionsElement.getElementsByTagName(speedNodeName).item(0).getTextContent().trim());
+        mySpeed = Double.parseDouble(extractElementValue(dimensionsElement, speedNodeName).trim());
     }
 
     private void extractWidth(Element dimensionsElement) {
-        myWidth = Integer.parseInt(dimensionsElement.getElementsByTagName(widthNodeName).item(0).getTextContent().trim());
+        myWidth = Integer.parseInt(extractElementValue(dimensionsElement, widthNodeName).trim());
     }
 
     private void extractHeight(Element dimensionsElement) {
-        myHeight = Integer.parseInt(dimensionsElement.getElementsByTagName(heightNodeName).item(0).getTextContent().trim());
+        myHeight = Integer.parseInt(extractElementValue(dimensionsElement, heightNodeName).trim());
     }
 
-    private void printParameters() {                                                                                    //For Debug Purposes
+    private String extractElementValue(Element parentElement, String nodeName){
+        return parentElement.getElementsByTagName(nodeName).item(0).getTextContent();
+    }
+
+    private void printParameters() {
         System.out.println("All Parameters Set (Debug):");
         for (Map.Entry name : myParameters.entrySet()) {
             System.out.println("Name: "+name.getKey() + " & Value: " + name.getValue());
@@ -208,6 +212,14 @@ public class Config {
         System.out.println("Height:" + myHeight);
         System.out.println("Width:" + myWidth);
         System.out.println("Speed:" + mySpeed);
+    }
+
+    private void printTitle(){
+        System.out.println("Simulation Name: "+ myTitle);
+    }
+
+    private void printAuthor(){
+        System.out.println("Author: "+ myAuthor);
     }
 
     /**
