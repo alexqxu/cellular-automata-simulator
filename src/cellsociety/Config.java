@@ -114,7 +114,7 @@ public class Config {
             extractParameters(configElement);
         }
     }
-                                                                                                                        //Note to self: VERY SIMILAR CODE TO EXTRACT STATES
+
     private void extractParameters(Element configElement) {
         myParameters = new HashMap<>();
 
@@ -210,10 +210,25 @@ public class Config {
         System.out.println("Speed:" + mySpeed);
     }
 
+    /**
+     * Based on the parameters set, creates a grid with a randomized configuration of CELLS
+     */
+    private void createRandomGrid(){
+        myGrid = new Grid();
+        myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myWidth, myHeight);
+    }
+
+    /**
+     * Based on parameters AND Cell configuration, creates a grid.
+     * @throws NoSuchMethodException
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     * @throws InstantiationException
+     */
     private void createGrid() throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
         myGrid = new Grid();
         int row = 0;
-
         NodeList rowNodeList = doc.getElementsByTagName(rowNodeName);
 
         for(int i = 0; i<rowNodeList.getLength(); i++){
@@ -226,39 +241,53 @@ public class Config {
                 if (k < myWidth){
                     Node singleCellNode = cellsNodeList.item(k);
                     Integer cellState = Integer.valueOf(singleCellNode.getTextContent());
-
                     Cell myCell = makeCell(cellState);
                     myGrid.placeCell(col, row, myCell);
-
                     col++;
                 }
             }
-            while(col < myWidth){
-                Cell myCell = makeCell(defaultState);
-                myGrid.placeCell(col, row, myCell);
-                col++;
-            }
+            fillRemainingRow(col, row);
             row++;
         }
     }
 
-    private void createRandomGrid(){
-        myGrid = new Grid();
-        myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myWidth, myHeight);
+    /**
+     * Fills the remaining row of cells with cells of the default state, if the XML file does not specify enough cells for a particular row.
+     * @param col the starting location in the row
+     * @param row the row to be filled
+     * @throws InvocationTargetException
+     * @throws NoSuchMethodException
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
+    private void fillRemainingRow(int col, int row) throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        while(col < myWidth){
+            Cell myCell = makeCell(defaultState);
+            myGrid.placeCell(col, row, myCell);
+            col++;
+        }
     }
 
+    /**
+     * Creates a cell and sets all relevant parameters to it from the config XML.
+     * @param state the specific state of the particular cell
+     * @return
+     * @throws NoSuchMethodException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     * @throws InstantiationException
+     * @throws ClassNotFoundException
+     */
     private Cell makeCell(int state) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
         Class cellClass = Class.forName(packagePrefixName +myTitle);
         Cell cell = (Cell)(cellClass.getConstructor().newInstance());
-
         for (Map.Entry<String, Double> parameterEntry : myParameters.entrySet()) {
             cell.setParam(parameterEntry.getKey(), parameterEntry.getValue());
         }
-
         for(Map.Entry<Integer, Color> stateEntry: myStates.entrySet()){
             cell.setStateColor(stateEntry.getKey(), stateEntry.getValue());
         }
-
         cell.setState(state);
         return cell;
     }
