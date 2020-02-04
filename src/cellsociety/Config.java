@@ -21,24 +21,41 @@ import java.util.Map;
  * @author Alex Xu aqx
  */
 public class Config {
-    private String ConfigNodeName = "ConfigInfo";
-    private String CellsNodeName = "Cells";
+    private String packagePrefixName = "cellsociety.";
 
-    private Grid myGrid;
+    private String configNodeName = "ConfigInfo";
+    private String titleNodeName = "Title";
+    private String authorNodeName = "Author";
+    private String parametersNodeName = "SpecialParameters";
+    private String statesNodeName = "States";
+    private String singleParameterNodeName = "Parameter";
+    private String singleStateNodeName = "State";
+    private String parameterNameAttributeName = "name";
+    private String rowNodeName = "Row";
+    private String stateIDNodeName = "ID";
+    private String colorNodeName = "Color";
+    private String dimensionsNodeName = "Dimensions";
+    private String speedNodeName = "Speed";
+    private String widthNodeName = "Width";
+    private String heightNodeName = "Height";
+    private String cellNodeName = "Cell";
+
+    private String docSetUpConfirmationMessage = "Document Setup Complete";
+    private String configSetUpConfirmationMessage = "Config Info Load Complete";
+    private String gridConfirmationMessage = "Grid Created";
 
     private File myFile;
     private Document doc;
 
+    private Grid myGrid;
     private String myTitle;
     private String myAuthor;
-
-    private Map<Integer, Color> myStates;
-    private Map<String, Double> myParameters;
-    private int defaultState = 0;
-
     private double mySpeed;
     private int myWidth;
     private int myHeight;
+    private Map<Integer, Color> myStates;
+    private Map<String, Double> myParameters;
+    private int defaultState = 0;
 
     /**
      * Constructor for the Config object. Sets the filepath and sets up the documentBuilder.
@@ -50,7 +67,7 @@ public class Config {
     public Config(File xmlFile) throws ParserConfigurationException, SAXException, IOException {
         myFile = xmlFile;
         setupDocument();
-        System.out.println("Document Setup Complete");                                                                  //Debugging Purposes Only.
+        System.out.println(docSetUpConfirmationMessage);
     }
 
     /**
@@ -59,24 +76,32 @@ public class Config {
      */
     public Grid loadFile() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         extractConfigInfo();
-        System.out.println("Config Info Load Complete");                                                                //Debugging Purposes Only.
+        System.out.println(configSetUpConfirmationMessage);
         createGrid();
-        System.out.println("Grid Created");                                                                //Debugging Purposes Only.
+        System.out.println(gridConfirmationMessage);
         return myGrid;
+    }
+
+    /**
+     * Returns the update speed of the simulation, as defined within the initial config XML document.
+     * @return speed of the simulation
+     */
+    public double getSpeed(){
+        return mySpeed;
     }
 
     private void setupDocument() throws IOException, SAXException, ParserConfigurationException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         doc = builder.parse(myFile);
-        doc.getDocumentElement().normalize();                                                                           //optional, might remove later.
+        doc.getDocumentElement().normalize();
     }
 
     /**
      * Extracts all information in the XML Document that lies within <ConfigInfo>.
      */
     private void extractConfigInfo(){
-        NodeList configNodeList = doc.getElementsByTagName(ConfigNodeName);
+        NodeList configNodeList = doc.getElementsByTagName(configNodeName);
         Node configNode = configNodeList.item(0);
 
         if(configNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -88,31 +113,21 @@ public class Config {
             extractParameters(configElement);
         }
     }
-
-    private void extractTitle(Element startingElement){
-        myTitle = startingElement.getElementsByTagName("Title").item(0).getTextContent();
-        System.out.println("Simulation Name: "+ myTitle);                                                               //For Debugging Purposes.
-    }
-    private void extractAuthor(Element startingElement){
-        myAuthor = startingElement.getElementsByTagName("Author").item(0).getTextContent();
-        System.out.println("Author: "+ myAuthor);
-    }
-
                                                                                                                         //Note to self: VERY SIMILAR CODE TO EXTRACT STATES
     private void extractParameters(Element configElement) {
         myParameters = new HashMap<>();
 
-        Node parametersNode = configElement.getElementsByTagName("SpecialParameters").item(0);
+        Node parametersNode = configElement.getElementsByTagName(parametersNodeName).item(0);
         if(parametersNode.getNodeType() == Node.ELEMENT_NODE){
             Element parametersElement = (Element) parametersNode;
 
-            NodeList parametersNodeList = parametersElement.getElementsByTagName("Parameter");                          //Gets the list of Nodes
+            NodeList parametersNodeList = parametersElement.getElementsByTagName(singleParameterNodeName);
 
             for(int i = 0; i<parametersNodeList.getLength(); i++){
                 Node singleParameterNode = parametersNodeList.item(i);
                 if(singleParameterNode.getNodeType() == Node.ELEMENT_NODE){
                     Element singleParameterElement = (Element) singleParameterNode;
-                    String parameterName = singleParameterElement.getAttribute("name");
+                    String parameterName = singleParameterElement.getAttribute(parameterNameAttributeName);
                     Double parameterValue = Double.valueOf(singleParameterElement.getTextContent());
                     myParameters.put(parameterName, parameterValue);
                 }
@@ -121,28 +136,21 @@ public class Config {
         printParameters();
     }
 
-    private void printParameters() {                                                                                    //For Debug Purposes
-        System.out.println("All Parameters Set (Debug):");
-        for (Map.Entry me : myParameters.entrySet()) {
-            System.out.println("Name: "+me.getKey() + " & Value: " + me.getValue());
-        }
-    }
-
     private void extractStates(Element startingElement){
         myStates = new HashMap<>();
 
-        Node statesNode = startingElement.getElementsByTagName("States").item(0);
+        Node statesNode = startingElement.getElementsByTagName(statesNodeName).item(0);
         if(statesNode.getNodeType() == Node.ELEMENT_NODE){
             Element statesElement = (Element) statesNode;
 
-            NodeList statesNodeList = statesElement.getElementsByTagName("State");
+            NodeList statesNodeList = statesElement.getElementsByTagName(singleStateNodeName);
 
             for(int i=0; i<statesNodeList.getLength(); i++) {
                 Node singleStateNode = statesNodeList.item(i);
                 if (singleStateNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element singleStateElement = (Element) singleStateNode;
-                    Integer stateID = Integer.valueOf(singleStateElement.getElementsByTagName("ID").item(0).getTextContent());
-                    String stateColor = singleStateElement.getElementsByTagName("Color").item(0).getTextContent();
+                    Integer stateID = Integer.valueOf(singleStateElement.getElementsByTagName(stateIDNodeName).item(0).getTextContent());
+                    String stateColor = singleStateElement.getElementsByTagName(colorNodeName).item(0).getTextContent();
                     myStates.put(stateID, Color.web(stateColor));
                 }
             }
@@ -150,54 +158,68 @@ public class Config {
         printStates();
     }
 
-    private void printStates() {
-        System.out.println("All States (Debug):");
-        for (Map.Entry me : myStates.entrySet()) {
-            System.out.println("State: "+me.getKey() + " & Value: " + me.getValue());
-        }
-    }
-
     private void extractDimensions(Element startingElement){
-        Node dimensionsNode = startingElement.getElementsByTagName("Dimensions").item(0);
+        Node dimensionsNode = startingElement.getElementsByTagName(dimensionsNodeName).item(0);
         if(dimensionsNode.getNodeType() == Node.ELEMENT_NODE){
             Element dimensionsElement = (Element) dimensionsNode;
             extractHeight(dimensionsElement);
             extractWidth(dimensionsElement);
             extractSpeed(dimensionsElement);
-
-            System.out.println("Height:" + myHeight);                                                                   //Debug
-            System.out.println("Width:" + myWidth);                                                                     //Debug
-            System.out.println("Speed:" + mySpeed);                                                                     //Debug
+            printDimensions();
         }
     }
 
+    private void extractTitle(Element startingElement){
+        myTitle = startingElement.getElementsByTagName(titleNodeName).item(0).getTextContent();
+        System.out.println("Simulation Name: "+ myTitle);
+    }
+    private void extractAuthor(Element startingElement){
+        myAuthor = startingElement.getElementsByTagName(authorNodeName).item(0).getTextContent();
+        System.out.println("Author: "+ myAuthor);
+    }
+
     private void extractSpeed(Element dimensionsElement) {
-        mySpeed = Double.parseDouble(dimensionsElement.getElementsByTagName("Speed").item(0).getTextContent().trim());        //REFACTOR These 3 later on.
+        mySpeed = Double.parseDouble(dimensionsElement.getElementsByTagName(speedNodeName).item(0).getTextContent().trim());
     }
 
     private void extractWidth(Element dimensionsElement) {
-        myWidth = Integer.parseInt(dimensionsElement.getElementsByTagName("Width").item(0).getTextContent().trim());
+        myWidth = Integer.parseInt(dimensionsElement.getElementsByTagName(widthNodeName).item(0).getTextContent().trim());
     }
 
     private void extractHeight(Element dimensionsElement) {
-        myHeight = Integer.parseInt(dimensionsElement.getElementsByTagName("Height").item(0).getTextContent().trim());
+        myHeight = Integer.parseInt(dimensionsElement.getElementsByTagName(heightNodeName).item(0).getTextContent().trim());
     }
 
-    public double getSpeed(){
-        return mySpeed;
+    private void printParameters() {                                                                                    //For Debug Purposes
+        System.out.println("All Parameters Set (Debug):");
+        for (Map.Entry name : myParameters.entrySet()) {
+            System.out.println("Name: "+name.getKey() + " & Value: " + name.getValue());
+        }
+    }
+    private void printStates() {
+        System.out.println("All States (Debug):");
+        for (Map.Entry stateID : myStates.entrySet()) {
+            System.out.println("State: "+stateID.getKey() + " & Value: " + stateID.getValue());
+        }
+    }
+
+    private void printDimensions(){
+        System.out.println("Height:" + myHeight);
+        System.out.println("Width:" + myWidth);
+        System.out.println("Speed:" + mySpeed);
     }
 
     private void createGrid() throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
         myGrid = new Grid();
         int row = 0;
 
-        NodeList rowNodeList = doc.getElementsByTagName("Row");
+        NodeList rowNodeList = doc.getElementsByTagName(rowNodeName);
 
         for(int i = 0; i<rowNodeList.getLength(); i++){
             int col = 0;
             Node singleRowNode = rowNodeList.item(i);
             Element singleRowElement = (Element) singleRowNode;
-            NodeList cellsNodeList = singleRowElement.getElementsByTagName("Cell");
+            NodeList cellsNodeList = singleRowElement.getElementsByTagName(cellNodeName);
 
             for(int k = 0; k<cellsNodeList.getLength(); k++) {
                 if (k < myWidth){
@@ -221,7 +243,7 @@ public class Config {
     }
 
     private Cell makeCell(int state) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
-        Class cellClass = Class.forName("cellsociety."+myTitle);
+        Class cellClass = Class.forName(packagePrefixName +myTitle);
         Cell cell = (Cell)(cellClass.getConstructor().newInstance());
 
         for (Map.Entry<String, Double> parameterEntry : myParameters.entrySet()) {
