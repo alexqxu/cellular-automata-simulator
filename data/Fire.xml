@@ -13,6 +13,7 @@
         <!-- There can be extra parameters, only those relevant will be used. -->
         <SpecialParameters>
             <Parameter name = "probCatch">0.7</Parameter>
+            <Parameter name = "probGrow">0.1</Parameter>
             <Parameter name = "happinessThresh">0.3</Parameter>
             <Parameter name = "sharkBreedTime">40.0</Parameter>
             <Parameter name = "fishBreedTime">5.0</Parameter>
