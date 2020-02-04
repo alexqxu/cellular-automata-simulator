@@ -109,6 +109,7 @@ public class Main extends Application {
      * and collects these rectangles into a gridpane.
      * @return A gridpane containing all the rectangles in the simulation
      */
+    //FIXME I set the width equal to the size/num vert cells. This will only work for squares, I am wondering why it is breaking like this.
     private Node instantiateCellGrid() {
         GridPane gridpane = new GridPane();
         cellGrid = new ArrayList<ArrayList<Rectangle>>();
@@ -121,7 +122,7 @@ public class Main extends Application {
                 cell.setStrokeType(StrokeType.INSIDE);
                 cell.setStroke(Color.GRAY);
                 cell.setStrokeWidth(.5);
-                cell.setWidth(SIZE/colorgrid[i].length);
+                cell.setWidth(SIZE/colorgrid.length);
                 cell.setHeight(SIZE/colorgrid.length);
                 cell.setX(j*cell.getWidth());
                 cell.setY(i*cell.getHeight());
