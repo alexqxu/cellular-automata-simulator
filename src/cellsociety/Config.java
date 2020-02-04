@@ -56,6 +56,7 @@ public class Config {
     private Map<Integer, Color> myStates;
     private Map<String, Double> myParameters;
     private int defaultState = 0;
+    private double[] randomGridVariables = new double[]{.2,.7,0};
 
     /**
      * Constructor for the Config object. Sets the filepath and sets up the documentBuilder.
@@ -239,7 +240,11 @@ public class Config {
             }
             row++;
         }
-        //myGrid.setRandomGrid(myTitle, myParameters, new double[]{.2,.7,0}, myWidth, myHeight); //Random Grid, for testing purposes.
+    }
+
+    private void createRandomGrid(){
+        myGrid = new Grid();
+        myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myWidth, myHeight);
     }
 
     private Cell makeCell(int state) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
