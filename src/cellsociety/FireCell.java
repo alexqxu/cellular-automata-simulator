@@ -7,6 +7,8 @@ import java.util.Random;
 
 public class FireCell extends Cell {
     public static final String PROB_CATCH = "probCatch";
+    public static final String PROB_GROW = "probGrow";
+
     public FireCell() {
         super();
         defaultEdge = 0;
