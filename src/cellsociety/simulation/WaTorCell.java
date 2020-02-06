@@ -42,12 +42,12 @@ public class WaTorCell extends Cell {
         fish.add(neighbors[i]);
       }
     }
-    setParam(reproductionTimer, getParam(reproductionTimer)-1);
+    setParam(reproductionTimer, getParam(reproductionTimer) - 1);
     if (state == 1) {
       fishPlanUpdate(updatedQueue, open);
     }
     if (state == 2) {
-      setParam(energy, getParam(energy)-1);
+      setParam(energy, getParam(energy) - 1);
       if (getParam(energy) <= 0) {
         nextState = 0;
         return;

@@ -1,6 +1,5 @@
 package cellsociety.simulation;
 
-import cellsociety.simulation.Cell;
 import java.util.Collections;
 import java.util.LinkedList;
 import javafx.scene.paint.Color;
@@ -55,12 +54,12 @@ public class SegregationCell extends Cell {
     double total = 0;
     double same = 0;
     for (int i = 0; i < neighbors.length; i++) {
-        if (neighbors[i].getState() > 0) {
-            total++;
-        }
-        if (neighbors[i].getState() == getState()) {
-            same++;
-        }
+      if (neighbors[i].getState() > 0) {
+        total++;
+      }
+      if (neighbors[i].getState() == getState()) {
+        same++;
+      }
     }
     return total == 0 || (same / total) > getParam(HAPPINESS_THRESH);
   }

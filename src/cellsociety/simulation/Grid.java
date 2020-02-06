@@ -1,6 +1,5 @@
 package cellsociety.simulation;
 
-import cellsociety.simulation.Cell;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -8,9 +7,10 @@ import java.util.Map;
 import java.util.Random;
 import javafx.scene.paint.Color;
 
-public class Grid {
+public abstract class Grid {
 
-  private ArrayList<ArrayList<Cell>> grid;
+  public static final String SIMULATION_PREFIX = "cellsociety.simulation.";
+  protected ArrayList<ArrayList<Cell>> grid;
 
   public Grid() {
     grid = new ArrayList<ArrayList<Cell>>();
@@ -35,6 +35,8 @@ public class Grid {
     grid.get(r).get(c).incrementState();
   }
 
+  abstract Cell[] getNeighbors(int r, int c);
+
   /**
    * Returns the 8 neighbors of the cell at r,c starting with North and rotating clockwise Acts as
    * though the grid is toroidal
@@ -43,10 +45,8 @@ public class Grid {
    * @param c
    * @return
    */
-  private Cell[] getNeighbors(int r, int c) {
+  protected Cell[] getSpecificNeighbors(int r, int c, int[] dr, int[] dc) {
     Cell[] ret = new Cell[8];
-    int[] dr = {-1, -1, 0, 1, 1, 1, 0, -1};
-    int[] dc = {0, 1, 1, 1, 0, -1, -1, -1};
     if (getCell(r, c).getDefaultEdge() == -1) {
       for (int i = 0; i < ret.length; i++) {
         ret[i] = grid.get((r + dr[i] + getHeight()) % getHeight())
@@ -71,6 +71,16 @@ public class Grid {
     return ret;
   }
 
+  protected Cell[] getNeighbors(Cell cell) {
+    for (int r = 0; r < grid.size(); r++) {
+      int c = grid.get(r).indexOf(cell);
+      if (c != -1) {
+        return getNeighbors(r, c);
+      }
+    }
+    throw new RuntimeException("cell wasn't in the grid");
+  }
+
   public void setRandomGrid(String className, Map<String, Double> paramMap, double[] stateChances,
       int rows, int cols) {
     ArrayList<ArrayList<Cell>> ret = new ArrayList<>();
@@ -89,11 +99,11 @@ public class Grid {
     Class cellClass = null;
     Cell cell = null;
     try {
-      cellClass = Class.forName("cellsociety.simulation." + className);
+      cellClass = Class.forName(SIMULATION_PREFIX + className);
       cell = (Cell) (cellClass.getConstructor().newInstance());
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
         NoSuchMethodException | InvocationTargetException e) {
-      e.printStackTrace();
+      cell = new FireCell(); //FIXME this should never happen bc error handling in config
     }
     for (String param : paramMap.keySet()) {
       cell.setParam(param, paramMap.get(param));
@@ -115,15 +125,15 @@ public class Grid {
     return cell;
   }
 
-  private int getWidth() {
+  protected int getWidth() {
     return grid.get(0).size();
   }
 
-  private int getHeight() {
+  protected int getHeight() {
     return grid.size();
   }
 
-  private LinkedList<Cell> getEmptyQueue() {
+  protected LinkedList<Cell> getEmptyQueue() {
     LinkedList<Cell> ret = new LinkedList<>();
     for (ArrayList<Cell> row : grid) {
       for (Cell cell : row) {
@@ -135,17 +145,7 @@ public class Grid {
     return ret;
   }
 
-  private Cell[] getNeighbors(Cell cell) {
-    for (int r = 0; r < grid.size(); r++) {
-      int c = grid.get(r).indexOf(cell);
-      if (c != -1) {
-        return getNeighbors(r, c);
-      }
-    }
-    throw new RuntimeException("cell wasn't in the grid");
-  }
-
-  private Cell getCell(int r, int c) {
+  protected Cell getCell(int r, int c) {
     return grid.get(r).get(c);
   }
 
@@ -163,7 +163,7 @@ public class Grid {
     return ret;
   }
 
-  public void placeCell(int c, int r, Cell cell) {
+  public void placeCell(int c, int r, Cell cell) { //FIXME r/c convention flipped here?
     while (c >= grid.size()) {
       grid.add(new ArrayList<>());
     }

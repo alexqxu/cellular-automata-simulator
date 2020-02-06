@@ -2,6 +2,7 @@ package cellsociety;
 
 import cellsociety.simulation.Cell;
 import cellsociety.simulation.Grid;
+import cellsociety.simulation.RectGrid;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -237,7 +238,7 @@ public class Config {
    * Based on the parameters set, creates a grid with a randomized configuration of CELLS
    */
   private void createRandomGrid() {
-    myGrid = new Grid();
+    myGrid = new RectGrid(); //FIXME temp fix by Maverick after making Grid abstract
     myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myWidth, myHeight);
   }
 
@@ -252,7 +253,7 @@ public class Config {
    */
   private void createGrid()
       throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
-    myGrid = new Grid();
+    myGrid = new RectGrid(); //FIXME temp fix by Maverick after making Grid abstract
     int row = 0;
     NodeList rowNodeList = doc.getElementsByTagName(rowNodeName);
 
