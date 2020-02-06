@@ -89,7 +89,7 @@ public class Grid {
     Class cellClass = null;
     Cell cell = null;
     try {
-      cellClass = Class.forName("cellsociety." + className);
+      cellClass = Class.forName("cellsociety.simulation." + className);
       cell = (Cell) (cellClass.getConstructor().newInstance());
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
         NoSuchMethodException | InvocationTargetException e) {

@@ -24,7 +24,7 @@ import org.xml.sax.SAXException;
  */
 public class Config {
 
-  private String packagePrefixName = "cellsociety.";
+  private String packagePrefixName = "cellsociety.simulation.";
 
   private String configNodeName = "ConfigInfo";
   private String titleNodeName = "Title";
