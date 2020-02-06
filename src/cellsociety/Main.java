@@ -78,6 +78,7 @@ public class Main extends Application {
     myVisualizer.setStage(newStage);
     newStage.setScene(myVisualizer.createScene());
     newStage.show();
+    newStage.setTitle(TITLE);
 
     KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->myVisualizer.update(SECOND_DELAY));
     Timeline animation = new Timeline();
