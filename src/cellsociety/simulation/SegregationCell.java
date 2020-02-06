@@ -2,7 +2,6 @@ package cellsociety.simulation;
 
 import java.util.Collections;
 import java.util.LinkedList;
-import javafx.scene.paint.Color;
 
 public class SegregationCell extends Cell {
 
@@ -11,7 +10,7 @@ public class SegregationCell extends Cell {
   public SegregationCell() {
     super();
     defaultEdge = 0;
-    addStates(new int[]{0,1,2});
+    addStates(new int[]{0, 1, 2});
   }
 
   public SegregationCell(double happinessThresh) {

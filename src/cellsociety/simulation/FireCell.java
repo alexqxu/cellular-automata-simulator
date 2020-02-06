@@ -2,7 +2,6 @@ package cellsociety.simulation;
 
 import java.util.LinkedList;
 import java.util.Random;
-import javafx.scene.paint.Color;
 
 public class FireCell extends Cell {
 
@@ -12,7 +11,7 @@ public class FireCell extends Cell {
   public FireCell() {
     super();
     defaultEdge = 0;
-    addStates(new int[]{0,1,2});
+    addStates(new int[]{0, 1, 2});
   }
 
   public FireCell(double probCatch) {

@@ -1,8 +1,6 @@
 package cellsociety.simulation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,7 +11,7 @@ public abstract class Cell {
 
   protected String[] params;
   protected String[] groundParams;
-  protected ArrayList<Integer> usedStates;
+  protected ArrayList<Integer> usedStates = new ArrayList<>();
   protected int state;
   protected int nextState;
   protected Map<String, Double> paramMap = new HashMap<>();
@@ -145,7 +143,7 @@ public abstract class Cell {
 
   public void incrementState() {
     int max = getHighestState();
-    state = (state + 1) % (max+1);
+    state = (state + 1) % (max + 1);
   }
 
   public void addState(int st) {
@@ -153,7 +151,7 @@ public abstract class Cell {
   }
 
   public void addStates(int[] states) {
-    for (int i: states) {
+    for (int i : states) {
       addState(i);
     }
   }

@@ -1,6 +1,6 @@
 package cellsociety.visualizer;
 
-import cellsociety.Config;
+import cellsociety.simulation.Grid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import javafx.scene.Node;
@@ -12,16 +12,16 @@ import javafx.scene.shape.StrokeType;
 
 public class RectVisualizer extends Visualizer {
 
-  public RectVisualizer(Config config)
+  public RectVisualizer(Grid grid)
       throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-    super(config);
+    super(grid);
   }
 
-  protected Node instantiateCellGrid(){
+  protected Node instantiateCellGrid() {
     GridPane gridpane = new GridPane();
     cellGrid = new ArrayList<ArrayList<Shape>>();
     Color[][] colorgrid = getColorGrid();
-    for(int i = 0; i < colorgrid.length; i++) {
+    for (int i = 0; i < colorgrid.length; i++) {
       cellGrid.add(new ArrayList<Shape>());
       for (int j = 0; j < colorgrid[i].length; j++) {
         Rectangle cell = new Rectangle();
@@ -29,13 +29,13 @@ public class RectVisualizer extends Visualizer {
         cell.setStrokeType(StrokeType.INSIDE);
         cell.setStroke(Color.GRAY);
         cell.setStrokeWidth(.5);
-        cell.setWidth(SIZE/colorgrid.length);
-        cell.setHeight(SIZE/colorgrid[i].length);
-        cell.setX(j*cell.getWidth());
-        cell.setY(i*cell.getHeight());
+        cell.setWidth(SIZE / colorgrid.length);
+        cell.setHeight(SIZE / colorgrid[i].length);
+        cell.setX(j * cell.getWidth());
+        cell.setY(i * cell.getHeight());
         final int r = i;
         final int c = j;
-        cell.setOnMouseClicked(e->{
+        cell.setOnMouseClicked(e -> {
           myGrid.incrementCellState(r, c);
           drawGrid();
         });

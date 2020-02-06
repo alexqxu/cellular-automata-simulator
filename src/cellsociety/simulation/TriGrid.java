@@ -7,7 +7,7 @@ public class TriGrid extends Grid {
     //FIXME need to flip/flop neighborhoods
     int[] dr;
     int[] dc;
-    if ((r+c)%2==0){
+    if ((r + c) % 2 == 0) {
       dr = new int[]{-1, -1, 0, 1, 1, 1, 0, -1};
       dc = new int[]{0, 1, 1, 1, 0, -1, -1, -1};
     } else {

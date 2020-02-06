@@ -1,7 +1,6 @@
 package cellsociety.simulation;
 
 import java.util.LinkedList;
-import javafx.scene.paint.Color;
 
 public class ConwayCell extends Cell {
 
@@ -12,7 +11,7 @@ public class ConwayCell extends Cell {
    */
   public ConwayCell() {
     super();
-    addStates(new int[]{0,1});
+    addStates(new int[]{0, 1});
   }
 
 
