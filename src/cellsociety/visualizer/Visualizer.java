@@ -16,6 +16,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -41,18 +43,20 @@ public abstract class Visualizer {
   protected static final String STYLESHEET = "default.css";
   protected static final int MAX_UPDATE_PERIOD = 2;
 
-
   protected Grid myGrid;
+  protected Scene myScene;
   private Config config;
   private ResourceBundle myResources;
   private BorderPane frame;
   protected ArrayList<ArrayList<Shape>> cellGrid;
   private Slider slider;
   private Button playpause;
-  private Button loadFile;
+  private Menu loadFile;
+  private Menu newWindow;
+  private Menu exit;
   private Button reset;
   private Button step;
-  private FileChooser fileChooser;
+  private MenuBar menuBar;
   private File currentFile;
   private double secondsElapsed;
   private double speed;
@@ -81,7 +85,7 @@ public abstract class Visualizer {
     frame.setBottom(instantiateCellGrid());
     Scene scene = new Scene(frame, Color.AZURE);
     scene.getStylesheets().add(getClass().getClassLoader().getResource(STYLESHEET).toExternalForm());
-
+    myScene = scene;
     return scene;
   }
 
@@ -92,9 +96,7 @@ public abstract class Visualizer {
    * @return A gridpane containing all the rectangles in the simulation
    */
   //FIXME I set the width equal to the size/num vert cells. This will only work for squares, I am wondering why it is breaking like this.
-  //
   protected abstract Node instantiateCellGrid();
-
 
   /**
    * Loads an .xml file by passing it to the Config class which creates the model backend for the simulation.
@@ -123,8 +125,30 @@ public abstract class Visualizer {
     HBox toolbar = new HBox();
     final Pane spacer = new Pane();
     HBox.setHgrow(spacer, Priority.ALWAYS);
-    playpause = makeButton("Play", e -> handlePlayPause(playpause));
-    loadFile = makeButton("Load", e -> {
+    menuBar = new MenuBar();
+    //FIXME throws
+    newWindow = makeMenu("New", e-> {
+      try {
+        Main.newWindow();
+      } catch (IOException ex) {
+        ex.printStackTrace();
+      } catch (SAXException ex) {
+        ex.printStackTrace();
+      } catch (ParserConfigurationException ex) {
+        ex.printStackTrace();
+      } catch (ClassNotFoundException ex) {
+        ex.printStackTrace();
+      } catch (NoSuchMethodException ex) {
+        ex.printStackTrace();
+      } catch (InvocationTargetException ex) {
+        ex.printStackTrace();
+      } catch (InstantiationException ex) {
+        ex.printStackTrace();
+      } catch (IllegalAccessException ex) {
+        ex.printStackTrace();
+      }
+    });
+    loadFile = makeMenu("Load", e -> {
       //FIXME We will die if we dont deal with these exception calls
       try {
         loadConfigFile(Main.chooseFile());
@@ -147,6 +171,8 @@ public abstract class Visualizer {
       }
       drawGrid();
     });
+    //exit = makeMenu("Exit", e-> Main.close(myScene)); FIXME
+    playpause = makeButton("Play", e -> handlePlayPause(playpause));
     reset = makeButton("Reset", e->{ //FIXME add intentional exceptions
       try {
         loadConfigFile(currentFile);
@@ -187,11 +213,11 @@ public abstract class Visualizer {
         setSpeed(new_val.doubleValue()/100);
       }
     });
-
+    menuBar.getMenus().addAll(loadFile, newWindow);
     toolbar.getChildren().add(playpause);
     toolbar.getChildren().add(step);
     toolbar.getChildren().add(reset);
-    toolbar.getChildren().add(loadFile);
+    toolbar.getChildren().add(menuBar);
     toolbar.getChildren().add(spacer);
     toolbar.getChildren().add(slider);
     return toolbar;
@@ -207,6 +233,20 @@ public abstract class Visualizer {
   private Button makeButton (String property, EventHandler<ActionEvent> handler) {
     final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     Button result = new Button();
+    String label = myResources.getString(property);
+    if (label.matches(IMAGEFILE_SUFFIXES)) {
+      result.setGraphic(new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(label))));
+    }
+    else {
+      result.setText(label);
+    }
+    result.setOnAction(handler);
+    return result;
+  }
+
+  private Menu makeMenu (String property, EventHandler<ActionEvent> handler) {
+    final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
+    Menu result = new Menu();
     String label = myResources.getString(property);
     if (label.matches(IMAGEFILE_SUFFIXES)) {
       result.setGraphic(new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(label))));

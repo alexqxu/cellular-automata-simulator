@@ -10,6 +10,9 @@ import java.lang.reflect.InvocationTargetException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.scene.Node;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -28,17 +31,20 @@ public class Main extends Application {
   public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 
   private Stage myStage;
+  private Config myConfig;
     /**
      * Start method. Runs game loop after setting up stage and scene data.
      * @param stage the window in which the application runs
      * @throws Exception
      */
+    //FIXME throws
     @Override
     public void start(Stage stage) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException { //throws exception?
         myStage = stage;
 
-        Config myConfig = new Config(chooseFile());
+        myConfig = new Config(chooseFile());
         //Visualizer myVisualizer = myConfig.getVisualizer();
+        //FIXME REFACTOR WITH NEW WINDOW
         Visualizer myVisualizer = new RectVisualizer(myConfig);
 
         myStage.setScene(myVisualizer.createScene());
@@ -69,8 +75,22 @@ public class Main extends Application {
       }
       return null;
     }
+    //FIXME throws
+    public static void newWindow()
+        throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+      Stage newStage = new Stage();
+      Config newConfig = new Config(chooseFile());
+      newStage.setTitle(TITLE);
+      Visualizer newVisualizer = new HexVisualizer(newConfig);
 
-
+      newStage.setScene(newVisualizer.createScene());
+      newStage.show();
+      KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->newVisualizer.update(SECOND_DELAY));
+      Timeline animation = new Timeline();
+      animation.setCycleCount(Timeline.INDEFINITE);
+      animation.getKeyFrames().add(frame);
+      animation.play();
+    }
 
     /**
      * Runner method, actually runs the game when a user presses
