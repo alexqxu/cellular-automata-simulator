@@ -11,9 +11,8 @@ public class WaTorCell extends Cell {
   public static final String SHARK_BREED_TIME = "sharkBreedTime";
   public static final String FISH_FEED_ENERGY = "fishFeedEnergy";
   public static final String SHARK_START_ENERGY = "sharkStartEnergy";
-  private double reproductionTimer;
-  private double energy;
-  private WaTorCell movedTo;
+  private static final String reproductionTimer = "reproductionTimer";
+  private static final String energy = "energy";
 
   public WaTorCell() {
     super();
@@ -43,12 +42,13 @@ public class WaTorCell extends Cell {
         fish.add(neighbors[i]);
       }
     }
-    reproductionTimer--;
+    setParam(reproductionTimer, getParam(reproductionTimer)-1);
     if (state == 1) {
       fishPlanUpdate(updatedQueue, open);
     }
     if (state == 2) {
-      if (--energy <= 0) {
+      setParam(energy, getParam(energy)-1);
+      if (getParam(energy) <= 0) {
         nextState = 0;
         return;
       }
@@ -62,6 +62,7 @@ public class WaTorCell extends Cell {
   private void sharkPlanUpdate(LinkedList<Cell> updatedQueue, ArrayList<Cell> open,
       ArrayList<Cell> fish) {
     Random rand = new Random();
+    WaTorCell movedTo = null;
     if (fish.size() > 0 || open.size() > 0) {
       if (fish.size() > 0) {
         int nextLoc = rand.nextInt(fish.size());
@@ -76,15 +77,15 @@ public class WaTorCell extends Cell {
         return;
       }
       if (movedTo.state == 1) {
-        energy += getParam(FISH_FEED_ENERGY);
+        setParam(energy, getParam(energy) + getParam(FISH_FEED_ENERGY));
       }
-      swap(this, movedTo);
+      swap(movedTo);
       this.nextState = 0;
-      if (movedTo.reproductionTimer <= 0) {
+      if (movedTo.getParam(reproductionTimer) <= 0) {
         nextState = 2;
-        energy = getParam(SHARK_START_ENERGY);
-        reproductionTimer = getParam(SHARK_BREED_TIME);
-        movedTo.reproductionTimer = getParam(SHARK_START_ENERGY);
+        setParam(energy, getParam(SHARK_START_ENERGY));
+        setParam(reproductionTimer, getParam(SHARK_BREED_TIME));
+        movedTo.setParam(reproductionTimer, getParam(SHARK_START_ENERGY));
       }
       return;
     }
@@ -93,6 +94,7 @@ public class WaTorCell extends Cell {
 
   private void fishPlanUpdate(LinkedList<Cell> updatedQueue, ArrayList<Cell> open) {
     Random rand = new Random();
+    WaTorCell movedTo = null;
     if (open.size() > 0) {
       int nextLoc = rand.nextInt(open.size());
       movedTo = (WaTorCell) open.get(nextLoc);
@@ -101,12 +103,12 @@ public class WaTorCell extends Cell {
         nextState = state;
         return;
       }
-      swap(movedTo, this);
-      if (movedTo.reproductionTimer <= 0) {
+      swap(movedTo);
+      if (movedTo.getParam(reproductionTimer) <= 0) {
         nextState = 1;
         movedTo.nextState = 1;
-        reproductionTimer = getParam(FISH_BREED_TIME);
-        movedTo.reproductionTimer = getParam(FISH_BREED_TIME);
+        setParam(reproductionTimer, getParam(FISH_BREED_TIME));
+        movedTo.setParam(reproductionTimer, getParam(FISH_BREED_TIME));
       }
       return;
     }
@@ -116,21 +118,7 @@ public class WaTorCell extends Cell {
   @Override
   public void update() {
     super.update();
-    movedTo = null;
     nextState = -1;
-  }
-
-  private void swap(WaTorCell a, WaTorCell b) {
-    WaTorCell temp = new WaTorCell();
-    temp.reproductionTimer = a.reproductionTimer;
-    temp.energy = a.energy;
-    a.reproductionTimer = b.reproductionTimer;
-    a.energy = b.energy;
-    b.reproductionTimer = temp.reproductionTimer;
-    b.energy = temp.energy;
-
-    a.nextState = b.state;
-    b.nextState = a.state;
   }
 
   @Override
@@ -141,12 +129,14 @@ public class WaTorCell extends Cell {
   @Override
   public void setState(int stat) {
     super.setState(stat);
+    setParam(reproductionTimer, 0);
+    setParam(energy, 0);
     if (stat == 1) {
-      reproductionTimer = getParam(FISH_BREED_TIME);
+      setParam(reproductionTimer, getParam(FISH_BREED_TIME));
     }
     if (stat == 2) {
-      energy = getParam(SHARK_START_ENERGY);
-      reproductionTimer = getParam(SHARK_BREED_TIME);
+      setParam(energy, getParam(SHARK_START_ENERGY));
+      setParam(reproductionTimer, getParam(SHARK_BREED_TIME));
     }
   }
 }

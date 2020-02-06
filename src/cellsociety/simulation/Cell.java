@@ -1,9 +1,12 @@
 package cellsociety.simulation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import javafx.scene.paint.Color;
+import javax.print.DocFlavor.STRING;
 
 public abstract class Cell {
 
@@ -40,12 +43,34 @@ public abstract class Cell {
     return params;
   }
 
+  protected List<String> getAllParams() {
+    ArrayList<String> ret = new ArrayList<>();
+    ret.addAll(paramMap.keySet());
+    return ret;
+  }
+
   public String[] getGroundParams() {
     return groundParams;
   }
 
-  public void setGroundParam() {
+  public void setGroundParam(String param, double value) {
+    groundParamMap.put(param, value);
+  }
 
+  public void swap(Cell other) {
+    Map<String, Double> tempMap = new HashMap<>();
+    for (String s : other.getAllParams()) {
+      tempMap.put(s, other.getParam(s));
+    }
+    for (String s : getAllParams()) {
+      other.setParam(s, getParam(s));
+    }
+    for (String s : tempMap.keySet()) {
+      setParam(s, tempMap.get(s));
+    }
+
+    other.nextState = state;
+    nextState = other.state;
   }
 
   /**
@@ -70,6 +95,7 @@ public abstract class Cell {
    */
   public void update() {
     if (nextState == -1) {
+      System.out.println("state = " + state);
       throw new RuntimeException("cell state is -1 so something terrible has happened");
     }
     state = nextState;
