@@ -1,19 +1,19 @@
 package cellsociety.simulation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import javafx.scene.paint.Color;
 
 public abstract class Cell {
 
   protected String[] params;
   protected String[] groundParams;
+  protected ArrayList<Integer> usedStates = new ArrayList<>();
   protected int state;
   protected int nextState;
-  protected Map<Integer, Color> colorMap = new HashMap<>();
   protected Map<String, Double> paramMap = new HashMap<>();
   protected Map<String, Double> groundParamMap = new HashMap<>();
   protected int defaultEdge = -1;
@@ -73,15 +73,6 @@ public abstract class Cell {
   }
 
   /**
-   * Returns the color of the cell.
-   *
-   * @return the color of the cell.
-   */
-  public Color getColor() {
-    return colorMap.get(state);
-  }
-
-  /**
    * Plan the update for the next time step, without updating the state of the cell.
    *
    * @param neighbors Neighbors of the cell.
@@ -99,16 +90,6 @@ public abstract class Cell {
     }
     state = nextState;
     nextState = -1;
-  }
-
-  /**
-   * Set the state/color pair of this cell
-   *
-   * @param state The int state to be changed
-   * @param color The color to be changed to
-   */
-  public void setStateColor(int state, Color color) {
-    colorMap.put(state, color);
   }
 
   /**
@@ -157,15 +138,21 @@ public abstract class Cell {
   }
 
   protected int getHighestState() {
-    int max = 0;
-    for (int st : colorMap.keySet()) {
-      max = Math.max(max, st);
-    }
-    return ++max;
+    return Collections.max(usedStates);
   }
 
   public void incrementState() {
     int max = getHighestState();
-    state = (state + 1) % max;
+    state = (state + 1) % (max + 1);
+  }
+
+  public void addState(int st) {
+    usedStates.add(st);
+  }
+
+  public void addStates(int[] states) {
+    for (int i : states) {
+      addState(i);
+    }
   }
 }

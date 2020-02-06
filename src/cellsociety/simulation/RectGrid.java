@@ -1,7 +1,5 @@
 package cellsociety.simulation;
 
-import java.lang.reflect.InvocationTargetException;
-
 public class RectGrid extends Grid {
 
   @Override

@@ -2,17 +2,14 @@ package cellsociety;
 
 import cellsociety.simulation.Cell;
 import cellsociety.simulation.Grid;
-import cellsociety.simulation.HexGrid;
 import cellsociety.simulation.RectGrid;
+import cellsociety.visualizer.RectVisualizer;
 import cellsociety.visualizer.Visualizer;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
-
-import cellsociety.visualizer.RectVisualizer;
-import cellsociety.visualizer.Visualizer;
 import javafx.scene.paint.Color;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -75,7 +72,8 @@ public class Config {
    * @throws SAXException
    * @throws IOException
    */
-  public Config(File xmlFile) throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+  public Config(File xmlFile)
+      throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
     myFile = xmlFile;
     setupDocument();
     System.out.println(docSetUpConfirmationMessage);
@@ -84,6 +82,7 @@ public class Config {
 
   /**
    * Creates the visualizer based on the Grid and speed.
+   *
    * @return
    * @throws ClassNotFoundException
    * @throws NoSuchMethodException
@@ -91,9 +90,13 @@ public class Config {
    * @throws InstantiationException
    * @throws IllegalAccessException
    */
-  public Visualizer createVisualizer() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+  public Visualizer createVisualizer()
+      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
     Visualizer myVisualizer = new RectVisualizer(myGrid);
     myVisualizer.setSpeed(mySpeed);
+    for (int i : myStates.keySet()) {
+      myVisualizer.setStateColor(i, myStates.get(i));
+    }
     return myVisualizer;
   }
 
@@ -119,7 +122,6 @@ public class Config {
   //public double getSpeed() {
   //  return mySpeed;
   //}
-
   private void setupDocument() throws IOException, SAXException, ParserConfigurationException {
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     DocumentBuilder builder = factory.newDocumentBuilder();
@@ -337,13 +339,19 @@ public class Config {
     for (Map.Entry<String, Double> parameterEntry : myParameters.entrySet()) {
       cell.setParam(parameterEntry.getKey(), parameterEntry.getValue());
     }
-    //for (Map.Entry<Integer, Color> stateEntry : myStates.entrySet()) {                                                //Part of refactoring. Color is now passed into visualizer
-    //  cell.setStateColor(stateEntry.getKey(), stateEntry.getValue());
-    //}
+    for (Map.Entry<Integer, Color> stateEntry : myStates
+        .entrySet()) {                                                //Part of refactoring. Color is now passed into visualizer
+      myStates.put(stateEntry.getKey(), stateEntry.getValue());
+    }
     cell.setState(state);
     return cell;
   }
 
-  public File getFile(){return myFile;}
-  public Visualizer getVisualizer(){return null;}
+  public File getFile() {
+    return myFile;
+  }
+
+  public Visualizer getVisualizer() {
+    return null;
+  }
 }
