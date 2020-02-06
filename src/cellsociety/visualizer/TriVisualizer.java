@@ -1,6 +1,7 @@
 package cellsociety.visualizer;
 
 import cellsociety.Config;
+import cellsociety.simulation.Grid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import javafx.scene.Node;
@@ -12,9 +13,9 @@ import javafx.scene.shape.StrokeType;
 
 public class TriVisualizer extends Visualizer {
 
-  public TriVisualizer(Config config)
+  public TriVisualizer(Grid grid)
       throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-    super(config);
+    super(grid);
   }
 
   @Override

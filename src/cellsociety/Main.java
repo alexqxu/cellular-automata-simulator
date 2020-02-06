@@ -45,6 +45,7 @@ public class Main extends Application {
 
         myConfig = new Config(chooseFile());
         myVisualizer = myConfig.createVisualizer();
+        myVisualizer.setStage(myStage);
         //FIXME REFACTOR WITH NEW WINDOW
         //Visualizer myVisualizer = new RectVisualizer(myConfig);
 
@@ -76,6 +77,14 @@ public class Main extends Application {
     Visualizer myVisualizer = config.createVisualizer();
     Stage newStage = new Stage();
     newStage.setScene(myVisualizer.createScene());
+
+    newStage.show();
+
+    KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->myVisualizer.update(SECOND_DELAY));
+    Timeline animation = new Timeline();
+    animation.setCycleCount(Timeline.INDEFINITE);
+    animation.getKeyFrames().add(frame);
+    animation.play();
   }
 
   /**
@@ -96,12 +105,13 @@ public class Main extends Application {
       return null;
     }
     //FIXME throws
+  /*
     public static void newWindow()
         throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
       Stage newStage = new Stage();
       Config newConfig = new Config(chooseFile());
       newStage.setTitle(TITLE);
-      Visualizer newVisualizer = new HexVisualizer(newConfig);
+      //Visualizer newVisualizer = new HexVisualizer(newConfig);
 
       newStage.setScene(newVisualizer.createScene());
       newStage.show();
@@ -111,6 +121,8 @@ public class Main extends Application {
       animation.getKeyFrames().add(frame);
       animation.play();
     }
+
+   */
 
     /**
      * Runner method, actually runs the game when a user presses

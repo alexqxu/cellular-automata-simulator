@@ -46,13 +46,14 @@ public abstract class Visualizer {
 
   protected Grid myGrid;
   protected Scene myScene;
+  protected Stage myStage;
   private Config config;
   private ResourceBundle myResources;
   private BorderPane frame;
   protected ArrayList<ArrayList<Shape>> cellGrid;
   private Slider slider;
   private Button playpause;
-  private Menu loadFile;
+  private Button loadFile;
   private Menu newWindow;
   private Menu exit;
   private Button reset;
@@ -69,7 +70,6 @@ public abstract class Visualizer {
     myGrid = grid;
     setSpeed(50);
     myResources = ResourceBundle.getBundle(RESOURCE_PACKAGE);
-    //frame.setBottom(instantiateCellGrid());
   }
 
   /**
@@ -99,7 +99,7 @@ public abstract class Visualizer {
    */
   //FIXME I set the width equal to the size/num vert cells. This will only work for squares, I am wondering why it is breaking like this.
   protected abstract Node instantiateCellGrid();
-
+/*
   /**
    * Loads an .xml file by passing it to the Config class which creates the model backend for the simulation.
    * Then updates the cell matrix to the new status of the loaded file.
@@ -113,12 +113,15 @@ public abstract class Visualizer {
    * @throws IllegalAccessException
    * @throws InvocationTargetException
    */
+/*
   public void loadConfigFile(File file) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
     config = new Config(file);
     //myGrid = config.loadFile();  //takes in grid constructor
     frame.setBottom(instantiateCellGrid());
 
   }
+
+ */
 
   /**
    * Creates the toolbar with UI components (buttons, sliders) to be rendered in the scene.
@@ -151,11 +154,11 @@ public abstract class Visualizer {
         ex.printStackTrace();
       }
     });
-    loadFile = makeMenu("Load", e -> {
+    loadFile = makeButton("Load", e -> {
       //FIXME We will die if we dont deal with these exception calls
       try {
-        System.exit(0);
         Main.loadConfigFile(Main.chooseFile());
+        myStage.hide();
       } catch (IOException ex) {
         ex.printStackTrace();
       } catch (SAXException ex) {
@@ -180,6 +183,7 @@ public abstract class Visualizer {
     reset = makeButton("Reset", e->{ //FIXME add intentional exceptions
       try {
         Main.loadConfigFile(currentFile);
+        myStage.hide();
       } catch (IOException ex) {
         ex.printStackTrace();
       } catch (SAXException ex) {
@@ -217,11 +221,11 @@ public abstract class Visualizer {
         setSpeed(new_val.doubleValue()/100);
       }
     });
-    menuBar.getMenus().addAll(loadFile, newWindow);
+    //menuBar.getMenus().addAll(loadFile, newWindow);
     toolbar.getChildren().add(playpause);
     toolbar.getChildren().add(step);
     toolbar.getChildren().add(reset);
-    toolbar.getChildren().add(menuBar);
+    toolbar.getChildren().add(loadFile);
     toolbar.getChildren().add(spacer);
     toolbar.getChildren().add(slider);
     return toolbar;
@@ -321,4 +325,5 @@ public abstract class Visualizer {
   }
 
   public void setGrid(Grid newGrid){myGrid = newGrid;}
+  public void setStage(Stage newStage){myStage = newStage;}
 }

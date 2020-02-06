@@ -1,6 +1,7 @@
 package cellsociety.visualizer;
 
 import cellsociety.Config;
+import cellsociety.simulation.Grid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import javafx.scene.Node;
@@ -13,9 +14,9 @@ import javafx.scene.shape.StrokeType;
 
 public class HexVisualizer extends Visualizer {
 
-  public HexVisualizer(Config config)
+  public HexVisualizer(Grid grid)
       throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-    super(config);
+    super(grid);
   }
 
   @Override
