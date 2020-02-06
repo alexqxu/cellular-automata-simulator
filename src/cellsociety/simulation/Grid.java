@@ -124,11 +124,11 @@ public abstract class Grid {
     return cell;
   }
 
-  protected int getWidth() {
+  public int getWidth() {
     return grid.get(0).size();
   }
 
-  protected int getHeight() {
+  public int getHeight() {
     return grid.size();
   }
 

@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,6 +23,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -61,6 +64,7 @@ public abstract class Visualizer {
   private double secondsElapsed;
   private double speed;
   private boolean running;
+  protected Map<Integer, Color> myColorMap = new HashMap<>();
 
   public Visualizer(Config config)
       throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
@@ -308,11 +312,24 @@ public abstract class Visualizer {
    * and then passes this color data into each cell.
    */
   public void drawGrid(){
-    Color[][] colorgrid = myGrid.getColorGrid();
     for(int i = 0; i < cellGrid.size(); i++){
-      for(int j = 0; j < colorgrid[i].length; j++){
-        cellGrid.get(i).get(j).setFill(colorgrid[i][j]);
+      for(int j = 0; j < cellGrid.get(i).size(); j++){
+        cellGrid.get(i).get(j).setFill(myColorMap.get(myGrid.getState(i, j)));
       }
     }
+  }
+
+  public void setStateColor(int state, Color color) {
+    myColorMap.put(state, color);
+  }
+
+  protected Color[][] getColorGrid() {
+    Color[][] colorgrid = new Color[myGrid.getWidth()][myGrid.getHeight()];
+    for (int i = 0; i < colorgrid.length; i++) {
+      for (int j = 0; j < colorgrid[i].length; j++) {
+        colorgrid[i][j] = myColorMap.get(myGrid.getState(i,j));
+      }
+    }
+    return colorgrid;
   }
 }

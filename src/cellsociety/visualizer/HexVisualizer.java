@@ -22,7 +22,7 @@ public class HexVisualizer extends Visualizer {
   protected Node instantiateCellGrid() {
     AnchorPane anchorPane = new AnchorPane();
     cellGrid = new ArrayList<ArrayList<Shape>>();
-    Color[][] colorgrid = myGrid.getColorGrid();
+    Color[][] colorgrid = getColorGrid();
     double horizEdge = SIZE/(colorgrid[0].length*1.5);
     double height = SIZE/(colorgrid.length+.5);
     double yCoord = 0.0;

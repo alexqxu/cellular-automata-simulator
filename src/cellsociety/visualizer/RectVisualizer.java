@@ -20,7 +20,7 @@ public class RectVisualizer extends Visualizer {
   protected Node instantiateCellGrid(){
     GridPane gridpane = new GridPane();
     cellGrid = new ArrayList<ArrayList<Shape>>();
-    Color[][] colorgrid = myGrid.getColorGrid();
+    Color[][] colorgrid = getColorGrid();
     for(int i = 0; i < colorgrid.length; i++) {
       cellGrid.add(new ArrayList<Shape>());
       for (int j = 0; j < colorgrid[i].length; j++) {
