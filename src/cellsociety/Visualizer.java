@@ -55,9 +55,8 @@ public class Visualizer {
   private double speed;
   private boolean running;
 
-  public Visualizer(Stage stage) {
+  public Visualizer() {
     myResources = ResourceBundle.getBundle(RESOURCE_PACKAGE);
-    myStage = stage;
   }
 
   /**
@@ -133,7 +132,7 @@ public class Visualizer {
    */
   public void loadConfigFile(File file) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
     config = new Config(file);
-    myGrid = config.loadFile();
+    myGrid = config.loadFile();  //takes in grid constructor
     frame.setBottom(instantiateCellGrid());
   }
 
@@ -269,7 +268,7 @@ public class Visualizer {
     fileChooser.setTitle("Choose Simulation File");
     fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
     fileChooser.getExtensionFilters().add(new ExtensionFilter("XML Files", "*.xml"));
-    File file = fileChooser.showOpenDialog(myStage);
+    File file = fileChooser.showOpenDialog(null);
     if(file!=null){
       currentFile = file;
       return file;

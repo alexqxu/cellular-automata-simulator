@@ -53,7 +53,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException { //throws exception?
         myStage = stage;
-        Visualizer myVisualizer = new Visualizer(myStage);
+        Visualizer myVisualizer = new Visualizer();
         myStage.setScene(myVisualizer.createScene());
         stage.setTitle(TITLE);
         stage.show();
