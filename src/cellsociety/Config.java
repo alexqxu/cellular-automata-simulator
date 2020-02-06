@@ -2,7 +2,9 @@ package cellsociety;
 
 import cellsociety.simulation.Cell;
 import cellsociety.simulation.Grid;
+import cellsociety.simulation.HexGrid;
 import cellsociety.simulation.RectGrid;
+import cellsociety.visualizer.Visualizer;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -324,4 +326,5 @@ public class Config {
   }
 
   public File getFile(){return myFile;}
+  public Visualizer getVisualizer(){return null;}
 }

@@ -2,6 +2,7 @@ package cellsociety.visualizer;
 
 
 import cellsociety.Config;
+import cellsociety.Main;
 import cellsociety.simulation.Grid;
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -34,17 +36,17 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 public abstract class Visualizer {
-  public static final int SIZE = 400;
-  public static final String RESOURCE_PACKAGE = "Image";
-  public static final String STYLESHEET = "default.css";
-  public static final int MAX_UPDATE_PERIOD = 2;
+  protected static final int SIZE = 400;
+  protected static final String RESOURCE_PACKAGE = "Image";
+  protected static final String STYLESHEET = "default.css";
+  protected static final int MAX_UPDATE_PERIOD = 2;
 
 
   protected Grid myGrid;
   private Config config;
   private ResourceBundle myResources;
   private BorderPane frame;
-  protected ArrayList<ArrayList<Rectangle>> cellGrid;
+  protected ArrayList<ArrayList<Shape>> cellGrid;
   private Slider slider;
   private Button playpause;
   private Button loadFile;
@@ -110,7 +112,6 @@ public abstract class Visualizer {
   public void loadConfigFile(File file) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
     config = new Config(file);
     myGrid = config.loadFile();  //takes in grid constructor
-
     frame.setBottom(instantiateCellGrid());
   }
 
@@ -126,7 +127,7 @@ public abstract class Visualizer {
     loadFile = makeButton("Load", e -> {
       //FIXME We will die if we dont deal with these exception calls
       try {
-        loadConfigFile(chooseFile());
+        loadConfigFile(Main.chooseFile());
       } catch (IOException ex) {
         ex.printStackTrace();
       } catch (SAXException ex) {
@@ -238,25 +239,6 @@ public abstract class Visualizer {
   }
 
   /**
-   * Opens a file navigator dialogue and allows the user to select an .xml file for importing into the simulation
-   * @return the File object representing the .xml file to be used by the simulation
-   */
-  private File chooseFile(){
-    fileChooser = new FileChooser();
-    fileChooser.setTitle("Choose Simulation File");
-    fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-    fileChooser.getExtensionFilters().add(new ExtensionFilter("XML Files", "*.xml"));
-    File file = fileChooser.showOpenDialog(null);
-    if(file!=null){
-      currentFile = file;
-      return file;
-    }else{
-      System.out.println("Error: File not found");
-    }
-    return null;
-  }
-
-  /**
    * Takes in a double representing a percent value. This reflects a percent of the max speed.
    * @param percentSpeed the percent of the max speed to which to set the simulation
    */
@@ -287,7 +269,7 @@ public abstract class Visualizer {
    */
   public void drawGrid(){
     Color[][] colorgrid = myGrid.getColorGrid();
-    for(int i = 0; i < colorgrid.length; i++){
+    for(int i = 0; i < cellGrid.size(); i++){
       for(int j = 0; j < colorgrid[i].length; j++){
         cellGrid.get(i).get(j).setFill(colorgrid[i][j]);
       }

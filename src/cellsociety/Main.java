@@ -1,6 +1,8 @@
 package cellsociety;
 
+import cellsociety.visualizer.HexVisualizer;
 import cellsociety.visualizer.RectVisualizer;
+import cellsociety.visualizer.TriVisualizer;
 import cellsociety.visualizer.Visualizer;
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +38,9 @@ public class Main extends Application {
         myStage = stage;
 
         Config myConfig = new Config(chooseFile());
+        //Visualizer myVisualizer = myConfig.getVisualizer();
         Visualizer myVisualizer = new RectVisualizer(myConfig);
+
         myStage.setScene(myVisualizer.createScene());
         stage.setTitle(TITLE);
         stage.show();
@@ -48,7 +52,11 @@ public class Main extends Application {
         animation.play();
     }
 
-    private File chooseFile(){
+  /**
+   * Opens a file navigator dialogue and allows the user to select an .xml file for importing into the simulation
+   * @return the File object representing the .xml file to be used by the simulation
+   */
+    public static File chooseFile(){
       FileChooser fileChooser = new FileChooser();
       fileChooser.setTitle("Choose Simulation File");
       fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
@@ -61,6 +69,8 @@ public class Main extends Application {
       }
       return null;
     }
+
+
 
     /**
      * Runner method, actually runs the game when a user presses
