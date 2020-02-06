@@ -47,7 +47,6 @@ public abstract class Visualizer {
   protected Grid myGrid;
   protected Scene myScene;
   protected Stage myStage;
-  private Config config;
   private ResourceBundle myResources;
   private BorderPane frame;
   protected ArrayList<ArrayList<Shape>> cellGrid;
@@ -251,7 +250,7 @@ public abstract class Visualizer {
     result.setOnAction(handler);
     return result;
   }
-
+//FIXME
   private Menu makeMenu (String property, EventHandler<ActionEvent> handler) {
     final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     Menu result = new Menu();
@@ -282,7 +281,6 @@ public abstract class Visualizer {
     }
     if (label.matches(IMAGEFILE_SUFFIXES)) {
       button.setGraphic(new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(label))));
-
     }
   }
 
@@ -324,6 +322,5 @@ public abstract class Visualizer {
     }
   }
 
-  public void setGrid(Grid newGrid){myGrid = newGrid;}
   public void setStage(Stage newStage){myStage = newStage;}
 }

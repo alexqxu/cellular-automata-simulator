@@ -41,23 +41,22 @@ public class Main extends Application {
     //FIXME throws
     @Override
     public void start(Stage stage) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException { //throws exception?
-        myStage = stage;
-
-        myConfig = new Config(chooseFile());
-        myVisualizer = myConfig.createVisualizer();
-        myVisualizer.setStage(myStage);
-        //FIXME REFACTOR WITH NEW WINDOW
-        //Visualizer myVisualizer = new RectVisualizer(myConfig);
-
-        myStage.setScene(myVisualizer.createScene());
-        stage.setTitle(TITLE);
-        stage.show();
-
-        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->myVisualizer.update(SECOND_DELAY));
-        Timeline animation = new Timeline();
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(frame);
-        animation.play();
+          loadConfigFile(chooseFile());
+//        myStage = stage;
+//
+//        myConfig = new Config(chooseFile());
+//        myVisualizer = myConfig.createVisualizer();
+//        myVisualizer.setStage(myStage);
+//
+//        myStage.setScene(myVisualizer.createScene());
+//        myStage.setTitle(TITLE);
+//        myStage.show();
+//
+//        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->myVisualizer.update(SECOND_DELAY));
+//        Timeline animation = new Timeline();
+//        animation.setCycleCount(Timeline.INDEFINITE);
+//        animation.getKeyFrames().add(frame);
+//        animation.play();
     }
   /**
    * Loads an .xml file by passing it to the Config class which creates the model backend for the simulation.
@@ -76,8 +75,8 @@ public class Main extends Application {
     Config config = new Config(file);
     Visualizer myVisualizer = config.createVisualizer();
     Stage newStage = new Stage();
+    myVisualizer.setStage(newStage);
     newStage.setScene(myVisualizer.createScene());
-
     newStage.show();
 
     KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->myVisualizer.update(SECOND_DELAY));
