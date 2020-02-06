@@ -32,6 +32,7 @@ public class Main extends Application {
 
   private Stage myStage;
   private Config myConfig;
+  private Visualizer myVisualizer;
     /**
      * Start method. Runs game loop after setting up stage and scene data.
      * @param stage the window in which the application runs
@@ -43,9 +44,9 @@ public class Main extends Application {
         myStage = stage;
 
         myConfig = new Config(chooseFile());
-        //Visualizer myVisualizer = myConfig.getVisualizer();
+        myVisualizer = myConfig.createVisualizer();
         //FIXME REFACTOR WITH NEW WINDOW
-        Visualizer myVisualizer = new RectVisualizer(myConfig);
+        //Visualizer myVisualizer = new RectVisualizer(myConfig);
 
         myStage.setScene(myVisualizer.createScene());
         stage.setTitle(TITLE);
@@ -57,6 +58,25 @@ public class Main extends Application {
         animation.getKeyFrames().add(frame);
         animation.play();
     }
+  /**
+   * Loads an .xml file by passing it to the Config class which creates the model backend for the simulation.
+   * Then updates the cell matrix to the new status of the loaded file.
+   * @param file
+   * @throws IOException
+   * @throws SAXException
+   * @throws ParserConfigurationException
+   * @throws ClassNotFoundException
+   * @throws NoSuchMethodException
+   * @throws InstantiationException
+   * @throws IllegalAccessException
+   * @throws InvocationTargetException
+   */
+  public static void loadConfigFile(File file) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    Config config = new Config(file);
+    Visualizer myVisualizer = config.createVisualizer();
+    Stage newStage = new Stage();
+    newStage.setScene(myVisualizer.createScene());
+  }
 
   /**
    * Opens a file navigator dialogue and allows the user to select an .xml file for importing into the simulation

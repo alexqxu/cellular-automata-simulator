@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -58,16 +59,17 @@ public abstract class Visualizer {
   private Button step;
   private MenuBar menuBar;
   private File currentFile;
+  private Map<Integer, Color> myColorMap;
   private double secondsElapsed;
   private double speed;
   private boolean running;
 
-  public Visualizer(Config config)
+  public Visualizer(Grid grid)
       throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-    myGrid = config.loadFile();
-    setSpeed(config.getSpeed());
-    currentFile = config.getFile();
+    myGrid = grid;
+    setSpeed(50);
     myResources = ResourceBundle.getBundle(RESOURCE_PACKAGE);
+    //frame.setBottom(instantiateCellGrid());
   }
 
   /**
@@ -113,8 +115,9 @@ public abstract class Visualizer {
    */
   public void loadConfigFile(File file) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
     config = new Config(file);
-    myGrid = config.loadFile();  //takes in grid constructor
+    //myGrid = config.loadFile();  //takes in grid constructor
     frame.setBottom(instantiateCellGrid());
+
   }
 
   /**
@@ -129,7 +132,7 @@ public abstract class Visualizer {
     //FIXME throws
     newWindow = makeMenu("New", e-> {
       try {
-        Main.newWindow();
+        Main.loadConfigFile(Main.chooseFile());
       } catch (IOException ex) {
         ex.printStackTrace();
       } catch (SAXException ex) {
@@ -151,7 +154,8 @@ public abstract class Visualizer {
     loadFile = makeMenu("Load", e -> {
       //FIXME We will die if we dont deal with these exception calls
       try {
-        loadConfigFile(Main.chooseFile());
+        System.exit(0);
+        Main.loadConfigFile(Main.chooseFile());
       } catch (IOException ex) {
         ex.printStackTrace();
       } catch (SAXException ex) {
@@ -171,11 +175,11 @@ public abstract class Visualizer {
       }
       drawGrid();
     });
-    //exit = makeMenu("Exit", e-> Main.close(myScene)); FIXME
+    //exit = makeMenu("Exit", e-> System.exit(0)); FIXME
     playpause = makeButton("Play", e -> handlePlayPause(playpause));
     reset = makeButton("Reset", e->{ //FIXME add intentional exceptions
       try {
-        loadConfigFile(currentFile);
+        Main.loadConfigFile(currentFile);
       } catch (IOException ex) {
         ex.printStackTrace();
       } catch (SAXException ex) {
@@ -315,4 +319,6 @@ public abstract class Visualizer {
       }
     }
   }
+
+  public void setGrid(Grid newGrid){myGrid = newGrid;}
 }
