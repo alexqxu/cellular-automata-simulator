@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 public class FireCell extends Cell {
 
   public static final String PROB_CATCH = "probCatch";
+  public static final String PROB_GROW = "probGrow";
 
   public FireCell() {
     super();

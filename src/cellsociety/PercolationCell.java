@@ -22,9 +22,9 @@ public class PercolationCell extends Cell {
 
   @Override
   void planUpdate(Cell[] neighbors, LinkedList<Cell> emptyQueue) {
-      if (neighbors[6].getState() == 3) {
-          neighbors[0].setState(2); //this is okay because cells with state 3 are dummy cells
-      }
+    if (neighbors[6].getState() == 3) {
+      neighbors[0].setState(2); //this is okay because cells with state 3 are dummy cells
+    }
     if (getState() == 1) {
       for (int i = 0; i < neighbors.length; i += 2) {
         if (neighbors[i].getState() == 2) {

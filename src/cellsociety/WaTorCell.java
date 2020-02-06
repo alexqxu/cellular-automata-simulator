@@ -29,19 +29,19 @@ public class WaTorCell extends Cell {
 
   @Override
   void planUpdate(Cell[] neighbors, LinkedList<Cell> updatedQueue) {
-      if (!updatedQueue.contains(this)) {
-          return;
-      }
+    if (!updatedQueue.contains(this)) {
+      return;
+    }
     updatedQueue.remove(this);
     ArrayList<Cell> open = new ArrayList<>();
     ArrayList<Cell> fish = new ArrayList<>();
     for (int i = 0; i < neighbors.length; i += 2) {
-        if (neighbors[i].getState() == 0) {
-            open.add(neighbors[i]);
-        }
-        if (neighbors[i].getState() == 1) {
-            fish.add(neighbors[i]);
-        }
+      if (neighbors[i].getState() == 0) {
+        open.add(neighbors[i]);
+      }
+      if (neighbors[i].getState() == 1) {
+        fish.add(neighbors[i]);
+      }
     }
     reproductionTimer--;
     if (state == 1) {
@@ -54,9 +54,9 @@ public class WaTorCell extends Cell {
       }
       sharkPlanUpdate(updatedQueue, open, fish);
     }
-      if (state == 0 && nextState == -1) {
-          nextState = 0;
-      }
+    if (state == 0 && nextState == -1) {
+      nextState = 0;
+    }
   }
 
   private void sharkPlanUpdate(LinkedList<Cell> updatedQueue, ArrayList<Cell> open,

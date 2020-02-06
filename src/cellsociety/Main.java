@@ -43,9 +43,6 @@ public class Main extends Application {
   public static final int FRAMES_PER_SECOND = 60; //FIXME Maverick changed to 60 from 120 for testing
   public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
   public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-  private static final String RESOURCES = "resources";
-  public static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
-  public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
   public static final String RESOURCE_PACKAGE = "Image";
   public static final String STYLESHEET = "default.css";
 
@@ -65,7 +62,6 @@ public class Main extends Application {
   private double secondsElapsed;
   private double speed;
   private boolean running;
-
 
   /**
    * Start method. Runs game loop after setting up stage and scene data.
@@ -90,28 +86,6 @@ public class Main extends Application {
   }
 
   /**
-   * Opens a file navigator dialogue and allows the user to select an .xml file for importing into
-   * the simulation
-   *
-   * @return the File object representing the .xml file to be used by the simulation
-   */
-  private File chooseFile() {
-    fileChooser = new FileChooser();
-    fileChooser.setTitle("Choose Simulation File");
-    fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-    File file = fileChooser.showOpenDialog(myStage);
-    if (file != null) {
-      currentFile = file;
-      return file;
-    } else {
-      System.out.println("Error: File not found");
-    }
-    return null;
-  }
-
-  //FIXME is filename necessary here or should I have instance var
-
-  /**
    * Creates the scene for the visualization. Calls the loading of an .xml file, and uses that data
    * to create the UI and graphical components and assemble them into a GUI.
    *
@@ -134,6 +108,65 @@ public class Main extends Application {
         .add(getClass().getClassLoader().getResource(STYLESHEET).toExternalForm());
 
     return scene;
+  }
+
+  /**
+   * Instantiates a grid of rectangles in a gridpane to be rendered by the scene. Takes color data
+   * from the Grid class and uses it to create scaled rectangles at the correct size and dimension
+   * and collects these rectangles into a gridpane.
+   *
+   * @return A gridpane containing all the rectangles in the simulation
+   */
+  //FIXME I set the width equal to the size/num vert cells. This will only work for squares, I am wondering why it is breaking like this.
+  private Node instantiateCellGrid() {
+    GridPane gridpane = new GridPane();
+    cellGrid = new ArrayList<ArrayList<Rectangle>>();
+    Color[][] colorgrid = myGrid.getColorGrid();
+    for (int i = 0; i < colorgrid.length; i++) {
+      cellGrid.add(new ArrayList<Rectangle>());
+      for (int j = 0; j < colorgrid[i].length; j++) {
+        Rectangle cell = new Rectangle();
+        cell.setFill(colorgrid[i][j]);
+        cell.setStrokeType(StrokeType.INSIDE);
+        cell.setStroke(Color.GRAY);
+        cell.setStrokeWidth(.5);
+        cell.setWidth(SIZE / colorgrid.length);
+        cell.setHeight(SIZE / colorgrid.length);
+        cell.setX(j * cell.getWidth());
+        cell.setY(i * cell.getHeight());
+        final int r = i;
+        final int c = j;
+        cell.setOnMouseClicked(e -> {
+          myGrid.incrementCellState(r, c);
+          drawGrid();
+        });
+        cellGrid.get(i).add(cell);
+        gridpane.add(cell, i, j);
+      }
+    }
+    return gridpane;
+  }
+
+
+  /**
+   * Loads an .xml file by passing it to the Config class which creates the model backend for the
+   * simulation. Then updates the cell matrix to the new status of the loaded file.
+   *
+   * @param file
+   * @throws IOException
+   * @throws SAXException
+   * @throws ParserConfigurationException
+   * @throws ClassNotFoundException
+   * @throws NoSuchMethodException
+   * @throws InstantiationException
+   * @throws IllegalAccessException
+   * @throws InvocationTargetException
+   */
+  public void loadConfigFile(File file)
+      throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    config = new Config(file);
+    myGrid = config.loadFile();
+    frame.setBottom(instantiateCellGrid());
   }
 
   /**
@@ -268,39 +301,33 @@ public class Main extends Application {
   }
 
   /**
-   * Instantiates a grid of rectangles in a gridpane to be rendered by the scene. Takes color data
-   * from the Grid class and uses it to create scaled rectangles at the correct size and dimension
-   * and collects these rectangles into a gridpane.
+   * Opens a file navigator dialogue and allows the user to select an .xml file for importing into
+   * the simulation
    *
-   * @return A gridpane containing all the rectangles in the simulation
+   * @return the File object representing the .xml file to be used by the simulation
    */
-  private Node instantiateCellGrid() {
-    GridPane gridpane = new GridPane();
-    cellGrid = new ArrayList<ArrayList<Rectangle>>();
-    Color[][] colorgrid = myGrid.getColorGrid();
-    for (int i = 0; i < colorgrid.length; i++) {
-      cellGrid.add(new ArrayList<Rectangle>());
-      for (int j = 0; j < colorgrid[i].length; j++) {
-        Rectangle cell = new Rectangle();
-        cell.setFill(colorgrid[i][j]);
-        cell.setStrokeType(StrokeType.INSIDE);
-        cell.setStroke(Color.GRAY);
-        cell.setStrokeWidth(.5);
-        cell.setWidth(SIZE / colorgrid[i].length);
-        cell.setHeight(SIZE / colorgrid.length);
-        cell.setX(j * cell.getWidth());
-        cell.setY(i * cell.getHeight());
-        final int r = i;
-        final int c = j;
-        cell.setOnMouseClicked(e -> {
-          myGrid.incrementCellState(r, c);
-          drawGrid();
-        });
-        cellGrid.get(i).add(cell);
-        gridpane.add(cell, i, j);
-      }
+  private File chooseFile() {
+    fileChooser = new FileChooser();
+    fileChooser.setTitle("Choose Simulation File");
+    fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+    File file = fileChooser.showOpenDialog(myStage);
+    if (file != null) {
+      currentFile = file;
+      return file;
+    } else {
+      System.out.println("Error: File not found");
     }
-    return gridpane;
+    return null;
+  }
+
+  /**
+   * Takes in a double representing a percent value. This reflects a percent of the max speed.
+   *
+   * @param percentSpeed the percent of the max speed to which to set the simulation
+   */
+  public void setSpeed(double percentSpeed) {
+    percentSpeed *= 2;
+    speed = 2 - percentSpeed;
   }
 
   /**
@@ -322,39 +349,6 @@ public class Main extends Application {
   }
 
   /**
-   * Takes in a double representing a percent value. This reflects a percent of the max speed.
-   *
-   * @param percentSpeed the percent of the max speed to which to set the simulation
-   */
-  public void setSpeed(double percentSpeed) {
-    percentSpeed *= 2;
-    speed = 2 - percentSpeed;
-  }
-
-  public void loadConfigFile(File file)
-      throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-    config = new Config(file);
-    myGrid = config.loadFile();
-    frame.setBottom(instantiateCellGrid());
-  }
-
-
-/*
-    public void loadConfigFile2(File file){
-        myGrid = new Grid();
-        HashMap<String, Double> paramMap = new HashMap<>();
-        paramMap.put(FireCell.PROB_CATCH, 0.7);
-        paramMap.put(SegregationCell.HAPPINESS_THRESH, .3);
-        paramMap.put(WaTorCell.FISH_BREED_TIME, 5.0);
-        paramMap.put(WaTorCell.SHARK_BREED_TIME, 40.0);
-        paramMap.put(WaTorCell.FISH_FEED_ENERGY, 2.0);
-        paramMap.put(WaTorCell.SHARK_START_ENERGY, 5.0);
-        myGrid.setRandomGrid("PercolationCell", paramMap, new double[]{.2,.7,0}, 50, 50);
-    }
-
- */
-
-  /**
    * Updates the colors of the rectangles rendered in the scene. Rechecks the Grid object for color
    * data, and then passes this color data into each cell.
    */
@@ -366,11 +360,6 @@ public class Main extends Application {
       }
     }
   }
-    /*
-    public void drawCell(int x, int y, Color color){
-        return;
-    }
-     */
 
   /**
    * Runner method, actually runs the game when a user presses play in the IDE

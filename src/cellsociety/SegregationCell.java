@@ -44,7 +44,7 @@ public class SegregationCell extends Cell {
         nextState = state;
         return;
       }
-    }s
+    }
     if (nextState == -1) {
       nextState = 0;
     }
