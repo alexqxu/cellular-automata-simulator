@@ -1,5 +1,7 @@
 package cellsociety;
 
+import cellsociety.simulation.Cell;
+import cellsociety.simulation.Grid;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;

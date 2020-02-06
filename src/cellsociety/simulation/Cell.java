@@ -1,4 +1,4 @@
-package cellsociety;
+package cellsociety.simulation;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,10 +8,12 @@ import javafx.scene.paint.Color;
 public abstract class Cell {
 
   protected String[] params;
+  protected String[] groundParams;
   protected int state;
   protected int nextState;
   protected Map<Integer, Color> colorMap = new HashMap<>();
   protected Map<String, Double> paramMap = new HashMap<>();
+  protected Map<String, Double> groundParamMap = new HashMap<>();
   protected int defaultEdge = -1;
 
   /**
@@ -25,6 +27,10 @@ public abstract class Cell {
     params = new String[0];
   }
 
+  protected void setGroundParams() {
+    params = new String[0];
+  }
+
   /**
    * Returns the parameters for this type of cell.
    *
@@ -32,6 +38,14 @@ public abstract class Cell {
    */
   public String[] getParams() {
     return params;
+  }
+
+  public String[] getGroundParams() {
+    return groundParams;
+  }
+
+  public void setGroundParam() {
+
   }
 
   /**

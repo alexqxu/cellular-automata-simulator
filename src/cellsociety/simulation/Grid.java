@@ -1,5 +1,6 @@
-package cellsociety;
+package cellsociety.simulation;
 
+import cellsociety.simulation.Cell;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.LinkedList;

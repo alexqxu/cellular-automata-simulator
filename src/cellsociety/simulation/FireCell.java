@@ -1,5 +1,6 @@
-package cellsociety;
+package cellsociety.simulation;
 
+import cellsociety.simulation.Cell;
 import java.util.LinkedList;
 import java.util.Random;
 import javafx.scene.paint.Color;
