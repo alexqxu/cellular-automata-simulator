@@ -7,18 +7,16 @@ public class PercolationCell extends Cell {
 
   public PercolationCell() {
     super();
-    setStateColor(0, Color.BLACK); //Blocked
-    setStateColor(1, Color.WHITE); //Open
-    setStateColor(2, Color.BLUE); //Percolated
-    setStateColor(3, Color.ORANGE); //Edge, should never show on screen
+    addStates(new int[]{0,1,2});
     defaultEdge = 3;
   }
 
+  /* //should be able to be removed
   @Override
   protected int getHighestState() {
     int ret = super.getHighestState();
     return --ret;
-  }
+  }*/
 
   @Override
   void planUpdate(Cell[] neighbors, LinkedList<Cell> emptyQueue) {

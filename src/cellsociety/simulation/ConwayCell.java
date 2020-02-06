@@ -12,8 +12,7 @@ public class ConwayCell extends Cell {
    */
   public ConwayCell() {
     super();
-    setStateColor(0, Color.WHITE);
-    setStateColor(1, Color.BLACK);
+    addStates(new int[]{0,1});
   }
 
 

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
-import javafx.scene.paint.Color;
 
 public abstract class Grid {
 
@@ -149,18 +148,8 @@ public abstract class Grid {
     return grid.get(r).get(c);
   }
 
-  public Color getColor(int r, int c) {
-    return grid.get(r).get(c).getColor();
-  }
-
-  public Color[][] getColorGrid() {
-    Color[][] ret = new Color[grid.size()][grid.get(0).size()];
-    for (int r = 0; r < ret.length; r++) {
-      for (int c = 0; c < ret[r].length; c++) {
-        ret[r][c] = getColor(r, c);
-      }
-    }
-    return ret;
+  public int getState(int r, int c) {
+    return grid.get(r).get(c).getState();
   }
 
   public void placeCell(int c, int r, Cell cell) { //FIXME r/c convention flipped here?

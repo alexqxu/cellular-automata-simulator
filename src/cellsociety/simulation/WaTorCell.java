@@ -16,9 +16,7 @@ public class WaTorCell extends Cell {
 
   public WaTorCell() {
     super();
-    setStateColor(0, Color.BLUE); //Water
-    setStateColor(1, Color.GREEN); //Fish
-    setStateColor(2, Color.YELLOW); //Shark
+    addStates(new int[]{0,1,2});
   }
 
   @Override
