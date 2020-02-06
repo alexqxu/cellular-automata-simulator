@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
 
 public class RectVisualizer extends Visualizer {
@@ -18,10 +19,10 @@ public class RectVisualizer extends Visualizer {
 
   protected Node instantiateCellGrid(){
     GridPane gridpane = new GridPane();
-    cellGrid = new ArrayList<ArrayList<Rectangle>>();
+    cellGrid = new ArrayList<ArrayList<Shape>>();
     Color[][] colorgrid = myGrid.getColorGrid();
     for(int i = 0; i < colorgrid.length; i++) {
-      cellGrid.add(new ArrayList<Rectangle>());
+      cellGrid.add(new ArrayList<Shape>());
       for (int j = 0; j < colorgrid[i].length; j++) {
         Rectangle cell = new Rectangle();
         cell.setFill(colorgrid[i][j]);
