@@ -322,4 +322,6 @@ public class Config {
     cell.setState(state);
     return cell;
   }
+
+  public File getFile(){return myFile;}
 }

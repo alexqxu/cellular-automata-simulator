@@ -1,36 +1,17 @@
 package cellsociety;
 
-import cellsociety.simulation.Grid;
+import cellsociety.visualizer.RectVisualizer;
+import cellsociety.visualizer.Visualizer;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javax.imageio.ImageIO;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
@@ -53,7 +34,9 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException { //throws exception?
         myStage = stage;
-        Visualizer myVisualizer = new Visualizer();
+
+        Config myConfig = new Config(chooseFile());
+        Visualizer myVisualizer = new RectVisualizer(myConfig);
         myStage.setScene(myVisualizer.createScene());
         stage.setTitle(TITLE);
         stage.show();
@@ -63,6 +46,20 @@ public class Main extends Application {
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.play();
+    }
+
+    private File chooseFile(){
+      FileChooser fileChooser = new FileChooser();
+      fileChooser.setTitle("Choose Simulation File");
+      fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+      fileChooser.getExtensionFilters().add(new ExtensionFilter("XML Files", "*.xml"));
+      File file = fileChooser.showOpenDialog(null);
+      if(file!=null){
+        return file;
+      }else{
+        System.out.println("Error: File not found");
+      }
+      return null;
     }
 
     /**

@@ -1,6 +1,7 @@
-package cellsociety;
+package cellsociety.visualizer;
 
 
+import cellsociety.Config;
 import cellsociety.simulation.Grid;
 import java.io.File;
 import java.io.IOException;
@@ -32,18 +33,18 @@ import javax.imageio.ImageIO;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
-public class Visualizer {
+public abstract class Visualizer {
   public static final int SIZE = 400;
   public static final String RESOURCE_PACKAGE = "Image";
   public static final String STYLESHEET = "default.css";
+  public static final int MAX_UPDATE_PERIOD = 2;
 
 
-  private Grid myGrid;
+  protected Grid myGrid;
   private Config config;
-  private Stage myStage; //FIXME I need a "frame" for the filechooser to be in so I can't delete myStage but I dont use it
   private ResourceBundle myResources;
   private BorderPane frame;
-  private ArrayList<ArrayList<Rectangle>> cellGrid;
+  protected ArrayList<ArrayList<Rectangle>> cellGrid;
   private Slider slider;
   private Button playpause;
   private Button loadFile;
@@ -55,7 +56,11 @@ public class Visualizer {
   private double speed;
   private boolean running;
 
-  public Visualizer() {
+  public Visualizer(Config config)
+      throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    myGrid = config.loadFile();
+    setSpeed(config.getSpeed());
+    currentFile = config.getFile();
     myResources = ResourceBundle.getBundle(RESOURCE_PACKAGE);
   }
 
@@ -71,8 +76,7 @@ public class Visualizer {
     frame = new BorderPane();
     running = false;
     frame.setTop(setToolBar());
-    loadConfigFile(chooseFile());
-    setSpeed(.5); // FIXME set speed in loadconfigfile
+    frame.setBottom(instantiateCellGrid());
     Scene scene = new Scene(frame, Color.AZURE);
     scene.getStylesheets().add(getClass().getClassLoader().getResource(STYLESHEET).toExternalForm());
 
@@ -87,34 +91,7 @@ public class Visualizer {
    */
   //FIXME I set the width equal to the size/num vert cells. This will only work for squares, I am wondering why it is breaking like this.
   //
-  private Node instantiateCellGrid() {
-    GridPane gridpane = new GridPane();
-    cellGrid = new ArrayList<ArrayList<Rectangle>>();
-    Color[][] colorgrid = myGrid.getColorGrid();
-    for(int i = 0; i < colorgrid.length; i++) {
-      cellGrid.add(new ArrayList<Rectangle>());
-      for (int j = 0; j < colorgrid[i].length; j++) {
-        Rectangle cell = new Rectangle();
-        cell.setFill(colorgrid[i][j]);
-        cell.setStrokeType(StrokeType.INSIDE);
-        cell.setStroke(Color.GRAY);
-        cell.setStrokeWidth(.5);
-        cell.setWidth(SIZE/colorgrid.length);
-        cell.setHeight(SIZE/colorgrid[i].length);
-        cell.setX(j*cell.getWidth());
-        cell.setY(i*cell.getHeight());
-        final int r = i;
-        final int c = j;
-        cell.setOnMouseClicked(e->{
-          myGrid.incrementCellState(r, c);
-          drawGrid();
-        });
-        cellGrid.get(i).add(cell);
-        gridpane.add(cell, i, j);
-      }
-    }
-    return gridpane;
-  }
+  protected abstract Node instantiateCellGrid();
 
 
   /**
@@ -133,6 +110,7 @@ public class Visualizer {
   public void loadConfigFile(File file) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
     config = new Config(file);
     myGrid = config.loadFile();  //takes in grid constructor
+
     frame.setBottom(instantiateCellGrid());
   }
 
@@ -283,8 +261,8 @@ public class Visualizer {
    * @param percentSpeed the percent of the max speed to which to set the simulation
    */
   public void setSpeed(double percentSpeed){
-    percentSpeed*=2;
-    speed = 2-percentSpeed;
+    percentSpeed*=MAX_UPDATE_PERIOD;
+    speed = MAX_UPDATE_PERIOD-percentSpeed;
   }
 
   /**
