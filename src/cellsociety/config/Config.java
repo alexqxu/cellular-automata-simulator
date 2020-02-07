@@ -45,6 +45,7 @@ public class Config {
   private String widthNodeName = "Width";
   private String heightNodeName = "Height";
   private String cellNodeName = "Cell";
+  private String shapeNodeName = "Shape";
 
   private String docSetUpConfirmationMessage = "Document Setup Complete";
   private String configSetUpConfirmationMessage = "Config Info Load Complete";
@@ -56,12 +57,14 @@ public class Config {
   private Grid myGrid;
   private String myTitle;
   private String myAuthor;
+  private String myShape;
   private double mySpeed;
   private int myWidth;
   private int myHeight;
   private Map<Integer, Color> myStates;
   private Map<String, Double> myParameters;
   private int defaultState = 0;
+
   private double[] randomGridVariables = new double[]{.2, .7, 0};
 
   /**
@@ -81,26 +84,33 @@ public class Config {
   }
 
   /**
-   * Create and set up the Grid based on stored information, and then return it.
-   *
-   * @return
-   */
-  private Grid loadFile()
-      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-    extractConfigInfo();
-    System.out.println(configSetUpConfirmationMessage);
-    createGrid();
-    System.out.println(gridConfirmationMessage);
-    return myGrid;
-  }
-
-  /**
    * Returns the update speed of the simulation, as defined within the initial cellsociety.config XML document.
    *
    * @return speed of the simulation
    */
   public double getSpeed() {
     return mySpeed;
+  }
+
+  //fixme added by alex
+  public Grid getGrid() {
+    return myGrid;
+  }
+
+  public Map<Integer, Color> getStates(){
+    return myStates;
+  }
+
+  /**
+   * Create and set up the Grid based on stored information, and then return it.
+   *
+   */
+  private void loadFile()
+      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    extractConfigInfo();
+    System.out.println(configSetUpConfirmationMessage);
+    createGrid();
+    System.out.println(gridConfirmationMessage);
   }
 
   private void setupDocument() throws IOException, SAXException, ParserConfigurationException {
@@ -326,9 +336,4 @@ public class Config {
     cell.setState(state);
     return cell;
   }
-//fixme added by alex
-  public Grid getGrid() {
-    return myGrid;
-  }
-  public Map<Integer, Color> getStates(){return myStates;}
 }
