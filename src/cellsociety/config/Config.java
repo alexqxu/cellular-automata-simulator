@@ -1,15 +1,12 @@
-package cellsociety.exceptions;
+package cellsociety.config;
 
 import cellsociety.exceptions.InvalidCellException;
+import cellsociety.exceptions.InvalidFileException;
 import cellsociety.simulation.Cell;
 import cellsociety.simulation.Grid;
-import cellsociety.simulation.HexGrid;
 import cellsociety.simulation.RectGrid;
 import cellsociety.simulation.TriGrid;
-import cellsociety.visualizer.HexVisualizer;
-import cellsociety.visualizer.RectVisualizer;
-import cellsociety.visualizer.TriVisualizer;
-import cellsociety.visualizer.Visualizer;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -93,14 +90,12 @@ public class Config {
   /**
    * Create and set up the Grid based on stored information, and then return it.
    *
-   * @return
    */
-  public Grid loadFile() {
+  public void loadFile() {
     extractConfigInfo();
     System.out.println(configSetUpConfirmationMessage);
     createGrid();
     System.out.println(gridConfirmationMessage);
-    return myGrid;
   }
 
   /**
@@ -112,10 +107,31 @@ public class Config {
     return mySpeed;
   }
 
-  private void setupDocument() throws IOException, SAXException, ParserConfigurationException {
+  public Grid getGrid() {
+    return myGrid;
+  }
+
+  public String getVisualizer(){
+    return myShape;
+  }
+
+  public Map<Integer, Color> getStates(){return myStates;}
+
+  private void setupDocument() throws InvalidFileException{
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-    DocumentBuilder builder = factory.newDocumentBuilder();
-    doc = builder.parse(myFile);
+    DocumentBuilder builder = null;
+    try {
+      builder = factory.newDocumentBuilder();
+    } catch (ParserConfigurationException e) {
+      throw new InvalidFileException(e);
+    }
+    try {
+      doc = builder.parse(myFile);
+    } catch (SAXException e) {
+      throw new InvalidFileException(e);
+    } catch (IOException e) {
+      throw new InvalidFileException(e);
+    }
     doc.getDocumentElement().normalize();
   }
 
@@ -344,9 +360,4 @@ public class Config {
     cell.setState(state);
     return cell;
   }
-//fixme added by alex
-  public Grid getGrid() {
-    return myGrid;
-  }
-  public Map<Integer, Color> getStates(){return myStates;}
 }

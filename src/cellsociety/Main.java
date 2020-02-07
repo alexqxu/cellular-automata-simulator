@@ -1,14 +1,14 @@
 package cellsociety;
 
-import cellsociety.exceptions.Config;
-import cellsociety.exceptions.InvalidCellException;
-import cellsociety.exceptions.InvalidGridException;
 import cellsociety.visualizer.TriVisualizer;
 import cellsociety.visualizer.Visualizer;
-import cellsociety.config.InvalidFileException;
+import cellsociety.config.Config;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
+
+import cellsociety.exceptions.Config;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -18,8 +18,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -236,12 +234,22 @@ public class Main extends Application {
   public void loadConfigFile(File file) {
     try {
       myConfig = new Config(file);
-    } catch (InvalidCellException e) {
-      retryLoadFile("Invalid Simulation Specified");
-    } catch (InvalidGridException e){
-      retryLoadFile("Invalid Shape Specified");
-    } catch (InvalidFileException e){
-      retryLoadFile("Invalid File Specified");
+    } catch (ParserConfigurationException e) {
+      e.printStackTrace();
+    } catch (SAXException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
     }
     myVisualizer = new TriVisualizer(myConfig.getGrid()); //FIXME
     myVisualizer.setColorMap(myConfig.getStates());
@@ -251,34 +259,6 @@ public class Main extends Application {
      */
     //FIXME uncomment once config.getVisualizer() is working, construct with grid param
 
-  }
-
-  private void retryLoadFile(String message)
-      throws ParserConfigurationException, SAXException, IOException {
-    boolean badFile;
-    displayError(message);
-    do {
-      badFile = false;
-      try {
-        myConfig = new Config(chooseFile());
-      } catch (InvalidCellException e) {
-        displayError(message);
-        badFile = true;
-      } catch (InvalidGridException e){
-        displayError(message);
-        badFile = true;
-      } catch (InvalidFileException e){
-        displayError(message);
-        badFile = true;
-      }
-    } while (badFile);
-  }
-
-  private void displayError(String message) {
-    Alert errorAlert = new Alert(AlertType.ERROR);
-    errorAlert.setHeaderText(message);
-    errorAlert.setContentText("Please Choose Another File");
-    errorAlert.showAndWait();
   }
 
   private Button makeButton(String property, EventHandler<ActionEvent> handler) {
