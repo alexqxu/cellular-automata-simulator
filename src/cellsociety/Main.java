@@ -84,34 +84,7 @@ public class Main extends Application {
     System.out.println(DEFAULT_RESOURCE_PACKAGE+RESOURCE_PACKAGE);
     myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE);
 
-    try {
-      myConfig = new Config(chooseFile());
-    } catch (ParserConfigurationException e) {
-      e.printStackTrace();
-    } catch (SAXException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    }
-    myVisualizer = new TriVisualizer(myConfig.loadFile()); //FIXME
-    myVisualizer.setColorMap(myConfig.getStates());
-    /*
-    Class visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
-    Visualizer myVisualizer = (Visualizer) (visualizerClass.getConstructor().newInstance(myConfig.getGrid()));
-
-     */
-    //FIXME uncomment once config.getVisualizer() is working, construct with grid param
-
+    loadConfigFile(chooseFile());
 
     myStage.setScene(createScene());
     myStage.setTitle(TITLE);
@@ -215,13 +188,15 @@ public class Main extends Application {
     menuBar = new MenuBar();
     newWindow = makeMenu("New", e -> makeWindow());
     loadFile = makeButton("Load", e -> {
-        loadConfigFile(chooseFile());
+      loadConfigFile(chooseFile());
+      frame.setBottom(myVisualizer.instantiateCellGrid());
       myVisualizer.drawGrid();
     });
     //exit = makeMenu("Exit", e-> System.exit(0)); FIXME
     playpause = makeButton("Play", e -> handlePlayPause(playpause));
     reset = makeButton("Reset", e -> {
-        loadConfigFile(myFile);
+      loadConfigFile(myFile);
+      frame.setBottom(myVisualizer.instantiateCellGrid());
       myVisualizer.drawGrid();
     });
     step = makeButton("Step", e -> {
@@ -275,9 +250,26 @@ public class Main extends Application {
     } catch (InvocationTargetException e) {
       e.printStackTrace();
     }
-    myVisualizer.setGrid(myConfig.loadFile());
+    try {
+      myVisualizer = new TriVisualizer(myConfig.loadFile()); //FIXME
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
+    }
     myVisualizer.setColorMap(myConfig.getStates());
-    frame.setBottom(myVisualizer.instantiateCellGrid());
+    /*
+    Class visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
+    Visualizer myVisualizer = (Visualizer) (visualizerClass.getConstructor().newInstance(myConfig.getGrid()));
+     */
+    //FIXME uncomment once config.getVisualizer() is working, construct with grid param
+
   }
 
   private Button makeButton(String property, EventHandler<ActionEvent> handler) {
