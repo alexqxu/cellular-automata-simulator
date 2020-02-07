@@ -1,13 +1,13 @@
 package cellsociety;
 
-import cellsociety.visualizer.HexVisualizer;
 import cellsociety.visualizer.TriVisualizer;
 import cellsociety.visualizer.Visualizer;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.ResourceBundle;
+
+import config.Config;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;

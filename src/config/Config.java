@@ -1,4 +1,4 @@
-package cellsociety;
+package config;
 
 import cellsociety.simulation.Cell;
 import cellsociety.simulation.Grid;
@@ -104,7 +104,7 @@ public class Config {
    */
   //FIXME edited by alex
   public String getVisualizer(){
-    //extractVisualizerInfo()
+    //extractVisualizerInfo();
     //return "HexVisualizer"
     return "";
   }
