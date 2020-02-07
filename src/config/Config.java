@@ -89,7 +89,7 @@ public class Config {
    *
    * @return
    */
-  private Grid loadFile()
+  public Grid loadFile()
       throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
     extractConfigInfo();
     System.out.println(configSetUpConfirmationMessage);
