@@ -1,4 +1,4 @@
-package config;
+package cellsociety.exceptions;
 
 import cellsociety.exceptions.InvalidCellException;
 import cellsociety.simulation.Cell;
@@ -32,6 +32,8 @@ import org.xml.sax.SAXException;
  */
 public class Config {
   private static final String INVALID_CELL = "Invalid Cell Thrown";
+  private static final String INVALID_FILE = "Invalid File Requested";
+
   private String packagePrefixName = "cellsociety.simulation.";
 
   private String configNodeName = "ConfigInfo";
@@ -50,6 +52,7 @@ public class Config {
   private String widthNodeName = "Width";
   private String heightNodeName = "Height";
   private String cellNodeName = "Cell";
+  private String shapeNodeName = "Shape";
 
   private String docSetUpConfirmationMessage = "Document Setup Complete";
   private String configSetUpConfirmationMessage = "Config Info Load Complete";
@@ -61,12 +64,14 @@ public class Config {
   private Grid myGrid;
   private String myTitle;
   private String myAuthor;
+  private String myShape;
   private double mySpeed;
   private int myWidth;
   private int myHeight;
   private Map<Integer, Color> myStates;
   private Map<String, Double> myParameters;
   private int defaultState = 0;
+
   private double[] randomGridVariables = new double[]{.2, .7, 0};
 
   /**
@@ -78,7 +83,7 @@ public class Config {
    * @throws IOException
    */
   public Config(File xmlFile)
-      throws ParserConfigurationException, SAXException, IOException {
+      throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
     myFile = xmlFile;
     setupDocument();
     System.out.println(docSetUpConfirmationMessage);
@@ -290,11 +295,6 @@ public class Config {
    *
    * @param col the starting location in the row
    * @param row the row to be filled
-   * @throws InvocationTargetException
-   * @throws NoSuchMethodException
-   * @throws ClassNotFoundException
-   * @throws InstantiationException
-   * @throws IllegalAccessException
    */
   private void fillRemainingRow(int col, int row) {
       while (col < myWidth) {
@@ -315,7 +315,8 @@ public class Config {
    * @throws InstantiationException
    * @throws ClassNotFoundException
    */
-  private Cell makeCell(int state) throws InvalidCellException {
+  private Cell makeCell(int state)
+      throws InvalidCellException {
     Class cellClass = null;
     try {
       cellClass = Class.forName(packagePrefixName + myTitle);

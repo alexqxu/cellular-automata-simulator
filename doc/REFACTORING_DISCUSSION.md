@@ -7,7 +7,8 @@
  
 ###Problems Encountered:
 1. **Loading a new file is not working**
-   * Cause: 
+   * Cause: Previously, the visualization created a config object that grabbed information from an xml file
+   However, we wanted to refactor such that multiple types of visualizers.
    * Fix: 
    * Rationale / Tradeoffs Considered:
 2. **Config set colors in Cell**

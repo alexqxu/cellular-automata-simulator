@@ -1,17 +1,14 @@
 package cellsociety;
 
+import cellsociety.exceptions.Config;
 import cellsociety.exceptions.InvalidCellException;
 import cellsociety.exceptions.InvalidGridException;
-import cellsociety.visualizer.HexVisualizer;
 import cellsociety.visualizer.TriVisualizer;
 import cellsociety.visualizer.Visualizer;
-import config.InvalidFileException;
+import cellsociety.config.InvalidFileException;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
-
-import config.Config;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -237,7 +234,6 @@ public class Main extends Application {
   }
 
   public void loadConfigFile(File file) {
-    boolean badFile;
     try {
       myConfig = new Config(file);
     } catch (InvalidCellException e) {
