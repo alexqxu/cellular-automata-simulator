@@ -1,16 +1,37 @@
 package cellsociety;
 
+import cellsociety.visualizer.HexVisualizer;
 import cellsociety.visualizer.Visualizer;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javax.imageio.ImageIO;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
@@ -23,12 +44,29 @@ public class Main extends Application {
   public static final int FRAMES_PER_SECOND = 60; //FIXME Maverick changed to 60 from 120 for testing
   public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
   public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+  private static final String RESOURCE_PACKAGE = "Image";
+  private static final String STYLESHEET = "default.css";
+  private static final int MAX_UPDATE_PERIOD = 2;
+
   private String packagePrefixName = "cellsociety.visualizer.";
+
+  private BorderPane frame;
   private Stage myStage;
   private Config myConfig;
   private Visualizer myVisualizer;
+  private Slider slider;
+  private Button playpause;
+  private Button loadFile;
+  private ResourceBundle myResources;
+  private Menu newWindow;
+  private Menu exit;
+  private Button reset;
+  private Button step;
+  private MenuBar menuBar;
   private File myFile;
-
+  private double secondsElapsed;
+  private double speed;
+  private boolean running;
 
   /**
      * Start method. Runs game loop after setting up stage and scene data.
@@ -39,60 +77,82 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException { //throws exception?
       myStage = stage;
-
+      myResources = ResourceBundle.getBundle(RESOURCE_PACKAGE); //FIXME
       myConfig = new Config(chooseFile());
-      myVisualizer = myConfig.createVisualizer();
+      myVisualizer = new HexVisualizer(myConfig.getGrid()); //FIXME
+      myVisualizer.setColorMap(myConfig.getStates());
       /*
       Class visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
       Visualizer myVisualizer = (Visualizer) (visualizerClass.getConstructor().newInstance());
-      myVisualizer.setStage(myStage);
-      //FIXME uncomment once config.getVisualizer() is working
-       */
 
-      myStage.setScene(myVisualizer.createScene());
+       */
+      //FIXME uncomment once config.getVisualizer() is working, construct with grid param
+
+
+      myStage.setScene(createScene());
       myStage.setTitle(TITLE);
       myStage.show();
 
-      KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->myVisualizer.update(SECOND_DELAY));
+      KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->update(SECOND_DELAY));
       Timeline animation = new Timeline();
       animation.setCycleCount(Timeline.INDEFINITE);
       animation.getKeyFrames().add(frame);
       animation.play();
     }
-  /**
-   * Loads an .xml file by passing it to the Config class which creates the model backend for the
-   * simulation. Then updates the cell matrix to the new status of the loaded file.
-   *
-   * @param file
-   * @throws IOException
-   * @throws SAXException
-   * @throws ParserConfigurationException
-   * @throws ClassNotFoundException
-   * @throws NoSuchMethodException
-   * @throws InstantiationException
-   * @throws IllegalAccessException
-   * @throws InvocationTargetException
-   */
-  public static void loadConfigFile(File file)
-      throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-    Config config = new Config(file);
-    Visualizer myVisualizer = config.createVisualizer();
-    myVisualizer.setFile(file);
-    Stage newStage = new Stage();
-    myVisualizer.setStage(newStage);
-    newStage.setScene(myVisualizer.createScene());
-    newStage.show();
-    newStage.setTitle(TITLE);
-
-    KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-        e -> myVisualizer.update(SECOND_DELAY));
-    Timeline animation = new Timeline();
-    animation.setCycleCount(Timeline.INDEFINITE);
-    animation.getKeyFrames().add(frame);
-    animation.play();
+  private Scene createScene() {
+    frame = new BorderPane();
+    frame.setTop(setToolBar());
+    frame.setBottom(myVisualizer.instantiateCellGrid());
+    running = false;
+    setSpeed(.5); //myconfig.getspeed
+    Scene scene = new Scene(frame, Color.AZURE);
+    scene.getStylesheets()
+        .add(getClass().getClassLoader().getResource(STYLESHEET).toExternalForm());
+    return scene;
   }
 
+  public void handlePlayPause (Button button){
+    running = !running;
+    final String IMAGEFILE_SUFFIXES = String
+        .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
+    String label = "";
+    if (running) {
+      label = myResources.getString("Pause");
+    } else {
+      label = myResources.getString("Play");
+    }
+    if (label.matches(IMAGEFILE_SUFFIXES)) {
+      button.setGraphic(
+          new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(label))));
+    }
+  }
 
+  /**
+   * Takes in a double representing a percent value. This reflects a percent of the max speed.
+   *
+   * @param percentSpeed the percent of the max speed to which to set the simulation
+   */
+  public void setSpeed ( double percentSpeed){
+    percentSpeed *= MAX_UPDATE_PERIOD;
+    speed = MAX_UPDATE_PERIOD - percentSpeed;
+  }
+
+  /**
+   * Update method which calls the model to update the states of all the cells on the backend, and
+   * redraws the rectangles with their new color values. Calls the inner update methods at a rate
+   * dependent on the speed of the simulation (specified in the .xml config file and controlled by
+   * the slider).
+   *
+   * @param elapsedTime - The elapsed time between frame calls made in the default start() method of
+   *                    the Application
+   */
+  public void update ( double elapsedTime){
+    secondsElapsed += elapsedTime;
+    if (running && secondsElapsed > speed) {
+      secondsElapsed = 0;
+      myVisualizer.stepGrid();
+    }
+  }
 
   /**
    * Opens a file navigator dialogue and allows the user to select an .xml file for importing into
@@ -100,38 +160,142 @@ public class Main extends Application {
    *
    * @return the File object representing the .xml file to be used by the simulation
    */
-  public static File chooseFile() {
+  public File chooseFile() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Choose Simulation File");
     fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
     fileChooser.getExtensionFilters().add(new ExtensionFilter("XML Files", "*.xml"));
     File file = fileChooser.showOpenDialog(null);
     if (file != null) {
+      myFile = file;
       return file;
     } else {
       System.out.println("Error: File not found");
     }
     return null;
   }
-  //FIXME throws
-  /*
-    public static void newWindow()
-        throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-      Stage newStage = new Stage();
-      Config newConfig = new Config(chooseFile());
-      newStage.setTitle(TITLE);
-      //Visualizer newVisualizer = new HexVisualizer(newConfig);
+  public Node setToolBar() {
+    HBox toolbar = new HBox();
+    final Pane spacer = new Pane();
+    HBox.setHgrow(spacer, Priority.ALWAYS);
+    menuBar = new MenuBar();
+    //FIXME throws
+    newWindow = makeMenu("New", e -> makeWindow());
+    loadFile = makeButton("Load", e -> {
+      //FIXME We will die if we dont deal with these exception calls
+      try {
+        loadConfigFile(chooseFile());
+      } catch (IOException ex) {
+        ex.printStackTrace();
+      } catch (SAXException ex) {
+        ex.printStackTrace();
+      } catch (ParserConfigurationException ex) {
+        ex.printStackTrace();
+      } catch (ClassNotFoundException ex) {
+        ex.printStackTrace();
+      } catch (NoSuchMethodException ex) {
+        ex.printStackTrace();
+      } catch (InstantiationException ex) {
+        ex.printStackTrace();
+      } catch (IllegalAccessException ex) {
+        ex.printStackTrace();
+      } catch (InvocationTargetException ex) {
+        ex.printStackTrace();
+      }
+      myVisualizer.drawGrid();
+    });
+    //exit = makeMenu("Exit", e-> System.exit(0)); FIXME
+    playpause = makeButton("Play", e -> handlePlayPause(playpause));
+    reset = makeButton("Reset", e -> { //FIXME add intentional exceptions
+      try {
+        loadConfigFile(myFile);
+      } catch (IOException ex) {
+        ex.printStackTrace();
+      } catch (SAXException ex) {
+        ex.printStackTrace();
+      } catch (ParserConfigurationException ex) {
+        ex.printStackTrace();
+      } catch (ClassNotFoundException ex) {
+        ex.printStackTrace();
+      } catch (NoSuchMethodException ex) {
+        ex.printStackTrace();
+      } catch (InstantiationException ex) {
+        ex.printStackTrace();
+      } catch (IllegalAccessException ex) {
+        ex.printStackTrace();
+      } catch (InvocationTargetException ex) {
+        ex.printStackTrace();
+      }
+      myVisualizer.drawGrid();
+    });
+    step = makeButton("Step", e -> {
+      myVisualizer.stepGrid();
+    });
 
-      newStage.setScene(newVisualizer.createScene());
-      newStage.show();
-      KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->newVisualizer.update(SECOND_DELAY));
-      Timeline animation = new Timeline();
-      animation.setCycleCount(Timeline.INDEFINITE);
-      animation.getKeyFrames().add(frame);
-      animation.play();
+    slider = new Slider();
+    slider.setMin(0);
+    slider.setMax(100);
+    slider.setValue(50);
+    slider.setMajorTickUnit(50);
+    slider.setMinorTickCount(5);
+    slider.setBlockIncrement(10);
+    slider.valueProperty().addListener(new ChangeListener<Number>() {
+      public void changed(ObservableValue<? extends Number> ov,
+          Number old_val, Number new_val) {
+        setSpeed(new_val.doubleValue() / 100);
+      }
+    });
+    //menuBar.getMenus().addAll(loadFile, newWindow);
+    toolbar.getChildren().add(playpause);
+    toolbar.getChildren().add(step);
+    toolbar.getChildren().add(reset);
+    toolbar.getChildren().add(loadFile);
+    toolbar.getChildren().add(spacer);
+    toolbar.getChildren().add(slider);
+    return toolbar;
+  }
+//fixme make
+  private void makeWindow() {
+    return;
+  }
+
+  public void loadConfigFile(File file) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    myConfig = new Config(file);
+    myVisualizer.setGrid(myConfig.getGrid());
+    myVisualizer.setColorMap(myConfig.getStates());
+    frame.setBottom(myVisualizer.instantiateCellGrid());
+  }
+
+  private Button makeButton(String property, EventHandler<ActionEvent> handler) {
+    final String IMAGEFILE_SUFFIXES = String
+        .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
+    Button result = new Button();
+    String label = myResources.getString(property);
+    if (label.matches(IMAGEFILE_SUFFIXES)) {
+      result.setGraphic(
+          new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(label))));
+    } else {
+      result.setText(label);
     }
+    result.setOnAction(handler);
+    return result;
+  }
 
-   */
+  //FIXME
+  private Menu makeMenu (String property, EventHandler < ActionEvent > handler){
+    final String IMAGEFILE_SUFFIXES = String
+        .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
+    Menu result = new Menu();
+    String label = myResources.getString(property);
+    if (label.matches(IMAGEFILE_SUFFIXES)) {
+      result.setGraphic(
+          new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(label))));
+    } else {
+      result.setText(label);
+    }
+    result.setOnAction(handler);
+    return result;
+  }
 
   /**
    * Runner method, actually runs the game when a user presses play in the IDE

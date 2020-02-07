@@ -17,7 +17,7 @@ public class RectVisualizer extends Visualizer {
     super(grid);
   }
 
-  protected Node instantiateCellGrid() {
+  public Node instantiateCellGrid() {
     GridPane gridpane = new GridPane();
     cellGrid = new ArrayList<ArrayList<Shape>>();
     Color[][] colorgrid = getColorGrid();

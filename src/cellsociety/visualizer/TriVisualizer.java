@@ -18,7 +18,7 @@ public class TriVisualizer extends Visualizer {
   }
 
   @Override
-  protected Node instantiateCellGrid() {
+  public Node instantiateCellGrid() {
     AnchorPane anchorPane = new AnchorPane();
     cellGrid = new ArrayList<ArrayList<Shape>>();
     Color[][] colorgrid = getColorGrid();
