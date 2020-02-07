@@ -170,6 +170,7 @@ public class Main extends Application {
    *
    * @return the File object representing the .xml file to be used by the simulation
    */
+  //FIXME null
   public File chooseFile() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Choose Simulation File");
@@ -180,9 +181,8 @@ public class Main extends Application {
       myFile = file;
       return file;
     } else {
-      System.out.println("Error: File not found"); //when hitting cancel
+      return null;
     }
-    return null;
   }
   public Node setToolBar() {
     HBox toolbar = new HBox();
@@ -234,6 +234,9 @@ public class Main extends Application {
   }
 
   public void loadConfigFile(File file) {
+    if(file == null){
+      return;
+    }
     try {
       myConfig = new Config(file);
     } catch (InvalidCellException e) {
