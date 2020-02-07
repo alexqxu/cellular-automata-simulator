@@ -239,16 +239,11 @@ public class Main extends Application {
     try {
       myConfig = new Config(file);
     } catch (InvalidCellException e) {
-      displayError("Invalid Simulation Specified");
-      do {
-        badFile = false;
-        try {
-          myConfig = new Config(chooseFile());
-        }  catch (InvalidCellException f) {
-          displayError("Invalid Simulation Specified");
-          badFile = true;
-        }
-      } while (badFile);
+      retryLoadFile("Invalid Simulation Specified");
+    } catch (InvalidGridException e){
+      retryLoadFile("Invalid Shape Specified");
+    } catch (InvalidFileException e){
+      retryLoadFile()
     }
     myVisualizer = new TriVisualizer(myConfig.getGrid()); //FIXME
     myVisualizer.setColorMap(myConfig.getStates());
@@ -258,6 +253,24 @@ public class Main extends Application {
      */
     //FIXME uncomment once config.getVisualizer() is working, construct with grid param
 
+  }
+
+  private void retryLoadFile(String message)
+      throws ParserConfigurationException, SAXException, IOException {
+    boolean badFile;
+    displayError(message);
+    do {
+      badFile = false;
+      try {
+        myConfig = new Config(chooseFile());
+      } catch (InvalidCellException e) {
+        displayError(message);
+        badFile = true;
+      } catch (InvalidGridException e){
+        displayError(message);
+        badFile = true;
+      }
+    } while (badFile);
   }
 
   private void displayError(String message) {
