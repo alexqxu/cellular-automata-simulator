@@ -136,9 +136,9 @@ public class Config {
    *
    * @return speed of the simulation
    */
-  //public double getSpeed() {
-  //  return mySpeed;
-  //}
+  public double getSpeed() {
+    return mySpeed;
+  }
   private void setupDocument() throws IOException, SAXException, ParserConfigurationException {
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     DocumentBuilder builder = factory.newDocumentBuilder();

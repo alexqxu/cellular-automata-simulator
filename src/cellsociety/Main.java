@@ -78,46 +78,73 @@ public class Main extends Application {
      * @param stage the window in which the application runs
      * @throws Exception
      */
-    //FIXME throws
-    @Override
-    public void start(Stage stage) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException { //throws exception?
-      myStage = stage;
-      System.out.println(DEFAULT_RESOURCE_PACKAGE+RESOURCE_PACKAGE);
-      myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE); //FIXME
+  @Override
+  public void start(Stage stage){ //throws exception?
+    myStage = stage;
+    System.out.println(DEFAULT_RESOURCE_PACKAGE+RESOURCE_PACKAGE);
+    myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE);
 
+    try {
       myConfig = new Config(chooseFile());
-      myVisualizer = new TriVisualizer(myConfig.getGrid()); //FIXME
-      myVisualizer.setColorMap(myConfig.getStates());
-      /*
-      Class visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
-      Visualizer myVisualizer = (Visualizer) (visualizerClass.getConstructor().newInstance());
-
-       */
-      //FIXME uncomment once config.getVisualizer() is working, construct with grid param
-
-
-      myStage.setScene(createScene());
-      myStage.setTitle(TITLE);
-      myStage.show();
-
-      KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->update(SECOND_DELAY));
-      Timeline animation = new Timeline();
-      animation.setCycleCount(Timeline.INDEFINITE);
-      animation.getKeyFrames().add(frame);
-      animation.play();
+    } catch (ParserConfigurationException e) {
+      e.printStackTrace();
+    } catch (SAXException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
     }
+    myVisualizer = new TriVisualizer(myConfig.loadFile()); //FIXME
+    myVisualizer.setColorMap(myConfig.getStates());
+    /*
+    Class visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
+    Visualizer myVisualizer = (Visualizer) (visualizerClass.getConstructor().newInstance(myConfig.getGrid()));
+
+     */
+    //FIXME uncomment once config.getVisualizer() is working, construct with grid param
+
+
+    myStage.setScene(createScene());
+    myStage.setTitle(TITLE);
+    myStage.show();
+
+    KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->update(SECOND_DELAY));
+    Timeline animation = new Timeline();
+    animation.setCycleCount(Timeline.INDEFINITE);
+    animation.getKeyFrames().add(frame);
+    animation.play();
+  }
+
+  /**
+   * Creates the scene to be rendered in the stage. Calls the creation of UI controls as well as graphics from the visualizer class.
+   * Applies CSS to the UI as well.
+   * @return the scene to be rendered by the application
+   */
   private Scene createScene() {
     frame = new BorderPane();
     frame.setTop(setToolBar());
     frame.setBottom(myVisualizer.instantiateCellGrid());
     running = false;
-    setSpeed(.5); //myconfig.getspeed
+    setSpeed(myConfig.getSpeed());
     Scene scene = new Scene(frame, Color.AZURE);
     scene.getStylesheets()
         .add(getClass().getClassLoader().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
     return scene;
   }
 
+  /**
+   * Handles
+   * @param button
+   */
   public void handlePlayPause (Button button){
     running = !running;
     final String IMAGEFILE_SUFFIXES = String
@@ -186,53 +213,15 @@ public class Main extends Application {
     final Pane spacer = new Pane();
     HBox.setHgrow(spacer, Priority.ALWAYS);
     menuBar = new MenuBar();
-    //FIXME throws
     newWindow = makeMenu("New", e -> makeWindow());
     loadFile = makeButton("Load", e -> {
-      //FIXME We will die if we dont deal with these exception calls
-      try {
         loadConfigFile(chooseFile());
-      } catch (IOException ex) {
-        ex.printStackTrace();
-      } catch (SAXException ex) {
-        ex.printStackTrace();
-      } catch (ParserConfigurationException ex) {
-        ex.printStackTrace();
-      } catch (ClassNotFoundException ex) {
-        ex.printStackTrace();
-      } catch (NoSuchMethodException ex) {
-        ex.printStackTrace();
-      } catch (InstantiationException ex) {
-        ex.printStackTrace();
-      } catch (IllegalAccessException ex) {
-        ex.printStackTrace();
-      } catch (InvocationTargetException ex) {
-        ex.printStackTrace();
-      }
       myVisualizer.drawGrid();
     });
     //exit = makeMenu("Exit", e-> System.exit(0)); FIXME
     playpause = makeButton("Play", e -> handlePlayPause(playpause));
-    reset = makeButton("Reset", e -> { //FIXME add intentional exceptions
-      try {
+    reset = makeButton("Reset", e -> {
         loadConfigFile(myFile);
-      } catch (IOException ex) {
-        ex.printStackTrace();
-      } catch (SAXException ex) {
-        ex.printStackTrace();
-      } catch (ParserConfigurationException ex) {
-        ex.printStackTrace();
-      } catch (ClassNotFoundException ex) {
-        ex.printStackTrace();
-      } catch (NoSuchMethodException ex) {
-        ex.printStackTrace();
-      } catch (InstantiationException ex) {
-        ex.printStackTrace();
-      } catch (IllegalAccessException ex) {
-        ex.printStackTrace();
-      } catch (InvocationTargetException ex) {
-        ex.printStackTrace();
-      }
       myVisualizer.drawGrid();
     });
     step = makeButton("Step", e -> {
@@ -266,9 +255,27 @@ public class Main extends Application {
     return;
   }
 
-  public void loadConfigFile(File file) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-    myConfig = new Config(file);
-    myVisualizer.setGrid(myConfig.getGrid());
+  public void loadConfigFile(File file) {
+    try {
+      myConfig = new Config(file);
+    } catch (ParserConfigurationException e) {
+      e.printStackTrace();
+    } catch (SAXException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
+    }
+    myVisualizer.setGrid(myConfig.loadFile());
     myVisualizer.setColorMap(myConfig.getStates());
     frame.setBottom(myVisualizer.instantiateCellGrid());
   }
