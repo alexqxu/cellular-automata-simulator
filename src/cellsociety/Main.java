@@ -1,9 +1,11 @@
 package cellsociety;
 
 import cellsociety.exceptions.InvalidCellException;
+import cellsociety.exceptions.InvalidGridException;
 import cellsociety.visualizer.HexVisualizer;
 import cellsociety.visualizer.TriVisualizer;
 import cellsociety.visualizer.Visualizer;
+import config.InvalidFileException;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -243,7 +245,7 @@ public class Main extends Application {
     } catch (InvalidGridException e){
       retryLoadFile("Invalid Shape Specified");
     } catch (InvalidFileException e){
-      retryLoadFile()
+      retryLoadFile("Invalid File Specified");
     }
     myVisualizer = new TriVisualizer(myConfig.getGrid()); //FIXME
     myVisualizer.setColorMap(myConfig.getStates());
@@ -267,6 +269,9 @@ public class Main extends Application {
         displayError(message);
         badFile = true;
       } catch (InvalidGridException e){
+        displayError(message);
+        badFile = true;
+      } catch (InvalidFileException e){
         displayError(message);
         badFile = true;
       }

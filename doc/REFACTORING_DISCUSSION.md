@@ -7,7 +7,7 @@
  
 ###Problems Encountered:
 1. **Loading a new file is not working**
-   * Cause:
+   * Cause: 
    * Fix: 
    * Rationale / Tradeoffs Considered:
 2. **Config set colors in Cell**
