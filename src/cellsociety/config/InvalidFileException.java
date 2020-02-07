@@ -10,5 +10,7 @@ public class InvalidFileException extends RuntimeException{
         super(String.format(message, values));
     }
 
+    public InvalidFileException (Throwable cause){
+        super(cause);
+    }
 }
-
