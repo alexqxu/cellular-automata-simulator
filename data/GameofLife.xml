@@ -3,6 +3,7 @@
     <ConfigInfo>
         <Title>ConwayCell</Title>
         <Author>Alex Xu, aqx</Author>
+        <Shape>HexGrid</Shape>
 
         <Dimensions>
             <Width>20</Width>
