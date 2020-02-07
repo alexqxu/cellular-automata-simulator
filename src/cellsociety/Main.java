@@ -23,7 +23,7 @@ public class Main extends Application {
   public static final int FRAMES_PER_SECOND = 60; //FIXME Maverick changed to 60 from 120 for testing
   public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
   public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-
+  private String packagePrefixName = "cellsociety.visualizer.";
   private Stage myStage;
   private Config myConfig;
   private Visualizer myVisualizer;
@@ -38,23 +38,26 @@ public class Main extends Application {
     //FIXME throws
     @Override
     public void start(Stage stage) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException { //throws exception?
-          myFile = chooseFile();
-          loadConfigFile(myFile);
-//        myStage = stage;
-//
-//        myConfig = new Config(chooseFile());
-//        myVisualizer = myConfig.createVisualizer();
-//        myVisualizer.setStage(myStage);
-//
-//        myStage.setScene(myVisualizer.createScene());
-//        myStage.setTitle(TITLE);
-//        myStage.show();
-//
-//        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->myVisualizer.update(SECOND_DELAY));
-//        Timeline animation = new Timeline();
-//        animation.setCycleCount(Timeline.INDEFINITE);
-//        animation.getKeyFrames().add(frame);
-//        animation.play();
+      myStage = stage;
+
+      myConfig = new Config(chooseFile());
+      myVisualizer = myConfig.createVisualizer();
+      /*
+      Class visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
+      Visualizer myVisualizer = (Visualizer) (visualizerClass.getConstructor().newInstance());
+      myVisualizer.setStage(myStage);
+      //FIXME uncomment once config.getVisualizer() is working
+       */
+
+      myStage.setScene(myVisualizer.createScene());
+      myStage.setTitle(TITLE);
+      myStage.show();
+
+      KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->myVisualizer.update(SECOND_DELAY));
+      Timeline animation = new Timeline();
+      animation.setCycleCount(Timeline.INDEFINITE);
+      animation.getKeyFrames().add(frame);
+      animation.play();
     }
   /**
    * Loads an .xml file by passing it to the Config class which creates the model backend for the

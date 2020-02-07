@@ -90,6 +90,12 @@ public class Config {
    * @throws InstantiationException
    * @throws IllegalAccessException
    */
+  //FIXME edited by alex
+  public String getVisualizer(){
+    //extractVisualizerInfo()
+    //return "HexVisualizer"
+    return "";
+  }
   public Visualizer createVisualizer()
       throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
     Visualizer myVisualizer = new RectVisualizer(myGrid);
@@ -349,9 +355,5 @@ public class Config {
 
   public File getFile() {
     return myFile;
-  }
-
-  public Visualizer getVisualizer() {
-    return null;
   }
 }
