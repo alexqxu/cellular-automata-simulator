@@ -253,8 +253,7 @@ public class Main extends Application {
 
   }
 
-  private void retryLoadFile(String message)
-      throws ParserConfigurationException, SAXException, IOException {
+  private void retryLoadFile(String message) {
     boolean badFile;
     displayError(message);
     do {
