@@ -12,8 +12,7 @@ import javafx.scene.shape.StrokeType;
 
 public class HexVisualizer extends Visualizer {
 
-  public HexVisualizer(Grid grid)
-      throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+  public HexVisualizer(Grid grid) {
     super(grid);
   }
 

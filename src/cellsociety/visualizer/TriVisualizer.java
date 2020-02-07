@@ -12,8 +12,7 @@ import javafx.scene.shape.StrokeType;
 
 public class TriVisualizer extends Visualizer {
 
-  public TriVisualizer(Grid grid)
-      throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+  public TriVisualizer(Grid grid) {
     super(grid);
   }
 
