@@ -92,13 +92,24 @@ public class Config {
     return mySpeed;
   }
 
-  //fixme added by alex
+   /**
+    * Returns the grid of the simulation
+    * @return
+    */
   public Grid getGrid() {
     return myGrid;
   }
 
+    /**
+     * Returns the colormapping to the different states for each cell.
+     * @return
+     */
   public Map<Integer, Color> getStates(){
     return myStates;
+  }
+
+  public String getVisualizer(){
+     return myShape;
   }
 
   /**
@@ -133,6 +144,8 @@ public class Config {
       printTitle();
       extractAuthor(configElement);
       printAuthor();
+      extractShape(configElement);
+      printShape();
       extractDimensions(configElement);
       extractStates(configElement);
       extractParameters(configElement);
@@ -204,6 +217,10 @@ public class Config {
     myAuthor = extractElementValue(startingElement, authorNodeName);
   }
 
+  private void extractShape(Element startingElement){
+      myShape = extractElementValue(startingElement, shapeNodeName);
+  }
+
   private void extractSpeed(Element dimensionsElement) {
     mySpeed = Double.parseDouble(extractElementValue(dimensionsElement, speedNodeName).trim());
   }
@@ -246,6 +263,10 @@ public class Config {
 
   private void printAuthor() {
     System.out.println("Author: " + myAuthor);
+  }
+
+  private void printShape(){
+      System.out.println("Cell Shape Requested: "+ myShape);
   }
 
   /**
