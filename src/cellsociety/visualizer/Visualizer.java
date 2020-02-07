@@ -70,34 +70,37 @@ public abstract class Visualizer {
     drawGrid();
   }
 
-    public void drawGrid () {
-      for (int i = 0; i < cellGrid.size(); i++) {
-        for (int j = 0; j < cellGrid.get(i).size(); j++) {
-          cellGrid.get(i).get(j).setFill(myColorMap.get(myGrid.getState(i, j)));
-        }
+  public void drawGrid () {
+    for (int i = 0; i < cellGrid.size(); i++) {
+      for (int j = 0; j < cellGrid.get(i).size(); j++) {
+        cellGrid.get(i).get(j).setFill(myColorMap.get(myGrid.getState(i, j)));
       }
     }
+  }
 
-    public void setStateColor (int state, Color color){
-      myColorMap.put(state, color);
-    }
+//    public void setStateColor (int state, Color color){
+//      myColorMap.put(state, color);
+//    }
 
-    public void setColorMap(Map<Integer, Color> newMap){
-      myColorMap = newMap;
-    }
+  public void setColorMap(Map<Integer, Color> newMap){
+    myColorMap = newMap;
+  }
 
-    protected Color[][] getColorGrid (){
-      Color[][] colorgrid = new Color[myGrid.getWidth()][myGrid.getHeight()];
-      for (int i = 0; i < colorgrid.length; i++) {
-        for (int j = 0; j < colorgrid[i].length; j++) {
-          colorgrid[i][j] = myColorMap.get(myGrid.getState(i, j));
-        }
+  protected Color[][] getColorGrid (){
+    Color[][] colorgrid = new Color[myGrid.getWidth()][myGrid.getHeight()];
+    for (int i = 0; i < colorgrid.length; i++) {
+      for (int j = 0; j < colorgrid[i].length; j++) {
+        colorgrid[i][j] = myColorMap.get(myGrid.getState(i, j));
       }
-      return colorgrid;
     }
+    return colorgrid;
+  }
 
-    public void setGrid (Grid newGrid){
-      myGrid = newGrid;
-    }
+  public void setGrid (Grid newGrid){
+    myGrid = newGrid;
+  }
 
+  public int[] getPopulations(){
+    return null;
+  }
 }
