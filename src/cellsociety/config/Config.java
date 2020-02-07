@@ -1,6 +1,7 @@
 package cellsociety.config;
 
 import cellsociety.exceptions.InvalidCellException;
+import cellsociety.exceptions.InvalidFileException;
 import cellsociety.simulation.Cell;
 import cellsociety.simulation.Grid;
 import cellsociety.simulation.RectGrid;
@@ -106,21 +107,30 @@ public class Config {
     return mySpeed;
   }
 
+  public Grid getGrid() {
+    return myGrid;
+  }
 
-  private void setupDocument() {
+  public String getVisualizer(){
+    return myShape;
+  }
+
+  public Map<Integer, Color> getStates(){return myStates;}
+
+  private void setupDocument() throws InvalidFileException{
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     DocumentBuilder builder = null;
     try {
       builder = factory.newDocumentBuilder();
     } catch (ParserConfigurationException e) {
-      e.printStackTrace();
+      throw new InvalidFileException(e);
     }
     try {
       doc = builder.parse(myFile);
     } catch (SAXException e) {
-      e.printStackTrace();
+      throw new InvalidFileException(e);
     } catch (IOException e) {
-      e.printStackTrace();
+      throw new InvalidFileException(e);
     }
     doc.getDocumentElement().normalize();
   }
@@ -350,9 +360,4 @@ public class Config {
     cell.setState(state);
     return cell;
   }
-//fixme added by alex
-  public Grid getGrid() {
-    return myGrid;
-  }
-  public Map<Integer, Color> getStates(){return myStates;}
 }
