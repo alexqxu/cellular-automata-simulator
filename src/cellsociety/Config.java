@@ -81,6 +81,14 @@ public class Config {
     System.out.println(docSetUpConfirmationMessage);
     loadFile();
   }
+  //fixme drafted by alex o
+  public void setFile(File xmlFile)
+      throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    myFile = xmlFile;
+    setupDocument();
+    System.out.println(docSetUpConfirmationMessage);
+    loadFile();
+  }
 
   /**
    * Creates the visualizer based on the Grid and speed.
@@ -92,10 +100,15 @@ public class Config {
    * @throws InstantiationException
    * @throws IllegalAccessException
    */
+  //FIXME edited by alex
+  public String getVisualizer(){
+    //extractVisualizerInfo()
+    //return "HexVisualizer"
+    return "";
+  }
   public Visualizer createVisualizer()
       throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
     Visualizer myVisualizer = new RectVisualizer(myGrid);
-    myVisualizer.setSpeed(mySpeed);
     for (int i : myStates.keySet()) {
       myVisualizer.setStateColor(i, myStates.get(i));
     }
@@ -348,12 +361,9 @@ public class Config {
     cell.setState(state);
     return cell;
   }
-
-  public File getFile() {
-    return myFile;
+//fixme added by alex
+  public Grid getGrid() {
+    return myGrid;
   }
-
-  public Visualizer getVisualizer() {
-    return null;
-  }
+  public Map<Integer, Color> getStates(){return myStates;}
 }
