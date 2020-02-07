@@ -1,5 +1,7 @@
 package cellsociety;
 
+import cellsociety.exceptions.InvalidCellException;
+import cellsociety.visualizer.HexVisualizer;
 import cellsociety.visualizer.TriVisualizer;
 import cellsociety.visualizer.Visualizer;
 import cellsociety.config.Config;
@@ -8,6 +10,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 
+import config.Config;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -17,6 +20,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -51,6 +56,7 @@ public class Main extends Application {
   private static final String RESOURCE_PACKAGE = "Image";
   private static final String STYLESHEET = "default.css";
   private static final int MAX_UPDATE_PERIOD = 2;
+
 
   private String packagePrefixName = "cellsociety.visualizer.";
 
@@ -176,7 +182,7 @@ public class Main extends Application {
       myFile = file;
       return file;
     } else {
-      System.out.println("Error: File not found");
+      System.out.println("Error: File not found"); //when hitting cancel
     }
     return null;
   }
@@ -249,19 +255,7 @@ public class Main extends Application {
     } catch (InvocationTargetException e) {
       e.printStackTrace();
     }
-    try {
-      myVisualizer = new TriVisualizer(myConfig.getGrid());
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    }
+    myVisualizer = new TriVisualizer(myConfig.getGrid()); //FIXME
     myVisualizer.setColorMap(myConfig.getStates());
     /*
     Class visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());

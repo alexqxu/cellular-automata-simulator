@@ -1,11 +1,15 @@
-package cellsociety.config;
+package config;
 
 import cellsociety.exceptions.InvalidCellException;
 import cellsociety.simulation.Cell;
 import cellsociety.simulation.Grid;
+import cellsociety.simulation.HexGrid;
 import cellsociety.simulation.RectGrid;
 import cellsociety.simulation.TriGrid;
-
+import cellsociety.visualizer.HexVisualizer;
+import cellsociety.visualizer.RectVisualizer;
+import cellsociety.visualizer.TriVisualizer;
+import cellsociety.visualizer.Visualizer;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -87,44 +91,25 @@ public class Config {
   }
 
   /**
-   * Returns the update speed of the simulation, as defined within the initial cellsociety.config XML document.
+   * Create and set up the Grid based on stored information, and then return it.
+   *
+   * @return
+   */
+  public Grid loadFile() {
+    extractConfigInfo();
+    System.out.println(configSetUpConfirmationMessage);
+    createGrid();
+    System.out.println(gridConfirmationMessage);
+    return myGrid;
+  }
+
+  /**
+   * Returns the update speed of the simulation, as defined within the initial config XML document.
    *
    * @return speed of the simulation
    */
   public double getSpeed() {
     return mySpeed;
-  }
-
-   /**
-    * Returns the grid of the simulation
-    * @return
-    */
-  public Grid getGrid() {
-    return myGrid;
-  }
-
-    /**
-     * Returns the colormapping to the different states for each cell.
-     * @return
-     */
-  public Map<Integer, Color> getStates(){
-    return myStates;
-  }
-
-  public String getVisualizer(){
-     return myShape;
-  }
-
-  /**
-   * Create and set up the Grid based on stored information, and then return it.
-   *
-   */
-  private void loadFile()
-      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-    extractConfigInfo();
-    System.out.println(configSetUpConfirmationMessage);
-    createGrid();
-    System.out.println(gridConfirmationMessage);
   }
 
   private void setupDocument() throws IOException, SAXException, ParserConfigurationException {
@@ -147,8 +132,6 @@ public class Config {
       printTitle();
       extractAuthor(configElement);
       printAuthor();
-      extractShape(configElement);
-      printShape();
       extractDimensions(configElement);
       extractStates(configElement);
       extractParameters(configElement);
@@ -220,10 +203,6 @@ public class Config {
     myAuthor = extractElementValue(startingElement, authorNodeName);
   }
 
-  private void extractShape(Element startingElement){
-      myShape = extractElementValue(startingElement, shapeNodeName);
-  }
-
   private void extractSpeed(Element dimensionsElement) {
     mySpeed = Double.parseDouble(extractElementValue(dimensionsElement, speedNodeName).trim());
   }
@@ -266,10 +245,6 @@ public class Config {
 
   private void printAuthor() {
     System.out.println("Author: " + myAuthor);
-  }
-
-  private void printShape(){
-      System.out.println("Cell Shape Requested: "+ myShape);
   }
 
   /**
@@ -321,9 +296,14 @@ public class Config {
    *
    * @param col the starting location in the row
    * @param row the row to be filled
+   * @throws InvocationTargetException
+   * @throws NoSuchMethodException
+   * @throws ClassNotFoundException
+   * @throws InstantiationException
+   * @throws IllegalAccessException
    */
   private void fillRemainingRow(int col, int row) {
-    while (col < myWidth) {
+      while (col < myWidth) {
       Cell myCell = makeCell(defaultState);
       myGrid.placeCell(col, row, myCell);
       col++;
@@ -331,11 +311,15 @@ public class Config {
   }
 
   /**
-   * Creates a cell and sets all relevant parameters to it from the cellsociety.config XML.
+   * Creates a cell and sets all relevant parameters to it from the config XML.
    *
    * @param state the specific state of the particular cell
    * @return
-   * @throws InvalidCellException
+   * @throws NoSuchMethodException
+   * @throws IllegalAccessException
+   * @throws InvocationTargetException
+   * @throws InstantiationException
+   * @throws ClassNotFoundException
    */
   private Cell makeCell(int state)
       throws InvalidCellException {
@@ -366,4 +350,9 @@ public class Config {
     cell.setState(state);
     return cell;
   }
+//fixme added by alex
+  public Grid getGrid() {
+    return myGrid;
+  }
+  public Map<Integer, Color> getStates(){return myStates;}
 }
