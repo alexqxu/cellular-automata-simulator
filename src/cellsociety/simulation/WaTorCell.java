@@ -59,14 +59,14 @@ public class WaTorCell extends Cell {
   private void sharkPlanUpdate(LinkedList<Cell> updatedQueue, ArrayList<Cell> open,
       ArrayList<Cell> fish) {
     Random rand = new Random();
-    WaTorCell movedTo = null;
+    Cell movedTo = null;
     if (fish.size() > 0 || open.size() > 0) {
       if (fish.size() > 0) {
         int nextLoc = rand.nextInt(fish.size());
-        movedTo = (WaTorCell) fish.get(nextLoc);
+        movedTo = fish.get(nextLoc);
       } else {
         int nextLoc = rand.nextInt(open.size());
-        movedTo = (WaTorCell) open.get(nextLoc);
+        movedTo = open.get(nextLoc);
       }
       updatedQueue.remove(movedTo);
       if (movedTo.nextState > 1) {
@@ -91,10 +91,10 @@ public class WaTorCell extends Cell {
 
   private void fishPlanUpdate(LinkedList<Cell> updatedQueue, ArrayList<Cell> open) {
     Random rand = new Random();
-    WaTorCell movedTo = null;
+    Cell movedTo = null;
     if (open.size() > 0) {
       int nextLoc = rand.nextInt(open.size());
-      movedTo = (WaTorCell) open.get(nextLoc);
+      movedTo = open.get(nextLoc);
       updatedQueue.remove(movedTo);
       if (movedTo.nextState > 0) {
         nextState = state;
