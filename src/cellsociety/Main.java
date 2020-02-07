@@ -1,5 +1,6 @@
 package cellsociety;
 
+import cellsociety.exceptions.InvalidCellException;
 import cellsociety.visualizer.HexVisualizer;
 import cellsociety.visualizer.TriVisualizer;
 import cellsociety.visualizer.Visualizer;
@@ -234,24 +235,20 @@ public class Main extends Application {
   }
 
   public void loadConfigFile(File file) {
+    boolean badFile;
     try {
       myConfig = new Config(file);
-    } catch (ParserConfigurationException e) {
-      e.printStackTrace();
-    } catch (SAXException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
+    } catch (InvalidCellException e) {
+      displayError("Invalid Simulation Specified");
+      do {
+        badFile = false;
+        try {
+          myConfig = new Config(chooseFile());
+        }  catch (InvalidCellException f) {
+          displayError("Invalid Simulation Specified");
+          badFile = true;
+        }
+      } while (badFile);
     }
     myVisualizer = new TriVisualizer(myConfig.getGrid()); //FIXME
     myVisualizer.setColorMap(myConfig.getStates());
@@ -261,6 +258,13 @@ public class Main extends Application {
      */
     //FIXME uncomment once config.getVisualizer() is working, construct with grid param
 
+  }
+
+  private void displayError(String message) {
+    Alert errorAlert = new Alert(AlertType.ERROR);
+    errorAlert.setHeaderText(message);
+    errorAlert.setContentText("Please Choose Another File");
+    errorAlert.showAndWait();
   }
 
   private Button makeButton(String property, EventHandler<ActionEvent> handler) {
