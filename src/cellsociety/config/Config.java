@@ -264,8 +264,7 @@ public class Config {
    * @throws InvocationTargetException
    * @throws InstantiationException
    */
-  private void createGrid()
-      throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
+  private void createGrid() {
     myGrid = new TriGrid(); //FIXME temp fix by Maverick after making Grid abstract
     int row = 0;
     NodeList rowNodeList = doc.getElementsByTagName(rowNodeName);
@@ -296,11 +295,6 @@ public class Config {
    *
    * @param col the starting location in the row
    * @param row the row to be filled
-   * @throws InvocationTargetException
-   * @throws NoSuchMethodException
-   * @throws ClassNotFoundException
-   * @throws InstantiationException
-   * @throws IllegalAccessException
    */
   private void fillRemainingRow(int col, int row) {
       while (col < myWidth) {
