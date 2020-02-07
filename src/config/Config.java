@@ -1,4 +1,4 @@
-package cellsociety;
+package config;
 
 import cellsociety.simulation.Cell;
 import cellsociety.simulation.Grid;
@@ -83,46 +83,13 @@ public class Config {
     System.out.println(docSetUpConfirmationMessage);
     loadFile();
   }
-  //fixme drafted by alex o
-  public void setFile(File xmlFile)
-      throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-    myFile = xmlFile;
-    setupDocument();
-    System.out.println(docSetUpConfirmationMessage);
-    loadFile();
-  }
-
-  /**
-   * Creates the visualizer based on the Grid and speed.
-   *
-   * @return
-   * @throws ClassNotFoundException
-   * @throws NoSuchMethodException
-   * @throws InvocationTargetException
-   * @throws InstantiationException
-   * @throws IllegalAccessException
-   */
-  //FIXME edited by alex
-  public String getVisualizer(){
-    //extractVisualizerInfo()
-    //return "HexVisualizer"
-    return "";
-  }
-  public Visualizer createVisualizer()
-      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-    Visualizer myVisualizer = new RectVisualizer(myGrid);
-    for (int i : myStates.keySet()) {
-      myVisualizer.setStateColor(i, myStates.get(i));
-    }
-    return myVisualizer;
-  }
 
   /**
    * Create and set up the Grid based on stored information, and then return it.
    *
    * @return
    */
-  private Grid loadFile()
+  public Grid loadFile()
       throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
     extractConfigInfo();
     System.out.println(configSetUpConfirmationMessage);
@@ -139,6 +106,7 @@ public class Config {
   public double getSpeed() {
     return mySpeed;
   }
+
   private void setupDocument() throws IOException, SAXException, ParserConfigurationException {
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     DocumentBuilder builder = factory.newDocumentBuilder();
@@ -356,8 +324,7 @@ public class Config {
     for (Map.Entry<String, Double> parameterEntry : myParameters.entrySet()) {
       cell.setParam(parameterEntry.getKey(), parameterEntry.getValue());
     }
-    for (Map.Entry<Integer, Color> stateEntry : myStates
-        .entrySet()) {                                                //Part of refactoring. Color is now passed into visualizer
+    for (Map.Entry<Integer, Color> stateEntry : myStates.entrySet()) {
       myStates.put(stateEntry.getKey(), stateEntry.getValue());
     }
     cell.setState(state);
