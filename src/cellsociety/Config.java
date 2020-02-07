@@ -277,7 +277,7 @@ public class Config {
   /**
    * Based on the parameters set, creates a grid with a randomized configuration of CELLS
    */
-  private void createRandomGrid() {
+  private void createRandomGrid() throws ClassNotFoundException {
     myGrid = new RectGrid(); //FIXME temp fix by Maverick after making Grid abstract
     myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myWidth, myHeight);
   }

@@ -60,7 +60,7 @@ public abstract class Grid {
           try {
             cell = getCell(r, c).getClass().getConstructor().newInstance();
           } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-            ex.printStackTrace();
+            cell = new FireCell();//FIXME this should never happen
           }
           cell.setState(getCell(r, c).getDefaultEdge());
           ret[i] = cell;
@@ -81,7 +81,7 @@ public abstract class Grid {
   }
 
   public void setRandomGrid(String className, Map<String, Double> paramMap, double[] stateChances,
-      int rows, int cols) {
+      int rows, int cols) throws ClassNotFoundException {
     ArrayList<ArrayList<Cell>> ret = new ArrayList<>();
     for (int i = 0; i < rows; i++) {
       ArrayList<Cell> row = new ArrayList<>();
@@ -94,7 +94,7 @@ public abstract class Grid {
   }
 
   public static Cell getRandomCell(String className, Map<String, Double> paramMap,
-      double[] stateChances) {
+      double[] stateChances) throws ClassNotFoundException {
     Class cellClass = null;
     Cell cell = null;
     try {
@@ -102,7 +102,7 @@ public abstract class Grid {
       cell = (Cell) (cellClass.getConstructor().newInstance());
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
         NoSuchMethodException | InvocationTargetException e) {
-      cell = new FireCell(); //FIXME this should never happen bc error handling in config
+      throw new ClassNotFoundException(e.toString());
     }
     for (String param : paramMap.keySet()) {
       cell.setParam(param, paramMap.get(param));
