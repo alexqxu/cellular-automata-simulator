@@ -1,6 +1,6 @@
 package cellsociety.simulation;
 
-public class HexGrid extends Grid{
+public class HexGrid extends Grid {
 
   @Override
   public Cell[] getNeighbors(int r, int c) {

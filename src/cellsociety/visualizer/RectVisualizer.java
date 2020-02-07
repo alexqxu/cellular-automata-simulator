@@ -1,6 +1,5 @@
 package cellsociety.visualizer;
 
-import cellsociety.Config;
 import cellsociety.simulation.Grid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -18,11 +17,11 @@ public class RectVisualizer extends Visualizer {
     super(grid);
   }
 
-  protected Node instantiateCellGrid(){
+  protected Node instantiateCellGrid() {
     GridPane gridpane = new GridPane();
     cellGrid = new ArrayList<ArrayList<Shape>>();
-    Color[][] colorgrid = myGrid.getColorGrid();
-    for(int i = 0; i < colorgrid.length; i++) {
+    Color[][] colorgrid = getColorGrid();
+    for (int i = 0; i < colorgrid.length; i++) {
       cellGrid.add(new ArrayList<Shape>());
       for (int j = 0; j < colorgrid[i].length; j++) {
         Rectangle cell = new Rectangle();
@@ -30,13 +29,13 @@ public class RectVisualizer extends Visualizer {
         cell.setStrokeType(StrokeType.INSIDE);
         cell.setStroke(Color.GRAY);
         cell.setStrokeWidth(.5);
-        cell.setWidth(SIZE/colorgrid.length);
-        cell.setHeight(SIZE/colorgrid[i].length);
-        cell.setX(j*cell.getWidth());
-        cell.setY(i*cell.getHeight());
+        cell.setWidth(SIZE / colorgrid.length);
+        cell.setHeight(SIZE / colorgrid[i].length);
+        cell.setX(j * cell.getWidth());
+        cell.setY(i * cell.getHeight());
         final int r = i;
         final int c = j;
-        cell.setOnMouseClicked(e->{
+        cell.setOnMouseClicked(e -> {
           myGrid.incrementCellState(r, c);
           drawGrid();
         });
