@@ -45,9 +45,13 @@ public class Main extends Application {
   public static final int FRAMES_PER_SECOND = 60; //FIXME Maverick changed to 60 from 120 for testing
   public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
   public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+  private static final String RESOURCES = "resources";
+  public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
+  public static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
   private static final String RESOURCE_PACKAGE = "Image";
   private static final String STYLESHEET = "default.css";
   private static final int MAX_UPDATE_PERIOD = 2;
+
 
   private String packagePrefixName = "cellsociety.visualizer.";
 
@@ -78,7 +82,9 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException { //throws exception?
       myStage = stage;
-      myResources = ResourceBundle.getBundle(RESOURCE_PACKAGE); //FIXME
+      System.out.println(DEFAULT_RESOURCE_PACKAGE+RESOURCE_PACKAGE);
+      myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE); //FIXME
+
       myConfig = new Config(chooseFile());
       myVisualizer = new TriVisualizer(myConfig.getGrid()); //FIXME
       myVisualizer.setColorMap(myConfig.getStates());
@@ -274,7 +280,7 @@ public class Main extends Application {
     String label = myResources.getString(property);
     if (label.matches(IMAGEFILE_SUFFIXES)) {
       result.setGraphic(
-          new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(label))));
+          new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
     } else {
       result.setText(label);
     }
@@ -290,7 +296,7 @@ public class Main extends Application {
     String label = myResources.getString(property);
     if (label.matches(IMAGEFILE_SUFFIXES)) {
       result.setGraphic(
-          new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(label))));
+          new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
     } else {
       result.setText(label);
     }
