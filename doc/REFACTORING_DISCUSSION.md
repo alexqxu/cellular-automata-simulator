@@ -13,7 +13,10 @@
    * Rationale / Tradeoffs Considered:
 2. **Config set colors in Cell**
    * Cause: Cell previously held its colors for its states.
-   * Fix: Move the color maps to the visualization code and have config set that map
+   * Fix: Move the color maps to the visualization code and have config set that map. Corresponding dependencies
+   were resolved. This resulted in the creation of a method in Visualizer `getColorGrid` which iterates
+   over the states returned from the Grid and creates a grid of corresponding colors, in order to
+   preserve existing code workflow.
    * Rationale: The model should not have access or knowledge of any of the visualization, and thus
    Config should tell the visualizer about the colors, not the model.
    
