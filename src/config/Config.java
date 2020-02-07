@@ -1,5 +1,6 @@
 package config;
 
+import cellsociety.exceptions.InvalidCellException;
 import cellsociety.simulation.Cell;
 import cellsociety.simulation.Grid;
 import cellsociety.simulation.HexGrid;
@@ -30,7 +31,7 @@ import org.xml.sax.SAXException;
  * @author Alex Xu aqx
  */
 public class Config {
-
+  private static final String INVALID_CELL = "Invalid Cell Thrown";
   private String packagePrefixName = "cellsociety.simulation.";
 
   private String configNodeName = "ConfigInfo";
@@ -318,9 +319,25 @@ public class Config {
    * @throws ClassNotFoundException
    */
   private Cell makeCell(int state)
-      throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
-    Class cellClass = Class.forName(packagePrefixName + myTitle);
-    Cell cell = (Cell) (cellClass.getConstructor().newInstance());
+      throws InvalidCellException {
+    Class cellClass = null;
+    try {
+      cellClass = Class.forName(packagePrefixName + myTitle);
+    } catch (ClassNotFoundException e) {
+      throw new InvalidCellException(e);
+    }
+    Cell cell = null;
+    try {
+      cell = (Cell) (cellClass.getConstructor().newInstance());
+    } catch (InstantiationException e) {
+      throw new InvalidCellException(e);
+    } catch (IllegalAccessException e) {
+      throw new InvalidCellException(e);
+    } catch (InvocationTargetException e) {
+      throw new InvalidCellException(e);
+    } catch (NoSuchMethodException e) {
+      throw new InvalidCellException(e);
+    }
     for (Map.Entry<String, Double> parameterEntry : myParameters.entrySet()) {
       cell.setParam(parameterEntry.getKey(), parameterEntry.getValue());
     }

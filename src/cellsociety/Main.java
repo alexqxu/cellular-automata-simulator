@@ -1,5 +1,6 @@
 package cellsociety;
 
+import cellsociety.visualizer.HexVisualizer;
 import cellsociety.visualizer.TriVisualizer;
 import cellsociety.visualizer.Visualizer;
 import java.io.File;
@@ -17,6 +18,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -177,7 +180,7 @@ public class Main extends Application {
       myFile = file;
       return file;
     } else {
-      System.out.println("Error: File not found");
+      System.out.println("Error: File not found"); //when hitting cancel
     }
     return null;
   }
@@ -250,19 +253,7 @@ public class Main extends Application {
     } catch (InvocationTargetException e) {
       e.printStackTrace();
     }
-    try {
-      myVisualizer = new TriVisualizer(myConfig.loadFile()); //FIXME
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    }
+    myVisualizer = new TriVisualizer(myConfig.getGrid()); //FIXME
     myVisualizer.setColorMap(myConfig.getStates());
     /*
     Class visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
