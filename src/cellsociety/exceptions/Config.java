@@ -1,4 +1,4 @@
-package config;
+package cellsociety.exceptions;
 
 import cellsociety.exceptions.InvalidCellException;
 import cellsociety.simulation.Cell;
