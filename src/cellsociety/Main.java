@@ -33,7 +33,10 @@ public class Main extends Application {
   private Stage myStage;
   private Config myConfig;
   private Visualizer myVisualizer;
-    /**
+  private File myFile;
+
+
+  /**
      * Start method. Runs game loop after setting up stage and scene data.
      * @param stage the window in which the application runs
      * @throws Exception
@@ -41,7 +44,8 @@ public class Main extends Application {
     //FIXME throws
     @Override
     public void start(Stage stage) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException { //throws exception?
-          loadConfigFile(chooseFile());
+          myFile = chooseFile();
+          loadConfigFile(myFile);
 //        myStage = stage;
 //
 //        myConfig = new Config(chooseFile());
@@ -74,6 +78,7 @@ public class Main extends Application {
   public static void loadConfigFile(File file) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
     Config config = new Config(file);
     Visualizer myVisualizer = config.createVisualizer();
+    myVisualizer.setFile(file);
     Stage newStage = new Stage();
     myVisualizer.setStage(newStage);
     newStage.setScene(myVisualizer.createScene());
@@ -86,6 +91,8 @@ public class Main extends Application {
     animation.getKeyFrames().add(frame);
     animation.play();
   }
+
+
 
   /**
    * Opens a file navigator dialogue and allows the user to select an .xml file for importing into the simulation

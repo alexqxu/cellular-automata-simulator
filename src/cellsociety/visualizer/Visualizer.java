@@ -134,7 +134,7 @@ public abstract class Visualizer {
     //FIXME throws
     newWindow = makeMenu("New", e-> {
       try {
-        Main.loadConfigFile(Main.chooseFile());
+        Main.loadConfigFile(chooseFile());
       } catch (IOException ex) {
         ex.printStackTrace();
       } catch (SAXException ex) {
@@ -156,7 +156,7 @@ public abstract class Visualizer {
     loadFile = makeButton("Load", e -> {
       //FIXME We will die if we dont deal with these exception calls
       try {
-        Main.loadConfigFile(Main.chooseFile());
+        Main.loadConfigFile(chooseFile());
         myStage.hide();
       } catch (IOException ex) {
         ex.printStackTrace();
@@ -265,6 +265,21 @@ public abstract class Visualizer {
     return result;
   }
 
+  private File chooseFile(){
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Choose Simulation File");
+    fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+    fileChooser.getExtensionFilters().add(new ExtensionFilter("XML Files", "*.xml"));
+    File file = fileChooser.showOpenDialog(null);
+    currentFile = file;
+    if(file!=null){
+      return file;
+    }else{
+      System.out.println("Error: File not found");
+    }
+    return null;
+  }
+
   /**
    * Handles the toggling of the play/pause button. Switches the image rendered on the play/pause button as well
    * as toggling whether the simulation is running or not.
@@ -323,4 +338,6 @@ public abstract class Visualizer {
   }
 
   public void setStage(Stage newStage){myStage = newStage;}
+
+  public void setFile(File file){currentFile = file;}
 }
