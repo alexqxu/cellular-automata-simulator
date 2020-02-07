@@ -1,4 +1,4 @@
-package cellsociety.config;
+package cellsociety.exceptions;
 
 public class InvalidFileException extends RuntimeException{
 

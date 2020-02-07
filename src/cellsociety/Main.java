@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 
-import cellsociety.exceptions.Config;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
