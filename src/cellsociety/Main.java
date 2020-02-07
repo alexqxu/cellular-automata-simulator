@@ -52,7 +52,6 @@ public class Main extends Application {
   private static final String STYLESHEET = "default.css";
   private static final int MAX_UPDATE_PERIOD = 2;
 
-
   private String packagePrefixName = "cellsociety.visualizer.";
 
   private BorderPane frame;

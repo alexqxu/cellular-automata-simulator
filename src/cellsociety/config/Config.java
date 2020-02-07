@@ -28,6 +28,8 @@ import org.xml.sax.SAXException;
  */
 public class Config {
   private static final String INVALID_CELL = "Invalid Cell Thrown";
+  private static final String INVALID_FILE = "Invalid File Requested";
+
   private String packagePrefixName = "cellsociety.simulation.";
 
   private String configNodeName = "ConfigInfo";
@@ -319,14 +321,8 @@ public class Config {
    *
    * @param col the starting location in the row
    * @param row the row to be filled
-   * @throws InvocationTargetException
-   * @throws NoSuchMethodException
-   * @throws ClassNotFoundException
-   * @throws InstantiationException
-   * @throws IllegalAccessException
    */
-  private void fillRemainingRow(int col, int row)
-      throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+  private void fillRemainingRow(int col, int row) {
     while (col < myWidth) {
       Cell myCell = makeCell(defaultState);
       myGrid.placeCell(col, row, myCell);
@@ -339,11 +335,7 @@ public class Config {
    *
    * @param state the specific state of the particular cell
    * @return
-   * @throws NoSuchMethodException
-   * @throws IllegalAccessException
-   * @throws InvocationTargetException
-   * @throws InstantiationException
-   * @throws ClassNotFoundException
+   * @throws InvalidCellException
    */
   private Cell makeCell(int state)
       throws InvalidCellException {
