@@ -1,4 +1,4 @@
-package config;
+package cellsociety.config;
 
 public class InvalidFileException extends RuntimeException{
 
@@ -9,7 +9,6 @@ public class InvalidFileException extends RuntimeException{
     public InvalidFileException (String message, Object ... values) {
         super(String.format(message, values));
     }
-
 
 }
 

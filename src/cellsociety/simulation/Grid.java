@@ -102,7 +102,7 @@ public abstract class Grid {
       cell = (Cell) (cellClass.getConstructor().newInstance());
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
         NoSuchMethodException | InvocationTargetException e) {
-      cell = new FireCell(); //FIXME this should never happen bc error handling in config
+      cell = new FireCell(); //FIXME this should never happen bc error handling in cellsociety.config
     }
     for (String param : paramMap.keySet()) {
       cell.setParam(param, paramMap.get(param));
