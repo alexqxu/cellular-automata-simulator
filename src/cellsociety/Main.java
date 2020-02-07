@@ -47,7 +47,7 @@ public class Main extends Application {
   public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
   private static final String RESOURCES = "resources";
   public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
-  public static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
+  public static final String DEFAULT_RESOURCE_FOLDER = RESOURCES + "/";
   private static final String RESOURCE_PACKAGE = "Image";
   private static final String STYLESHEET = "default.css";
   private static final int MAX_UPDATE_PERIOD = 2;
@@ -114,7 +114,7 @@ public class Main extends Application {
     setSpeed(.5); //myconfig.getspeed
     Scene scene = new Scene(frame, Color.AZURE);
     scene.getStylesheets()
-        .add(getClass().getClassLoader().getResource(STYLESHEET).toExternalForm());
+        .add(getClass().getClassLoader().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
     return scene;
   }
 
@@ -130,7 +130,7 @@ public class Main extends Application {
     }
     if (label.matches(IMAGEFILE_SUFFIXES)) {
       button.setGraphic(
-          new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(label))));
+          new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
     }
   }
 
