@@ -10,5 +10,13 @@
    * Cause:
    * Fix: 
    * Rationale / Tradeoffs Considered:
-2.
-
+2. **Exceptions Handling**
+   *
+   *
+   *
+3. **Config set colors in Cell**
+   * Cause: Cell previously held its colors for its states.
+   * Fix: Move the color maps to the visualization code and have config set that map
+   * Rationale: The model should not have access or knowledge of any of the visualization, and thus
+   Config should tell the visualizer about the colors, not the model.
+   
