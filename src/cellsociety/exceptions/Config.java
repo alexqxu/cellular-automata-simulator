@@ -83,7 +83,7 @@ public class Config {
    * @throws IOException
    */
   public Config(File xmlFile)
-      throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+      throws ParserConfigurationException, SAXException, IOException {
     myFile = xmlFile;
     setupDocument();
     System.out.println(docSetUpConfirmationMessage);
