@@ -79,8 +79,7 @@ public class Config {
    * @throws SAXException
    * @throws IOException
    */
-  public Config(File xmlFile)
-      throws ParserConfigurationException, SAXException, IOException {
+  public Config(File xmlFile) {
     myFile = xmlFile;
     setupDocument();
     System.out.println(docSetUpConfirmationMessage);
@@ -107,17 +106,26 @@ public class Config {
     return mySpeed;
   }
 
+  /**
+   * Returns the Grid created
+   * @return
+   */
   public Grid getGrid() {
     return myGrid;
   }
 
+  /**
+   * Returns a string representing the type of shape/visualizer
+   * @return
+   */
   public String getVisualizer(){
     return myShape;
   }
 
   public Map<Integer, Color> getStates(){return myStates;}
 
-  private void setupDocument() throws InvalidFileException{
+  private void setupDocument()
+          throws InvalidFileException{
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     DocumentBuilder builder = null;
     try {
@@ -148,6 +156,8 @@ public class Config {
       printTitle();
       extractAuthor(configElement);
       printAuthor();
+      extractShape(configElement);
+      printShape();
       extractDimensions(configElement);
       extractStates(configElement);
       extractParameters(configElement);
@@ -219,6 +229,10 @@ public class Config {
     myAuthor = extractElementValue(startingElement, authorNodeName);
   }
 
+  private void extractShape(Element startingElement) {
+    myShape = extractElementValue(startingElement, shapeNodeName);
+  }
+
   private void extractSpeed(Element dimensionsElement) {
     mySpeed = Double.parseDouble(extractElementValue(dimensionsElement, speedNodeName).trim());
   }
@@ -261,6 +275,10 @@ public class Config {
 
   private void printAuthor() {
     System.out.println("Author: " + myAuthor);
+  }
+
+  private void printShape(){
+    System.out.println("Cell Shape Requested: " + myShape);
   }
 
   /**
