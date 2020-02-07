@@ -1,5 +1,6 @@
 package cellsociety.simulation;
 
+import cellsociety.exceptions.InvalidCellException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -60,7 +61,7 @@ public abstract class Grid {
           try {
             cell = getCell(r, c).getClass().getConstructor().newInstance();
           } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-            ex.printStackTrace();
+            cell = new FireCell(); //FIXME Should never happen due to error handling elsewhere
           }
           cell.setState(getCell(r, c).getDefaultEdge());
           ret[i] = cell;
@@ -102,7 +103,7 @@ public abstract class Grid {
       cell = (Cell) (cellClass.getConstructor().newInstance());
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
         NoSuchMethodException | InvocationTargetException e) {
-      cell = new FireCell(); //FIXME this should never happen bc error handling in config
+      throw new InvalidCellException(e);
     }
     for (String param : paramMap.keySet()) {
       cell.setParam(param, paramMap.get(param));
