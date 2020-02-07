@@ -78,7 +78,7 @@ public class Config {
    * @throws IOException
    */
   public Config(File xmlFile)
-      throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+      throws ParserConfigurationException, SAXException, IOException {
     myFile = xmlFile;
     setupDocument();
     System.out.println(docSetUpConfirmationMessage);
@@ -90,8 +90,7 @@ public class Config {
    *
    * @return
    */
-  public Grid loadFile()
-      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+  public Grid loadFile() {
     extractConfigInfo();
     System.out.println(configSetUpConfirmationMessage);
     createGrid();
@@ -260,8 +259,7 @@ public class Config {
    * @throws InvocationTargetException
    * @throws InstantiationException
    */
-  private void createGrid()
-      throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
+  private void createGrid() {
     myGrid = new TriGrid(); //FIXME temp fix by Maverick after making Grid abstract
     int row = 0;
     NodeList rowNodeList = doc.getElementsByTagName(rowNodeName);
@@ -298,9 +296,8 @@ public class Config {
    * @throws InstantiationException
    * @throws IllegalAccessException
    */
-  private void fillRemainingRow(int col, int row)
-      throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-    while (col < myWidth) {
+  private void fillRemainingRow(int col, int row) {
+      while (col < myWidth) {
       Cell myCell = makeCell(defaultState);
       myGrid.placeCell(col, row, myCell);
       col++;
@@ -318,8 +315,7 @@ public class Config {
    * @throws InstantiationException
    * @throws ClassNotFoundException
    */
-  private Cell makeCell(int state)
-      throws InvalidCellException {
+  private Cell makeCell(int state) throws InvalidCellException {
     Class cellClass = null;
     try {
       cellClass = Class.forName(packagePrefixName + myTitle);
