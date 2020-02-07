@@ -155,4 +155,11 @@ public abstract class Cell {
       addState(i);
     }
   }
+
+  protected int getSideOffset(int len) {
+    if (len%4==0) {
+      return len/4;
+    }
+    return 1;
+  }
 }

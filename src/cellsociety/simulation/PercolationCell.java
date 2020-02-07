@@ -10,20 +10,13 @@ public class PercolationCell extends Cell {
     defaultEdge = 3;
   }
 
-  /* //should be able to be removed
-  @Override
-  protected int getHighestState() {
-    int ret = super.getHighestState();
-    return --ret;
-  }*/
-
   @Override
   void planUpdate(Cell[] neighbors, LinkedList<Cell> emptyQueue) {
-    if (neighbors[6].getState() == 3) {
+    if (neighbors[0].getState() == 3) {
       neighbors[0].setState(2); //this is okay because cells with state 3 are dummy cells
     }
     if (getState() == 1) {
-      for (int i = 0; i < neighbors.length; i += 2) {
+      for (int i = 0; i < neighbors.length; i += 1) {
         if (neighbors[i].getState() == 2) {
           nextState = 2;
           return;

@@ -45,7 +45,7 @@ public abstract class Grid {
    * @return
    */
   protected Cell[] getSpecificNeighbors(int r, int c, int[] dr, int[] dc) {
-    Cell[] ret = new Cell[8];
+    Cell[] ret = new Cell[dr.length];
     if (getCell(r, c).getDefaultEdge() == -1) {
       for (int i = 0; i < ret.length; i++) {
         ret[i] = grid.get((r + dr[i] + getHeight()) % getHeight())

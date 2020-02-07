@@ -31,8 +31,8 @@ public class RectVisualizer extends Visualizer {
         cell.setStrokeWidth(.5);
         cell.setWidth(SIZE / colorgrid.length);
         cell.setHeight(SIZE / colorgrid[i].length);
-        cell.setX(j * cell.getWidth());
-        cell.setY(i * cell.getHeight());
+        cell.setX(i * cell.getWidth());
+        cell.setY(j * cell.getHeight());
         final int r = i;
         final int c = j;
         cell.setOnMouseClicked(e -> {
@@ -40,7 +40,7 @@ public class RectVisualizer extends Visualizer {
           drawGrid();
         });
         cellGrid.get(i).add(cell);
-        gridpane.add(cell, i, j);
+        gridpane.add(cell, j, i); //order of these was changed by Maverick to make other things work
       }
     }
     return gridpane;

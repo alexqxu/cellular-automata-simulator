@@ -2,7 +2,9 @@ package cellsociety;
 
 import cellsociety.simulation.Cell;
 import cellsociety.simulation.Grid;
+import cellsociety.simulation.HexGrid;
 import cellsociety.simulation.RectGrid;
+import cellsociety.visualizer.HexVisualizer;
 import cellsociety.visualizer.RectVisualizer;
 import cellsociety.visualizer.Visualizer;
 import java.io.File;

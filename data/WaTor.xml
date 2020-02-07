@@ -14,10 +14,10 @@
         <SpecialParameters>
             <Parameter name = "probCatch">0.7</Parameter>
             <Parameter name = "happinessThresh">0.3</Parameter>
-            <Parameter name = "sharkBreedTime">40.0</Parameter>
-            <Parameter name = "fishBreedTime">5.0</Parameter>
-            <Parameter name = "fishFeedEnergy">2.0</Parameter>
-            <Parameter name = "sharkStartEnergy">5.0</Parameter>
+            <Parameter name = "sharkBreedTime">35.0</Parameter>
+            <Parameter name = "fishBreedTime">3.0</Parameter>
+            <Parameter name = "fishFeedEnergy">1.5</Parameter>
+            <Parameter name = "sharkStartEnergy">3.5</Parameter>
         </SpecialParameters>
 
         <!-- Default is the cells that are filled if there are not enough cells. Color names must be standard HTML Names -->
