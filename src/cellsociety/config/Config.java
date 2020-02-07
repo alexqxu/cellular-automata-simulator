@@ -1,14 +1,10 @@
-package config;
+package cellsociety.config;
 
 import cellsociety.simulation.Cell;
 import cellsociety.simulation.Grid;
-import cellsociety.simulation.HexGrid;
 import cellsociety.simulation.RectGrid;
 import cellsociety.simulation.TriGrid;
-import cellsociety.visualizer.HexVisualizer;
-import cellsociety.visualizer.RectVisualizer;
-import cellsociety.visualizer.TriVisualizer;
-import cellsociety.visualizer.Visualizer;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -99,7 +95,7 @@ public class Config {
   }
 
   /**
-   * Returns the update speed of the simulation, as defined within the initial config XML document.
+   * Returns the update speed of the simulation, as defined within the initial cellsociety.config XML document.
    *
    * @return speed of the simulation
    */
@@ -307,7 +303,7 @@ public class Config {
   }
 
   /**
-   * Creates a cell and sets all relevant parameters to it from the config XML.
+   * Creates a cell and sets all relevant parameters to it from the cellsociety.config XML.
    *
    * @param state the specific state of the particular cell
    * @return

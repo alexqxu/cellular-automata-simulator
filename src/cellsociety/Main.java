@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 
-import config.Config;
+import cellsociety.config.Config;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -93,7 +93,7 @@ public class Main extends Application {
       Visualizer myVisualizer = (Visualizer) (visualizerClass.getConstructor().newInstance());
 
        */
-      //FIXME uncomment once config.getVisualizer() is working, construct with grid param
+      //FIXME uncomment once cellsociety.config.getVisualizer() is working, construct with grid param
 
 
       myStage.setScene(createScene());
@@ -147,7 +147,7 @@ public class Main extends Application {
   /**
    * Update method which calls the model to update the states of all the cells on the backend, and
    * redraws the rectangles with their new color values. Calls the inner update methods at a rate
-   * dependent on the speed of the simulation (specified in the .xml config file and controlled by
+   * dependent on the speed of the simulation (specified in the .xml cellsociety.config file and controlled by
    * the slider).
    *
    * @param elapsedTime - The elapsed time between frame calls made in the default start() method of
