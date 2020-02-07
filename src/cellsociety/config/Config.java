@@ -79,8 +79,7 @@ public class Config {
    * @throws SAXException
    * @throws IOException
    */
-  public Config(File xmlFile)
-      throws ParserConfigurationException, SAXException, IOException {
+  public Config(File xmlFile) {
     myFile = xmlFile;
     setupDocument();
     System.out.println(docSetUpConfirmationMessage);
