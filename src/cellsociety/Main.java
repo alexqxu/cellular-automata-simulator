@@ -1,6 +1,7 @@
 package cellsociety;
 
 import cellsociety.visualizer.HexVisualizer;
+import cellsociety.visualizer.TriVisualizer;
 import cellsociety.visualizer.Visualizer;
 import java.io.File;
 import java.io.IOException;
@@ -79,7 +80,7 @@ public class Main extends Application {
       myStage = stage;
       myResources = ResourceBundle.getBundle(RESOURCE_PACKAGE); //FIXME
       myConfig = new Config(chooseFile());
-      myVisualizer = new HexVisualizer(myConfig.getGrid()); //FIXME
+      myVisualizer = new TriVisualizer(myConfig.getGrid()); //FIXME
       myVisualizer.setColorMap(myConfig.getStates());
       /*
       Class visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());

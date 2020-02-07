@@ -11,12 +11,13 @@ public abstract class Cell {
 
   protected String[] params;
   protected String[] groundParams;
-  protected ArrayList<Integer> usedStates = new ArrayList<>();
+  private ArrayList<Integer> usedStates = new ArrayList<>();
   protected int state;
   protected int nextState;
-  protected Map<String, Double> paramMap = new HashMap<>();
-  protected Map<String, Double> groundParamMap = new HashMap<>();
+  private Map<String, Double> paramMap = new HashMap<>();
+  private Map<String, Double> groundParamMap = new HashMap<>();
   protected int defaultEdge = -1;
+  protected boolean pointingUp = false;
 
   /**
    * Default constructor for all Cells. Sets the parameters to an empty array.
@@ -158,8 +159,27 @@ public abstract class Cell {
 
   protected int getSideOffset(int len) {
     if (len%4==0) {
-      return len/4;
+      return len/3;
     }
     return 1;
+  }
+
+  /*protected Cell[] triAdjust(int r, int c, Cell[] arr) {
+    if ((r+c)%2==0 && arr.length==12) {
+      return rotateNeighbors(arr);
+    }
+    return arr;
+  }*/
+
+  protected Cell[] rotateNeighbors(Cell[] arr){
+    Cell[] ret = new Cell[arr.length];
+    for (int i = 0; i < arr.length; i++){
+      ret[i] = arr[(i+arr.length/2)%arr.length];
+    }
+    return ret;
+  }
+
+  public void setPointUp(boolean point) {
+    pointingUp = point;
   }
 }

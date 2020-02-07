@@ -1,20 +1,36 @@
 package cellsociety.simulation;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+
 public class TriGrid extends Grid {
 
   @Override
   public Cell[] getNeighbors(int r, int c) {
-    //FIXME need to flip/flop neighborhoods
     int[] dr;
     int[] dc;
     if ((r + c) % 2 == 0) {
-      dr = new int[]{-1, -1, 0, 1, 1, 1, 0, -1};
-      dc = new int[]{0, 1, 1, 1, 0, -1, -1, -1};
+      dr = new int[]{-1, -1, 0, 0, 1, 1, 1, 1, 1, 0, 0, -1};
+      dc = new int[]{0, 1, 1, 2, 2, 1, 0, -1, -2, -2, -1, -1};
     } else {
-      dr = new int[]{-1, -1, 0, 1, 1, 1, 0, -1};
-      dc = new int[]{0, 1, 1, 1, 0, -1, -1, -1};
+      dr = new int[]{-1, -1, -1, 0, 0, 1, 1, 1, 0, 0, -1, -1};
+      dc = new int[]{0, 1, 2, 2,1, 1, 0, -1, -1, -2, -2, -1};
     }
-    throw new RuntimeException("NONFUNCTIONAL DO NOT USE!");
-    //return getSpecificNeighbors(r, c, dr, dc);
+    return getSpecificNeighbors(r, c, dr, dc);
   }
+
+  private int[] rotate(int[] arr){
+    int[] ret = new int[arr.length];
+    for (int i = 0; i < arr.length; i++){
+      ret[i] = arr[(i+arr.length/2)%arr.length];
+    }
+    return ret;
+  }
+
+  @Override
+  public void placeCell(int c, int r, Cell cell){
+    super.placeCell(c, r, cell);
+    cell.setPointUp((c+r)%2==0);
+  }
+
 }

@@ -26,6 +26,9 @@ public class FireCell extends Cell {
 
   @Override
   void planUpdate(Cell[] neighbors, LinkedList<Cell> emptyQueue) {
+    if (pointingUp) {
+      neighbors = rotateNeighbors(neighbors);
+    }
     if (getState() == 0) {
       nextState = 0;
     }
