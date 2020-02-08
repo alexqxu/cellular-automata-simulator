@@ -40,7 +40,7 @@ import javax.imageio.ImageIO;
 /**
  * @author: Alex Oesterling, axo
  */
-public class Main extends Application {
+public class SimulationApp {
 
   public static final String TITLE = "Cell Simulator";
   public static final int FRAMES_PER_SECOND = 60; //FIXME Maverick changed to 60 from 120 for testing
@@ -63,9 +63,10 @@ public class Main extends Application {
   private Slider slider;
   private Button playpause;
   private Button loadFile;
+  private Button shuffle;
   private ResourceBundle myResources;
-  private Menu newWindow;
-  private Menu exit;
+  private Button newWindow;
+  private Button exit;
   private Button reset;
   private Button step;
   private MenuBar menuBar;
@@ -80,8 +81,8 @@ public class Main extends Application {
    * @param stage the window in which the application runs
    * @throws Exception
    */
-  @Override
-  public void start(Stage stage) { //throws exception?
+
+  public SimulationApp(Stage stage) {
     myStage = stage;
     System.out.println(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE);
     myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE);
@@ -193,16 +194,16 @@ public class Main extends Application {
 
   public Node setToolBar() {
     HBox toolbar = new HBox();
-    final Pane spacer = new Pane();
-    HBox.setHgrow(spacer, Priority.ALWAYS);
+//    final Pane spacer = new Pane();
+//    HBox.setHgrow(spacer, Priority.ALWAYS);
     menuBar = new MenuBar();
-    newWindow = makeMenu("New", e -> makeWindow());
+    newWindow = makeButton("New", e -> makeWindow());
     loadFile = makeButton("Load", e -> {
       loadConfigFile(chooseFile());
       frame.setCenter(myVisualizer.bundledUI());
       myVisualizer.drawGrid();
     });
-    //exit = makeMenu("Exit", e-> );
+    exit = makeButton("Exit", e-> closeWindow());
     playpause = makeButton("Play", e -> handlePlayPause(playpause));
     reset = makeButton("Reset", e -> {
       loadConfigFile(myFile);
@@ -225,20 +226,25 @@ public class Main extends Application {
         setSpeed(new_val.doubleValue() / 100);
       }
     });
-    menuBar.getMenus().addAll(newWindow);
+//    menuBar.getMenus().addAll(newWindow);
     toolbar.getChildren().add(menuBar);
     toolbar.getChildren().add(playpause);
     toolbar.getChildren().add(step);
     toolbar.getChildren().add(reset);
     toolbar.getChildren().add(loadFile);
-    toolbar.getChildren().add(spacer);
+    toolbar.getChildren().add(newWindow);
+    toolbar.getChildren().add(exit);
     toolbar.getChildren().add(slider);
     return toolbar;
   }
 
+  private void closeWindow() {
+    myStage.close();
+  }
+
   //fixme make
   private void makeWindow() {
-    Stage newStage = new Stage();
+    SimulationApp newWindow = new SimulationApp(new Stage());
   }
 
   public void loadConfigFile(File file) {
@@ -295,9 +301,10 @@ public class Main extends Application {
   }
 
   private Button makeButton(String property, EventHandler<ActionEvent> handler) {
+    Button result = new Button();
+
     final String IMAGEFILE_SUFFIXES = String
         .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
-    Button result = new Button();
     String label = myResources.getString(property);
     if (label.matches(IMAGEFILE_SUFFIXES)) {
       result.setGraphic(
@@ -312,9 +319,10 @@ public class Main extends Application {
 
   //FIXME
   private Menu makeMenu(String property, EventHandler<ActionEvent> handler) {
+    Menu result = new Menu();
+
     final String IMAGEFILE_SUFFIXES = String
         .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
-    Menu result = new Menu();
     String label = myResources.getString(property);
     if (label.matches(IMAGEFILE_SUFFIXES)) {
       result.setGraphic(
@@ -332,7 +340,7 @@ public class Main extends Application {
    *
    * @param args
    */
-  public static void main(String[] args) {
-    launch(args);
-  }
+//  public static void main(String[] args) {
+//    launch(args);
+//  }
 }
