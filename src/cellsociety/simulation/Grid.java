@@ -175,7 +175,7 @@ public abstract class Grid {
     return grid.get(r).get(c).getState();
   }
 
-  public void placeCell(int c, int r, Cell cell) { //FIXME r/c convention flipped here?
+  public void placeCell(int r, int c, Cell cell) { //FIXME r/c convention flipped here?
     while (c >= grid.size()) {
       grid.add(new ArrayList<>());
     }

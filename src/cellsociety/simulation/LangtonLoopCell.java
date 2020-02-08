@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 public class LangtonLoopCell extends Cell {
+
   private Map<Integer, HashMap<String, Integer>> ruleMap;
 
   public static final String RULE_TABLE = "000000 000012 000020 000030 000050 000063 000071 000112 "
@@ -29,6 +30,8 @@ public class LangtonLoopCell extends Cell {
   public LangtonLoopCell() {
     super();
     ruleMap = getRuleTableMap(RULE_TABLE);
+    defaultEdge = 2;
+    addStates(new int[]{0, 1, 2, 3, 4, 5, 6, 7});
   }
 
   @Override
@@ -39,7 +42,7 @@ public class LangtonLoopCell extends Cell {
       return;
     }
     String surround = "";
-    for (int i = 0; i < neighbors.length; i+=2) {
+    for (int i = 0; i < neighbors.length; i += 2) {
       surround += neighbors[i];
     }
     nextState = stateRules.getOrDefault(surround, state);

@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Simulation>
+  <ConfigInfo>
+    <Title>LangtonLoopCell</Title>
+    <Author>Maverick Chung, mc608</Author>
+    <Shape>Rect</Shape>
+
+    <Dimensions>
+      <Width>56</Width>
+      <Height>56</Height>
+      <Speed>0.95</Speed>
+    </Dimensions>
+
+    <!-- There can be extra parameters, only those relevant will be used. -->
+    <SpecialParameters>
+      <Parameter name="probCatch">0.7</Parameter>
+      <Parameter name="probGrow">0.1</Parameter>
+      <Parameter name="happinessThresh">0.3</Parameter>
+      <Parameter name="sharkBreedTime">40.0</Parameter>
+      <Parameter name="fishBreedTime">5.0</Parameter>
+      <Parameter name="fishFeedEnergy">2.0</Parameter>
+      <Parameter name="sharkStartEnergy">5.0</Parameter>
+    </SpecialParameters>
+
+    <!-- Default is the cells that are filled if there are not enough cells. Color names must be standard HTML Names -->
+    <States>
+      <State>
+        <ID>0</ID>
+        <Color>black</Color>
+      </State>
+
+      <State>
+        <ID>1</ID>
+        <Color>blue</Color>
+      </State>
+
+      <State>
+        <ID>2</ID>
+        <Color>red</Color>
+      </State>
+
+      <State>
+        <ID>3</ID>
+        <Color>green</Color>
+      </State>
+
+      <State>
+        <ID>4</ID>
+        <Color>yellow</Color>
+      </State>
+
+      <State>
+        <ID>5</ID>
+        <Color>pink</Color>
+      </State>
+
+      <State>
+        <ID>6</ID>
+        <Color>white</Color>
+      </State>
+
+      <State>
+        <ID>7</ID>
+        <Color>cyan</Color>
+      </State>
+
+    </States>
+  </ConfigInfo>
+
+  <Cells>
+    <Row numbr="0">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="1">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="2">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="3">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="4">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="5">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="6">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="7">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="8">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="9">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="10">
+      <Cell>0</Cell>
+    </Row>
+    <Row numbr="11">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="12">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="13">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="14">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="15">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="16">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="17">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="18">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="19">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="20">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="21">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="22">
+      <Cell>0</Cell>
+    </Row>
+    <Row numbr="23">
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>0</Cell>
+    </Row>
+    <Row numbr="24">
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>1</Cell>
+      <Cell>7</Cell>
+      <Cell>0</Cell>
+      <Cell>1</Cell>
+      <Cell>4</Cell>
+      <Cell>0</Cell>
+      <Cell>1</Cell>
+      <Cell>4</Cell>
+      <Cell>2</Cell>
+    </Row>
+    <Row numbr="25">
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+    </Row>
+    <Row numbr="26">
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>7</Cell>
+      <Cell>2</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>1</Cell>
+      <Cell>2</Cell>
+    </Row>
+    <Row numbr="27">
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>1</Cell>
+      <Cell>2</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>1</Cell>
+      <Cell>2</Cell>
+    </Row>
+    <Row numbr="28">
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>1</Cell>
+      <Cell>2</Cell>
+    </Row>
+    <Row numbr="29">
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>7</Cell>
+      <Cell>2</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>1</Cell>
+      <Cell>2</Cell>
+    </Row>
+    <Row numbr="30">
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>1</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>1</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+    </Row>
+    <Row numbr="31">
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>0</Cell>
+      <Cell>7</Cell>
+      <Cell>1</Cell>
+      <Cell>0</Cell>
+      <Cell>7</Cell>
+      <Cell>1</Cell>
+      <Cell>0</Cell>
+      <Cell>7</Cell>
+      <Cell>1</Cell>
+      <Cell>1</Cell>
+      <Cell>1</Cell>
+      <Cell>1</Cell>
+      <Cell>1</Cell>
+    </Row>
+    <Row numbr="32">
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+    </Row>
+
+    <Row numbr="33">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="34">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="35">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="36">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="37">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="38">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="39">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="40">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="41">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="42">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="43">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="44">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="45">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="46">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="47">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="48">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="49">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="50">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="51">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="52">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="53">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="54">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="55">
+      <Cell>0</Cell>
+    </Row>
+
+  </Cells>
+</Simulation>

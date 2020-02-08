@@ -1,6 +1,7 @@
 package cellsociety.simulation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -191,7 +192,7 @@ public abstract class Cell {
       int nextSt = Integer.parseInt(""+rule.charAt(rule.length()-1));
       ret.putIfAbsent(st, new HashMap<>());
       HashMap<String, Integer> mapRule = ret.get(st);
-      String[] combos = getStringRotations(rule.substring(1,rule.length()-2));
+      String[] combos = getStringRotations(rule.substring(1,rule.length()-1));
       for (String combo: combos) {
         mapRule.put(combo, nextSt);
       }
