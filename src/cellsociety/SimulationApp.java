@@ -232,6 +232,7 @@ public class SimulationApp {
       }
     });
 //    menuBar.getMenus().addAll(newWindow);
+    toolbar.getChildren().add(shuffle);
     toolbar.getChildren().add(menuBar);
     toolbar.getChildren().add(playpause);
     toolbar.getChildren().add(step);
