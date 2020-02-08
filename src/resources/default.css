@@ -43,3 +43,7 @@
   -fx-padding: 0.25em; /* 3 */ /* linear-gradient(#33cc33, #ff3300); */
 }
 
+.chart {
+  -fx-stroke: red;
+}
+

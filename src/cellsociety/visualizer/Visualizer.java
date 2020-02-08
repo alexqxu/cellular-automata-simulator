@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
@@ -95,7 +96,15 @@ public abstract class Visualizer {
       XYChart.Series tempSeries = new XYChart.Series<>();
       mySeries.add(tempSeries);
       myGraph.getData().add(tempSeries);
+      //System.out.println(myColorMap.get(i).toString() + "YEET");
+      Set<Node> nodes = myGraph.lookupAll(".series");
+      for(Node series : nodes){
+        StringBuilder style = new StringBuilder();
+        style.append(myColorMap.get(i).toString());
+        series.setStyle("-fx-stroke: "+style.toString());
+      }
     }
+    myGraph.applyCss();
     return myGraph;
   }
 
