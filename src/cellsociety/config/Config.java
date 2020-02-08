@@ -3,9 +3,10 @@ package cellsociety.config;
 import cellsociety.exceptions.InvalidCellException;
 import cellsociety.exceptions.InvalidFileException;
 import cellsociety.exceptions.InvalidGridException;
+import cellsociety.exceptions.InvalidShapeException;
 import cellsociety.simulation.Cell;
 import cellsociety.simulation.Grid;
-import cellsociety.simulation.RectGrid;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -53,6 +54,7 @@ public class Config {
   private String cellNodeName = "Cell";
   private String shapeNodeName = "Shape";
   private String defaultStateNodeName = "Default";
+  private String customNodeName = "Custom";
 
   private String docSetUpConfirmationMessage = "---Document Setup Complete---";
   private String configSetUpConfirmationMessage = "---Config Info Load Complete---";
@@ -65,6 +67,7 @@ public class Config {
   private String myTitle;
   private String myAuthor;
   private String myShape;
+  private boolean customRequested = false;
   private double mySpeed;
   private int myWidth;
   private int myHeight;
@@ -89,10 +92,15 @@ public class Config {
   /**
    * Create and set up the Grid based on stored information, and then return it.
    */
-  public void loadFile() {
+  private void loadFile() {
     extractConfigInfo();
     System.out.println(configSetUpConfirmationMessage);
-    createGrid();
+    if(customRequested) {
+      createGrid();
+    }
+    else{
+      createRandomGrid();
+    }
     System.out.println(gridConfirmationMessage);
   }
 
@@ -117,12 +125,16 @@ public class Config {
   /**
    * Returns a string representing the type of shape/visualizer
    *
-   * @return
+   * @return String, representing visualizer class name
    */
   public String getVisualizer() {
     return myShape + visualizerSuffix;
   }
 
+  /**
+   * Returns color/state mappings.
+   * @return
+   */
   public Map<Integer, Color> getStates() {
     return myStates;
   }
@@ -162,6 +174,8 @@ public class Config {
       extractDimensions(configElement);
       extractStates(configElement);
       extractParameters(configElement);
+      extractCustom(configElement);
+      printCustom();
     }
   }
 
@@ -239,6 +253,10 @@ public class Config {
     myShape = extractElementValue(startingElement, shapeNodeName);
   }
 
+  private void extractCustom(Element startingElement){
+    customRequested = Boolean.parseBoolean(extractElementValue(startingElement, customNodeName));
+  }
+
   private void extractSpeed(Element dimensionsElement) {
     mySpeed = Double.parseDouble(extractElementValue(dimensionsElement, speedNodeName).trim());
   }
@@ -288,17 +306,22 @@ public class Config {
     System.out.println("Cell Shape Requested: " + myShape);
   }
 
+  private void printCustom(){
+    System.out.println("Custom cell locations? " + customRequested);
+  }
+
   /**
    * Based on the parameters set, creates a grid with a randomized configuration of CELLS
    * @throws InvalidCellException
    * @throws InvalidGridException
+   * @throws InvalidShapeException
    */
   private void createRandomGrid()  throws InvalidCellException, InvalidGridException{
     Class gridClass = null;
     try {
       gridClass = Class.forName(packagePrefixName + myShape + gridSuffix);
     } catch (ClassNotFoundException e) {
-      throw new InvalidGridException(e);
+      throw new InvalidShapeException(e);
     }
     try {
       myGrid = (Grid) (gridClass.getConstructor().newInstance());
@@ -315,6 +338,7 @@ public class Config {
   /**
    * Based on parameters AND Cell configuration, creates a grid.
    * @throws InvalidGridException
+   * @throws InvalidShapeException
    */
   private void createGrid()
       throws InvalidGridException {
@@ -322,7 +346,7 @@ public class Config {
     try {
       gridClass = Class.forName(packagePrefixName + myShape + gridSuffix);
     } catch (ClassNotFoundException e) {
-      throw new InvalidGridException(e);
+      throw new InvalidShapeException(e);
     }
     try {
       myGrid = (Grid) (gridClass.getConstructor().newInstance());
@@ -346,9 +370,10 @@ public class Config {
           col++;
         }
       }
-      fillRemainingRow(col, row);
+      fillRow(col, row);
       row++;
     }
+    fillRemainingRows(row);
   }
 
   /**
@@ -358,11 +383,18 @@ public class Config {
    * @param col the starting location in the row
    * @param row the row to be filled
    */
-  private void fillRemainingRow(int col, int row) {
+  private void fillRow(int col, int row) {
     while (col < myWidth) {
       Cell myCell = makeCell(defaultState);
       myGrid.placeCell(col, row, myCell);
       col++;
+    }
+  }
+
+  private void fillRemainingRows(int row){
+    while(row < myHeight){
+      fillRow(0, row);
+      row++;
     }
   }
 
