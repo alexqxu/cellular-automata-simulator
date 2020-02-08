@@ -10,7 +10,6 @@ import cellsociety.simulation.Grid;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.paint.Color;
@@ -29,9 +28,9 @@ import org.xml.sax.SAXException;
  * @author Alex Xu aqx
  */
 public class Config {
-
-  private static final String INVALID_CELL = "Invalid Cell Thrown";
-  private static final String INVALID_FILE = "Invalid File Requested";
+  public static final double RANDOM_GRID_VARIABLE_VALUE = 0.5;
+  //private static final String INVALID_CELL = "Invalid Cell Thrown";
+  //private static final String INVALID_FILE = "Invalid File Requested";
 
   private String packagePrefixName = "cellsociety.simulation.";
   private String gridSuffix = "Grid";
@@ -75,9 +74,8 @@ public class Config {
   private Map<Integer, Color> myStates;
   private Map<String, Double> myParameters;
   private int defaultState = 0;
-
-  private double randomGridVariableValue = 0.5;
   private double[] randomGridVariables;
+
   /**
    * Constructor for the Config object. Sets the filepath and sets up the documentBuilder.
    *
@@ -169,7 +167,7 @@ public class Config {
   private void setRandomVariables() {
     randomGridVariables = new double[myStates.size()];
     for(int i = 0; i<myStates.size(); i++){
-      randomGridVariables[i] = randomGridVariableValue;
+      randomGridVariables[i] = RANDOM_GRID_VARIABLE_VALUE;
     }
   }
 
