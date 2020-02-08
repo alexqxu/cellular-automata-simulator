@@ -3,7 +3,7 @@
     <ConfigInfo>
         <Title>ConwayCell</Title>
         <Author>Alex Xu, aqx</Author>
-        <Shape>Hex</Shape>
+        <Shape>Tri</Shape>
 
         <Dimensions>
             <Width>20</Width>
@@ -22,7 +22,9 @@
         </SpecialParameters>
 
         <!-- Default is the cells that are filled if there are not enough cells. Color names must be standard HTML Names -->
+        <!-- If not specified, DEFAULT is aways the first State (ID: 0)-->
         <States>
+            <Default>0</Default>
             <State>
                 <ID>0</ID>
                 <Color>white</Color>
@@ -32,7 +34,6 @@
                 <ID>1</ID>
                 <Color>black</Color>
             </State>
-
         </States>
     </ConfigInfo>
 

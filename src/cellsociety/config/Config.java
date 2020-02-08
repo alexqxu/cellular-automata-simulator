@@ -52,10 +52,11 @@ public class Config {
   private String heightNodeName = "Height";
   private String cellNodeName = "Cell";
   private String shapeNodeName = "Shape";
+  private String defaultStateNodeName = "Default";
 
-  private String docSetUpConfirmationMessage = "Document Setup Complete";
-  private String configSetUpConfirmationMessage = "Config Info Load Complete";
-  private String gridConfirmationMessage = "Grid Created";
+  private String docSetUpConfirmationMessage = "---Document Setup Complete---";
+  private String configSetUpConfirmationMessage = "---Config Info Load Complete---";
+  private String gridConfirmationMessage = "---Grid Created---";
 
   private File myFile;
   private Document doc;
@@ -137,9 +138,7 @@ public class Config {
     }
     try {
       doc = builder.parse(myFile);
-    } catch (SAXException e) {
-      throw new InvalidFileException(e);
-    } catch (IOException e) {
+    } catch (SAXException | IOException e) {
       throw new InvalidFileException(e);
     }
     doc.getDocumentElement().normalize();
@@ -195,6 +194,7 @@ public class Config {
     if (statesNode.getNodeType() == Node.ELEMENT_NODE) {
       Element statesElement = (Element) statesNode;
 
+      extractDefaultState(statesElement);
       NodeList statesNodeList = statesElement.getElementsByTagName(singleStateNodeName);
 
       for (int i = 0; i < statesNodeList.getLength(); i++) {
@@ -221,6 +221,10 @@ public class Config {
       extractSpeed(dimensionsElement);
       printDimensions();
     }
+  }
+
+  private void extractDefaultState(Element statesElement){
+    defaultState = Integer.parseInt(extractElementValue(statesElement, defaultStateNodeName));
   }
 
   private void extractTitle(Element startingElement) {
@@ -263,6 +267,7 @@ public class Config {
     for (Map.Entry stateID : myStates.entrySet()) {
       System.out.println("State: " + stateID.getKey() + " & Value: " + stateID.getValue());
     }
+    System.out.println("Default State: " + defaultState);
   }
 
   private void printDimensions() {
@@ -285,15 +290,30 @@ public class Config {
 
   /**
    * Based on the parameters set, creates a grid with a randomized configuration of CELLS
+   * @throws InvalidCellException
+   * @throws InvalidGridException
    */
-  private void createRandomGrid() throws ClassNotFoundException {
-    myGrid = new RectGrid(); //FIXME temp fix by Maverick after making Grid abstract
-    myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myWidth, myHeight);
+  private void createRandomGrid()  throws InvalidCellException, InvalidGridException{
+    Class gridClass = null;
+    try {
+      gridClass = Class.forName(packagePrefixName + myShape + gridSuffix);
+    } catch (ClassNotFoundException e) {
+      throw new InvalidGridException(e);
+    }
+    try {
+      myGrid = (Grid) (gridClass.getConstructor().newInstance());
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+      throw new InvalidGridException(e);
+    }
+    try {
+      myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myWidth, myHeight);
+    } catch (ClassNotFoundException e) {
+      throw new InvalidCellException(e);
+    }
   }
 
   /**
    * Based on parameters AND Cell configuration, creates a grid.
-   *
    * @throws InvalidGridException
    */
   private void createGrid()
@@ -306,18 +326,11 @@ public class Config {
     }
     try {
       myGrid = (Grid) (gridClass.getConstructor().newInstance());
-    } catch (InstantiationException e) {
-      throw new InvalidGridException(e);
-    } catch (IllegalAccessException e) {
-      throw new InvalidGridException(e);
-    } catch (InvocationTargetException e) {
-      throw new InvalidGridException(e);
-    } catch (NoSuchMethodException e) {
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       throw new InvalidGridException(e);
     }
     int row = 0;
     NodeList rowNodeList = doc.getElementsByTagName(rowNodeName);
-
     for (int i = 0; i < rowNodeList.getLength(); i++) {
       int col = 0;
       Node singleRowNode = rowNodeList.item(i);
@@ -371,13 +384,7 @@ public class Config {
     Cell cell = null;
     try {
       cell = (Cell) (cellClass.getConstructor().newInstance());
-    } catch (InstantiationException e) {
-      throw new InvalidCellException(e);
-    } catch (IllegalAccessException e) {
-      throw new InvalidCellException(e);
-    } catch (InvocationTargetException e) {
-      throw new InvalidCellException(e);
-    } catch (NoSuchMethodException e) {
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       throw new InvalidCellException(e);
     }
     for (Map.Entry<String, Double> parameterEntry : myParameters.entrySet()) {
