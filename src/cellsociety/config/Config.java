@@ -335,7 +335,7 @@ public class Config {
     System.out.println("Custom cell locations? " + customRequested);
   }
 
-  /**
+   /**
    * Based on parameters AND Cell configuration, creates a grid.
    * @throws InvalidGridException
    * @throws InvalidShapeException
