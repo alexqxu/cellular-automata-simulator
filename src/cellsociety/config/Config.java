@@ -138,7 +138,7 @@ public class Config {
   public Map<Integer, Color> getStates() {
     return myStates;
   }
-  
+
   /**
    * Based on the parameters set, creates a grid with a randomized configuration of CELLS
    * @throws InvalidCellException
@@ -356,23 +356,24 @@ public class Config {
     int row = 0;
     NodeList rowNodeList = doc.getElementsByTagName(rowNodeName);
     for (int i = 0; i < rowNodeList.getLength(); i++) {
+      if(i < myHeight) {
+        int col = 0;
+        Node singleRowNode = rowNodeList.item(i);
+        Element singleRowElement = (Element) singleRowNode;
+        NodeList cellsNodeList = singleRowElement.getElementsByTagName(cellNodeName);
 
-      int col = 0;
-      Node singleRowNode = rowNodeList.item(i);
-      Element singleRowElement = (Element) singleRowNode;
-      NodeList cellsNodeList = singleRowElement.getElementsByTagName(cellNodeName);
-
-      for (int k = 0; k < cellsNodeList.getLength(); k++) {
-        if (k < myWidth) {
-          Node singleCellNode = cellsNodeList.item(k);
-          Integer cellState = Integer.valueOf(singleCellNode.getTextContent());
-          Cell myCell = makeCell(cellState);
-          myGrid.placeCell(col, row, myCell);
-          col++;
+        for (int k = 0; k < cellsNodeList.getLength(); k++) {
+          if (k < myWidth) {
+            Node singleCellNode = cellsNodeList.item(k);
+            Integer cellState = Integer.valueOf(singleCellNode.getTextContent());
+            Cell myCell = makeCell(cellState);
+            myGrid.placeCell(col, row, myCell);
+            col++;
+          }
         }
+        fillRow(col, row);
+        row++;
       }
-      fillRow(col, row);
-      row++;
     }
     fillRemainingRows(row);
   }
