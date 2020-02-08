@@ -182,4 +182,29 @@ public abstract class Cell {
   public void setPointUp(boolean point) {
     pointingUp = point;
   }
+
+  public Map<Integer, HashMap<String, Integer>> getRuleTableMap(String ruleTable) {
+    String[] rules = ruleTable.split(" ");
+    HashMap<Integer, HashMap<String, Integer>> ret = new HashMap<>();
+    for (String rule: rules) {
+      int st = Integer.parseInt(""+rule.charAt(0));
+      int nextSt = Integer.parseInt(""+rule.charAt(rule.length()-1));
+      ret.putIfAbsent(st, new HashMap<>());
+      HashMap<String, Integer> mapRule = ret.get(st);
+      String[] combos = getStringRotations(rule.substring(1,rule.length()-2));
+      for (String combo: combos) {
+        mapRule.put(combo, nextSt);
+      }
+    }
+    return ret;
+  }
+
+  private String[] getStringRotations(String str) {
+    String[] ret = new String[str.length()];
+    for (int i = 0; i < ret.length; i++) {
+      ret[i] = str;
+      str = str.substring(1)+str.charAt(0);
+    }
+    return ret;
+  }
 }

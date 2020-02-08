@@ -35,6 +35,28 @@ public abstract class Grid {
     grid.get(r).get(c).incrementState();
   }
 
+  public int[] getPopulations() {
+    int[] ret = new int[getCell(0,0).getHighestState()+1];
+    for (int r = 0; r < getHeight(); r++) {
+      for (int c = 0; c < getWidth(); c++) {
+        ret[getState(r,c)]++;
+      }
+    }
+    return ret;
+  }
+
+  public String[] getParams() {
+    return getCell(0,0).getParams();
+  }
+
+  public void setParam(String param, double value) {
+    for (int r = 0; r < getHeight(); r++) {
+      for (int c = 0; c < getWidth(); c++) {
+        getCell(r,c).setParam(param, value);
+      }
+    }
+  }
+
   abstract Cell[] getNeighbors(int r, int c);
 
   /**
@@ -82,7 +104,7 @@ public abstract class Grid {
   }
 
   public void setRandomGrid(String className, Map<String, Double> paramMap, double[] stateChances,
-      int rows, int cols) {
+      int rows, int cols) throws ClassNotFoundException {
     ArrayList<ArrayList<Cell>> ret = new ArrayList<>();
     for (int i = 0; i < rows; i++) {
       ArrayList<Cell> row = new ArrayList<>();
@@ -95,7 +117,7 @@ public abstract class Grid {
   }
 
   public static Cell getRandomCell(String className, Map<String, Double> paramMap,
-      double[] stateChances) {
+      double[] stateChances) throws ClassNotFoundException {
     Class cellClass = null;
     Cell cell = null;
     try {

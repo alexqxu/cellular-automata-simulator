@@ -100,7 +100,15 @@ public abstract class Visualizer {
     myGrid = newGrid;
   }
 
+  public String[] getParameters(){
+    return myGrid.getParams();
+  }
+
+  public void setParameters(String param, double newValue){
+    myGrid.setParam(param, newValue);
+  }
+
   public int[] getPopulations(){
-    return null;
+    return myGrid.getPopulations();
   }
 }

@@ -9,6 +9,9 @@ import cellsociety.exceptions.InvalidFileException;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -247,31 +250,14 @@ public class Main extends Application {
     } catch (InvalidFileException e){
       retryLoadFile("Invalid File Specified");
     }
-
-    /*
     myVisualizer = new TriVisualizer(myConfig.getGrid()); //FIXME
     myVisualizer.setColorMap(myConfig.getStates());
+    /*
+    Class visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
+    Visualizer myVisualizer = (Visualizer) (visualizerClass.getConstructor().newInstance(myConfig.getGrid()));
      */
-
-    Class visualizerClass = null;
-    try {
-      visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    }
-    try {
-      Visualizer myVisualizer = (Visualizer) (visualizerClass.getConstructor().newInstance(myConfig.getGrid()));
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    }
-
     //FIXME uncomment once config.getVisualizer() is working, construct with grid param
+
   }
 
   private void retryLoadFile(String message) {
