@@ -3,6 +3,7 @@ package cellsociety;
 import cellsociety.config.Config;
 import cellsociety.exceptions.InvalidCellException;
 import cellsociety.exceptions.InvalidGridException;
+import cellsociety.simulation.Grid;
 import cellsociety.visualizer.TriVisualizer;
 import cellsociety.visualizer.Visualizer;
 import cellsociety.exceptions.InvalidFileException;
@@ -266,7 +267,7 @@ public class Main extends Application {
           e.printStackTrace();
       }
       try {
-          Visualizer myVisualizer = (Visualizer) (visualizerClass.getConstructor().newInstance(myConfig.getGrid()));
+          myVisualizer = (Visualizer) (visualizerClass.getConstructor(Grid.class).newInstance(myConfig.getGrid()));
       } catch (InstantiationException e) {
           e.printStackTrace();
       } catch (IllegalAccessException e) {
