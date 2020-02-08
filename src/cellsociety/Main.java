@@ -237,7 +237,7 @@ public class Main extends Application {
     return;
   }
 
-  public void loadConfigFile(File file) {
+  public void loadConfigFile(File file){
     if(file == null){
       return;
     }
@@ -250,13 +250,30 @@ public class Main extends Application {
     } catch (InvalidFileException e){
       retryLoadFile("Invalid File Specified");
     }
+    /*
     myVisualizer = new TriVisualizer(myConfig.getGrid()); //FIXME
     myVisualizer.setColorMap(myConfig.getStates());
-    /*
-    Class visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
-    Visualizer myVisualizer = (Visualizer) (visualizerClass.getConstructor().newInstance(myConfig.getGrid()));
-     */
-    //FIXME uncomment once config.getVisualizer() is working, construct with grid param
+    */
+
+      Class visualizerClass = null;
+      try {
+          visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
+      } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+      }
+      try {
+          Visualizer myVisualizer = (Visualizer) (visualizerClass.getConstructor().newInstance(myConfig.getGrid()));
+      } catch (InstantiationException e) {
+          e.printStackTrace();
+      } catch (IllegalAccessException e) {
+          e.printStackTrace();
+      } catch (InvocationTargetException e) {
+          e.printStackTrace();
+      } catch (NoSuchMethodException e) {
+          e.printStackTrace();
+      }
+      myVisualizer.setColorMap(myConfig.getStates());
+      //FIXME uncomment once config.getVisualizer() is working, construct with grid param
 
   }
 
