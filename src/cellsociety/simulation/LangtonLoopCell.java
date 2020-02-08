@@ -1,8 +1,11 @@
 package cellsociety.simulation;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class LangtonLoopCell extends Cell {
+  private Map<Integer, HashMap<String, Integer>> ruleMap;
 
   public static final String RULE_TABLE = "000000 000012 000020 000030 000050 000063 000071 000112 "
       + "000122 000132 000212 000220 000230 000262 000272 000320 000525 000622 000722 001022 001120 "
@@ -23,8 +26,22 @@ public class LangtonLoopCell extends Cell {
       + "600011 600021 602120 612125 612131 612225 700077 701120 701220 701250 702120 702221 702251 "
       + "702321 702525 702720";
 
+  public LangtonLoopCell() {
+    super();
+    ruleMap = getRuleTableMap(RULE_TABLE);
+  }
+
   @Override
   void planUpdate(Cell[] neighbors, LinkedList<Cell> cellQueue) {
-
+    Map<String, Integer> stateRules = ruleMap.get(state);
+    if (stateRules == null) {
+      nextState = state;
+      return;
+    }
+    String surround = "";
+    for (int i = 0; i < neighbors.length; i+=2) {
+      surround += neighbors[i];
+    }
+    nextState = stateRules.getOrDefault(surround, state);
   }
 }

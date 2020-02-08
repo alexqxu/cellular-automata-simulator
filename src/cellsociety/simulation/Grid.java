@@ -45,6 +45,18 @@ public abstract class Grid {
     return ret;
   }
 
+  public String[] getParams() {
+    return getCell(0,0).getParams();
+  }
+
+  public void setParam(String param, double value) {
+    for (int r = 0; r < getHeight(); r++) {
+      for (int c = 0; c < getWidth(); c++) {
+        getCell(r,c).setParam(param, value);
+      }
+    }
+  }
+
   abstract Cell[] getNeighbors(int r, int c);
 
   /**
