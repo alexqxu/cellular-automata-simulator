@@ -2,17 +2,12 @@ package cellsociety;
 
 import cellsociety.config.Config;
 import cellsociety.exceptions.InvalidCellException;
+import cellsociety.exceptions.InvalidFileException;
 import cellsociety.exceptions.InvalidGridException;
 import cellsociety.simulation.Grid;
-import cellsociety.visualizer.TriVisualizer;
 import cellsociety.visualizer.Visualizer;
-import cellsociety.exceptions.InvalidFileException;
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -41,8 +36,6 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javax.imageio.ImageIO;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 
 /**
  * @author: Alex Oesterling, axo
@@ -83,13 +76,14 @@ public class Main extends Application {
 
   /**
    * Start method. Runs game loop after setting up stage and scene data.
+   *
    * @param stage the window in which the application runs
    * @throws Exception
    */
   @Override
-  public void start(Stage stage){ //throws exception?
+  public void start(Stage stage) { //throws exception?
     myStage = stage;
-    System.out.println(DEFAULT_RESOURCE_PACKAGE+RESOURCE_PACKAGE);
+    System.out.println(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE);
     myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE);
 
     loadConfigFile(chooseFile());
@@ -98,7 +92,7 @@ public class Main extends Application {
     myStage.setTitle(TITLE);
     myStage.show();
 
-    KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->update(SECOND_DELAY));
+    KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> update(SECOND_DELAY));
     Timeline animation = new Timeline();
     animation.setCycleCount(Timeline.INDEFINITE);
     animation.getKeyFrames().add(frame);
@@ -106,8 +100,9 @@ public class Main extends Application {
   }
 
   /**
-   * Creates the scene to be rendered in the stage. Calls the creation of UI controls as well as graphics from the visualizer class.
-   * Applies CSS to the UI as well.
+   * Creates the scene to be rendered in the stage. Calls the creation of UI controls as well as
+   * graphics from the visualizer class. Applies CSS to the UI as well.
+   *
    * @return the scene to be rendered by the application
    */
   private Scene createScene() {
@@ -118,15 +113,17 @@ public class Main extends Application {
     setSpeed(myConfig.getSpeed());
     Scene scene = new Scene(frame, Color.AZURE);
     scene.getStylesheets()
-        .add(getClass().getClassLoader().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
+        .add(getClass().getClassLoader().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET)
+            .toExternalForm());
     return scene;
   }
 
   /**
    * Handles
+   *
    * @param button
    */
-  public void handlePlayPause (Button button){
+  public void handlePlayPause(Button button) {
     running = !running;
     final String IMAGEFILE_SUFFIXES = String
         .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
@@ -138,7 +135,8 @@ public class Main extends Application {
     }
     if (label.matches(IMAGEFILE_SUFFIXES)) {
       button.setGraphic(
-          new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
+          new ImageView(new Image(
+              getClass().getClassLoader().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
     }
   }
 
@@ -147,7 +145,7 @@ public class Main extends Application {
    *
    * @param percentSpeed the percent of the max speed to which to set the simulation
    */
-  public void setSpeed ( double percentSpeed){
+  public void setSpeed(double percentSpeed) {
     percentSpeed *= MAX_UPDATE_PERIOD;
     speed = MAX_UPDATE_PERIOD - percentSpeed;
   }
@@ -161,8 +159,8 @@ public class Main extends Application {
    * @param elapsedTime - The elapsed time between frame calls made in the default start() method of
    *                    the Application
    */
-  public void update ( double elapsedTime){
-    if(running) {
+  public void update(double elapsedTime) {
+    if (running) {
       secondsElapsed += elapsedTime;
       if (secondsElapsed > speed) {
         myVisualizer.updateChart(secondsElapsed);
@@ -192,6 +190,7 @@ public class Main extends Application {
       return null;
     }
   }
+
   public Node setToolBar() {
     HBox toolbar = new HBox();
     final Pane spacer = new Pane();
@@ -242,17 +241,17 @@ public class Main extends Application {
     Stage newStage = new Stage();
   }
 
-  public void loadConfigFile(File file){
-    if(file == null){
+  public void loadConfigFile(File file) {
+    if (file == null) {
       return;
     }
     try {
       myConfig = new Config(file);
     } catch (InvalidCellException e) {
       retryLoadFile("Invalid Simulation Specified");
-    } catch (InvalidGridException e){
+    } catch (InvalidGridException e) {
       retryLoadFile("Invalid Shape Specified");
-    } catch (InvalidFileException e){
+    } catch (InvalidFileException e) {
       retryLoadFile("Invalid File Specified");
     }
     /*
@@ -260,15 +259,16 @@ public class Main extends Application {
     myVisualizer.setColorMap(myConfig.getStates());
     */
 
-      Class visualizerClass = null;
-      try {
-          visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
-        myVisualizer = (Visualizer) (visualizerClass.getConstructor(Grid.class).newInstance(myConfig.getGrid()));
-      } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-        retryLoadFile("Invalid file selected");
-      }
+    Class visualizerClass = null;
+    try {
+      visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
+      myVisualizer = (Visualizer) (visualizerClass.getConstructor(Grid.class)
+          .newInstance(myConfig.getGrid()));
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+      retryLoadFile("Invalid file selected");
+    }
     myVisualizer.setColorMap(myConfig.getStates());
-      //FIXME uncomment once config.getVisualizer() is working, construct with grid param
+    //FIXME uncomment once config.getVisualizer() is working, construct with grid param
 
   }
 
@@ -282,10 +282,10 @@ public class Main extends Application {
       } catch (InvalidCellException e) {
         displayError(message);
         badFile = true;
-      } catch (InvalidGridException e){
+      } catch (InvalidGridException e) {
         displayError(message);
         badFile = true;
-      } catch (InvalidFileException e){
+      } catch (InvalidFileException e) {
         displayError(message);
         badFile = true;
       }
@@ -306,7 +306,8 @@ public class Main extends Application {
     String label = myResources.getString(property);
     if (label.matches(IMAGEFILE_SUFFIXES)) {
       result.setGraphic(
-          new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
+          new ImageView(new Image(
+              getClass().getClassLoader().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
     } else {
       result.setText(label);
     }
@@ -315,14 +316,15 @@ public class Main extends Application {
   }
 
   //FIXME
-  private Menu makeMenu (String property, EventHandler < ActionEvent > handler){
+  private Menu makeMenu(String property, EventHandler<ActionEvent> handler) {
     final String IMAGEFILE_SUFFIXES = String
         .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     Menu result = new Menu();
     String label = myResources.getString(property);
     if (label.matches(IMAGEFILE_SUFFIXES)) {
       result.setGraphic(
-          new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
+          new ImageView(new Image(
+              getClass().getClassLoader().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
     } else {
       result.setText(label);
     }
@@ -332,6 +334,7 @@ public class Main extends Application {
 
   /**
    * Runner method, actually runs the game when a user presses play in the IDE
+   *
    * @param args
    */
   public static void main(String[] args) {

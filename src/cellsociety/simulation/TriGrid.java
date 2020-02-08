@@ -1,8 +1,5 @@
 package cellsociety.simulation;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-
 public class TriGrid extends Grid {
 
   @Override
@@ -14,23 +11,23 @@ public class TriGrid extends Grid {
       dc = new int[]{0, 1, 1, 2, 2, 1, 0, -1, -2, -2, -1, -1};
     } else {
       dr = new int[]{-1, -1, -1, 0, 0, 1, 1, 1, 0, 0, -1, -1};
-      dc = new int[]{0, 1, 2, 2,1, 1, 0, -1, -1, -2, -2, -1};
+      dc = new int[]{0, 1, 2, 2, 1, 1, 0, -1, -1, -2, -2, -1};
     }
     return getSpecificNeighbors(r, c, dr, dc);
   }
 
-  private int[] rotate(int[] arr){
+  private int[] rotate(int[] arr) {
     int[] ret = new int[arr.length];
-    for (int i = 0; i < arr.length; i++){
-      ret[i] = arr[(i+arr.length/2)%arr.length];
+    for (int i = 0; i < arr.length; i++) {
+      ret[i] = arr[(i + arr.length / 2) % arr.length];
     }
     return ret;
   }
 
   @Override
-  public void placeCell(int c, int r, Cell cell){
+  public void placeCell(int c, int r, Cell cell) {
     super.placeCell(c, r, cell);
-    cell.setPointUp((c+r)%2==0);
+    cell.setPointUp((c + r) % 2 == 0);
   }
 
 }

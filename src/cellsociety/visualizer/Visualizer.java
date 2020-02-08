@@ -5,11 +5,9 @@ import cellsociety.config.Config;
 import cellsociety.simulation.Grid;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
@@ -81,7 +79,7 @@ public abstract class Visualizer {
   //FIXME I set the width equal to the size/num vert cells. This will only work for squares, I am wondering why it is breaking like this.
   public abstract Node instantiateCellGrid();
 
-  private Node setGraph(){
+  private Node setGraph() {
     final NumberAxis xAxis = new NumberAxis();
     final NumberAxis yAxis = new NumberAxis();
 
@@ -93,7 +91,7 @@ public abstract class Visualizer {
 
     mySeries = new ArrayList<XYChart.Series>();
     int[] populations = myGrid.getPopulations();
-    for(int i = 0; i < populations.length; i++){
+    for (int i = 0; i < populations.length; i++) {
       XYChart.Series tempSeries = new XYChart.Series<>();
       mySeries.add(tempSeries);
       myGraph.getData().add(tempSeries);
@@ -101,14 +99,14 @@ public abstract class Visualizer {
     return myGraph;
   }
 
-  public void updateChart(double secondsElapsed){
+  public void updateChart(double secondsElapsed) {
     timeElapsed += secondsElapsed;
-    for(int i = 0; i < mySeries.size(); i++){
+    for (int i = 0; i < mySeries.size(); i++) {
       mySeries.get(i).getData().add(new XYChart.Data(timeElapsed, myGrid.getPopulations()[i]));
     }
   }
 
-  public Node bundledUI(){
+  public Node bundledUI() {
     BorderPane bundle = new BorderPane();
     bundle.setCenter(instantiateCellGrid());
     bundle.setRight(setGraph());
@@ -121,7 +119,7 @@ public abstract class Visualizer {
     drawGrid();
   }
 
-  public void drawGrid () {
+  public void drawGrid() {
     for (int i = 0; i < cellGrid.size(); i++) {
       for (int j = 0; j < cellGrid.get(i).size(); j++) {
         cellGrid.get(i).get(j).setFill(myColorMap.get(myGrid.getState(i, j)));
@@ -133,11 +131,11 @@ public abstract class Visualizer {
 //      myColorMap.put(state, color);
 //    }
 
-  public void setColorMap(Map<Integer, Color> newMap){
+  public void setColorMap(Map<Integer, Color> newMap) {
     myColorMap = newMap;
   }
 
-  protected Color[][] getColorGrid (){
+  protected Color[][] getColorGrid() {
     Color[][] colorgrid = new Color[myGrid.getWidth()][myGrid.getHeight()];
     for (int i = 0; i < colorgrid.length; i++) {
       for (int j = 0; j < colorgrid[i].length; j++) {
@@ -147,14 +145,14 @@ public abstract class Visualizer {
     return colorgrid;
   }
 
-  public void setGrid (Grid newGrid){
+  public void setGrid(Grid newGrid) {
     myGrid = newGrid;
   }
 
-  private Node setParamBar(){
+  private Node setParamBar() {
     HBox parameters = new HBox();
     String[] paramList = getParameters();
-    for(String s : paramList){
+    for (String s : paramList) {
       TextField paramField = makeParamField(s);
       parameters.getChildren().add(paramField);
       final Pane spacer = new Pane();
@@ -167,12 +165,12 @@ public abstract class Visualizer {
     return parameters;
   }
 
-  private TextField makeParamField(String param){
+  private TextField makeParamField(String param) {
     TextField paramField = new TextField();
     paramField.setPrefColumnCount(50);
     paramField.setMaxWidth(50);
     paramField.setOnAction(e -> {
-      if(paramField.getText() != null && !paramField.getText().isEmpty()){
+      if (paramField.getText() != null && !paramField.getText().isEmpty()) {
         double value = Double.parseDouble(paramField.getText());
         setParameters(param, value);
       } else {
@@ -185,15 +183,15 @@ public abstract class Visualizer {
     return paramField;
   }
 
-  public String[] getParameters(){
+  public String[] getParameters() {
     return myGrid.getParams();
   }
 
-  public void setParameters(String param, double newValue){
+  public void setParameters(String param, double newValue) {
     myGrid.setParam(param, newValue);
   }
 
-  public int[] getPopulations(){
+  public int[] getPopulations() {
     return myGrid.getPopulations();
   }
 }

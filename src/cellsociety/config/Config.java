@@ -6,8 +6,6 @@ import cellsociety.exceptions.InvalidGridException;
 import cellsociety.simulation.Cell;
 import cellsociety.simulation.Grid;
 import cellsociety.simulation.RectGrid;
-import cellsociety.simulation.TriGrid;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -29,6 +27,7 @@ import org.xml.sax.SAXException;
  * @author Alex Xu aqx
  */
 public class Config {
+
   private static final String INVALID_CELL = "Invalid Cell Thrown";
   private static final String INVALID_FILE = "Invalid File Requested";
 
@@ -88,7 +87,6 @@ public class Config {
 
   /**
    * Create and set up the Grid based on stored information, and then return it.
-   *
    */
   public void loadFile() {
     extractConfigInfo();
@@ -108,6 +106,7 @@ public class Config {
 
   /**
    * Returns the Grid created
+   *
    * @return
    */
   public Grid getGrid() {
@@ -116,16 +115,19 @@ public class Config {
 
   /**
    * Returns a string representing the type of shape/visualizer
+   *
    * @return
    */
-  public String getVisualizer(){
+  public String getVisualizer() {
     return myShape + visualizerSuffix;
   }
 
-  public Map<Integer, Color> getStates(){return myStates;}
+  public Map<Integer, Color> getStates() {
+    return myStates;
+  }
 
   private void setupDocument()
-          throws InvalidFileException{
+      throws InvalidFileException {
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     DocumentBuilder builder = null;
     try {
@@ -277,7 +279,7 @@ public class Config {
     System.out.println("Author: " + myAuthor);
   }
 
-  private void printShape(){
+  private void printShape() {
     System.out.println("Cell Shape Requested: " + myShape);
   }
 
@@ -295,7 +297,7 @@ public class Config {
    * @throws InvalidGridException
    */
   private void createGrid()
-          throws InvalidGridException{
+      throws InvalidGridException {
     Class gridClass = null;
     try {
       gridClass = Class.forName(packagePrefixName + myShape + gridSuffix);
@@ -344,7 +346,7 @@ public class Config {
    * @param row the row to be filled
    */
   private void fillRemainingRow(int col, int row) {
-      while (col < myWidth) {
+    while (col < myWidth) {
       Cell myCell = makeCell(defaultState);
       myGrid.placeCell(col, row, myCell);
       col++;

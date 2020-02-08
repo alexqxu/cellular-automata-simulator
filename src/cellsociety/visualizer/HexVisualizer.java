@@ -1,7 +1,6 @@
 package cellsociety.visualizer;
 
 import cellsociety.simulation.Grid;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
