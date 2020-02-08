@@ -1,5 +1,7 @@
 package cellsociety.config;
 
+import cellsociety.exceptions.InvalidCellException;
+import cellsociety.exceptions.InvalidFileException;
 import cellsociety.simulation.Cell;
 import cellsociety.simulation.Grid;
 import cellsociety.simulation.RectGrid;
@@ -26,6 +28,8 @@ import org.xml.sax.SAXException;
  * @author Alex Xu aqx
  */
 public class Config {
+  private static final String INVALID_CELL = "Invalid Cell Thrown";
+  private static final String INVALID_FILE = "Invalid File Requested";
 
   private String packagePrefixName = "cellsociety.simulation.";
 
@@ -75,8 +79,7 @@ public class Config {
    * @throws SAXException
    * @throws IOException
    */
-  public Config(File xmlFile)
-      throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+  public Config(File xmlFile) {
     myFile = xmlFile;
     setupDocument();
     System.out.println(docSetUpConfirmationMessage);
@@ -84,7 +87,18 @@ public class Config {
   }
 
   /**
-   * Returns the update speed of the simulation, as defined within the initial cellsociety.config XML document.
+   * Create and set up the Grid based on stored information, and then return it.
+   *
+   */
+  public void loadFile() {
+    extractConfigInfo();
+    System.out.println(configSetUpConfirmationMessage);
+    createGrid();
+    System.out.println(gridConfirmationMessage);
+  }
+
+  /**
+   * Returns the update speed of the simulation, as defined within the initial config XML document.
    *
    * @return speed of the simulation
    */
@@ -92,42 +106,40 @@ public class Config {
     return mySpeed;
   }
 
-   /**
-    * Returns the grid of the simulation
-    * @return
-    */
+  /**
+   * Returns the Grid created
+   * @return
+   */
   public Grid getGrid() {
     return myGrid;
   }
 
-    /**
-     * Returns the colormapping to the different states for each cell.
-     * @return
-     */
-  public Map<Integer, Color> getStates(){
-    return myStates;
-  }
-
-  public String getVisualizer(){
-     return myShape;
-  }
-
   /**
-   * Create and set up the Grid based on stored information, and then return it.
-   *
+   * Returns a string representing the type of shape/visualizer
+   * @return
    */
-  private void loadFile()
-      throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-    extractConfigInfo();
-    System.out.println(configSetUpConfirmationMessage);
-    createGrid();
-    System.out.println(gridConfirmationMessage);
+  public String getVisualizer(){
+    return myShape;
   }
 
-  private void setupDocument() throws IOException, SAXException, ParserConfigurationException {
+  public Map<Integer, Color> getStates(){return myStates;}
+
+  private void setupDocument()
+          throws InvalidFileException{
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-    DocumentBuilder builder = factory.newDocumentBuilder();
-    doc = builder.parse(myFile);
+    DocumentBuilder builder = null;
+    try {
+      builder = factory.newDocumentBuilder();
+    } catch (ParserConfigurationException e) {
+      throw new InvalidFileException(e);
+    }
+    try {
+      doc = builder.parse(myFile);
+    } catch (SAXException e) {
+      throw new InvalidFileException(e);
+    } catch (IOException e) {
+      throw new InvalidFileException(e);
+    }
     doc.getDocumentElement().normalize();
   }
 
@@ -217,8 +229,8 @@ public class Config {
     myAuthor = extractElementValue(startingElement, authorNodeName);
   }
 
-  private void extractShape(Element startingElement){
-      myShape = extractElementValue(startingElement, shapeNodeName);
+  private void extractShape(Element startingElement) {
+    myShape = extractElementValue(startingElement, shapeNodeName);
   }
 
   private void extractSpeed(Element dimensionsElement) {
@@ -266,7 +278,7 @@ public class Config {
   }
 
   private void printShape(){
-      System.out.println("Cell Shape Requested: "+ myShape);
+    System.out.println("Cell Shape Requested: " + myShape);
   }
 
   /**
@@ -286,8 +298,7 @@ public class Config {
    * @throws InvocationTargetException
    * @throws InstantiationException
    */
-  private void createGrid()
-      throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
+  private void createGrid() {
     myGrid = new TriGrid(); //FIXME temp fix by Maverick after making Grid abstract
     int row = 0;
     NodeList rowNodeList = doc.getElementsByTagName(rowNodeName);
@@ -318,15 +329,9 @@ public class Config {
    *
    * @param col the starting location in the row
    * @param row the row to be filled
-   * @throws InvocationTargetException
-   * @throws NoSuchMethodException
-   * @throws ClassNotFoundException
-   * @throws InstantiationException
-   * @throws IllegalAccessException
    */
-  private void fillRemainingRow(int col, int row)
-      throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-    while (col < myWidth) {
+  private void fillRemainingRow(int col, int row) {
+      while (col < myWidth) {
       Cell myCell = makeCell(defaultState);
       myGrid.placeCell(col, row, myCell);
       col++;
@@ -334,7 +339,7 @@ public class Config {
   }
 
   /**
-   * Creates a cell and sets all relevant parameters to it from the cellsociety.config XML.
+   * Creates a cell and sets all relevant parameters to it from the config XML.
    *
    * @param state the specific state of the particular cell
    * @return
@@ -345,9 +350,25 @@ public class Config {
    * @throws ClassNotFoundException
    */
   private Cell makeCell(int state)
-      throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
-    Class cellClass = Class.forName(packagePrefixName + myTitle);
-    Cell cell = (Cell) (cellClass.getConstructor().newInstance());
+      throws InvalidCellException {
+    Class cellClass = null;
+    try {
+      cellClass = Class.forName(packagePrefixName + myTitle);
+    } catch (ClassNotFoundException e) {
+      throw new InvalidCellException(e);
+    }
+    Cell cell = null;
+    try {
+      cell = (Cell) (cellClass.getConstructor().newInstance());
+    } catch (InstantiationException e) {
+      throw new InvalidCellException(e);
+    } catch (IllegalAccessException e) {
+      throw new InvalidCellException(e);
+    } catch (InvocationTargetException e) {
+      throw new InvalidCellException(e);
+    } catch (NoSuchMethodException e) {
+      throw new InvalidCellException(e);
+    }
     for (Map.Entry<String, Double> parameterEntry : myParameters.entrySet()) {
       cell.setParam(parameterEntry.getKey(), parameterEntry.getValue());
     }
