@@ -82,7 +82,7 @@ public class Config {
    *
    * @param xmlFile File object passed in, in XML format
    */
-  public Config(File xmlFile) {
+  public Config(File xmlFile) throws InvalidShapeException, InvalidGridException, InvalidCellException{
     myFile = xmlFile;
     setupDocument();
     System.out.println(docSetUpConfirmationMessage);
@@ -91,7 +91,6 @@ public class Config {
 
   /**
    * Create and set up the Grid based on stored information, and then return it.
-   * @throws InvalidShapeException
    */
   private void loadFile() throws InvalidShapeException, InvalidGridException, InvalidCellException{
     extractConfigInfo();
