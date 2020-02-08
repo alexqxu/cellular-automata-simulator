@@ -254,10 +254,6 @@ public class Main extends Application {
     } catch (InvalidFileException e) {
       retryLoadFile("Invalid File Specified");
     }
-    /*
-    myVisualizer = new TriVisualizer(myConfig.getGrid()); //FIXME
-    myVisualizer.setColorMap(myConfig.getStates());
-    */
 
     Class visualizerClass = null;
     try {
@@ -268,7 +264,6 @@ public class Main extends Application {
       retryLoadFile("Invalid file selected");
     }
     myVisualizer.setColorMap(myConfig.getStates());
-    //FIXME uncomment once config.getVisualizer() is working, construct with grid param
 
   }
 
