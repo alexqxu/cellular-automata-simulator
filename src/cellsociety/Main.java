@@ -24,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -69,6 +70,7 @@ public class Main extends Application {
   private Menu exit;
   private Button reset;
   private Button step;
+  private List<TextField> 
   private MenuBar menuBar;
   private File myFile;
   private double secondsElapsed;
@@ -81,7 +83,7 @@ public class Main extends Application {
    * @throws Exception
    */
   @Override
-  public void start(Stage stage){ //throws exception?
+  public void start(Stage stage){
     myStage = stage;
     System.out.println(DEFAULT_RESOURCE_PACKAGE+RESOURCE_PACKAGE);
     myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE);
@@ -229,6 +231,13 @@ public class Main extends Application {
     toolbar.getChildren().add(spacer);
     toolbar.getChildren().add(slider);
     return toolbar;
+  }
+
+  public Node setParamBar(){
+    HBox parameters = new HBox();
+    final Pane spacer = new Pane();
+    HBox.setHgrow(spacer, Priority.ALWAYS);
+    return parameters;
   }
   //fixme make
   private void makeWindow() {
