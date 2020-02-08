@@ -313,7 +313,6 @@ public class Config {
     } catch (NoSuchMethodException e) {
       throw new InvalidGridException(e);
     }
-    myGrid = new TriGrid();
     int row = 0;
     NodeList rowNodeList = doc.getElementsByTagName(rowNodeName);
 
