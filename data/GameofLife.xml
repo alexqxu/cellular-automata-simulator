@@ -35,6 +35,10 @@
                 <Color>black</Color>
             </State>
         </States>
+
+        <!-- Case insensitive. TRUE means you want to use custom cell locations, below in the <Cells> section. FALSE means you want to have a random grid based on parameters above -->
+        <Custom>true</Custom>
+
     </ConfigInfo>
 
     <Cells>
