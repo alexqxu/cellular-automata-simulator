@@ -26,9 +26,13 @@ public class LangtonLoopCell extends Cell {
       + "600011 600021 602120 612125 612131 612225 700077 701120 701220 701250 702120 702221 702251 "
       + "702321 702525 702720";
 
+  public LangtonLoopCell() {
+    super();
+    ruleMap = getRuleTableMap(RULE_TABLE);
+  }
+
   @Override
   void planUpdate(Cell[] neighbors, LinkedList<Cell> cellQueue) {
-    if (ruleMap == null) ruleMap = getRuleTableMap(RULE_TABLE);
     Map<String, Integer> stateRules = ruleMap.get(state);
     if (stateRules == null) {
       nextState = state;
