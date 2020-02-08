@@ -10,6 +10,7 @@ import cellsociety.simulation.Grid;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.paint.Color;
@@ -75,8 +76,8 @@ public class Config {
   private Map<String, Double> myParameters;
   private int defaultState = 0;
 
-  private double[] randomGridVariables = new double[]{.2, .7, 0};
-
+  private double randomGridVariableValue = 0.5;
+  private double[] randomGridVariables;
   /**
    * Constructor for the Config object. Sets the filepath and sets up the documentBuilder.
    *
@@ -87,21 +88,6 @@ public class Config {
     setupDocument();
     System.out.println(docSetUpConfirmationMessage);
     loadFile();
-  }
-
-  /**
-   * Create and set up the Grid based on stored information, and then return it.
-   */
-  private void loadFile() throws InvalidShapeException, InvalidGridException, InvalidCellException{
-    extractConfigInfo();
-    System.out.println(configSetUpConfirmationMessage);
-    if(customRequested) {
-      createGrid();
-    }
-    else{
-      createRandomGrid();
-    }
-    System.out.println(gridConfirmationMessage);
   }
 
   /**
@@ -163,6 +149,30 @@ public class Config {
       throw new InvalidCellException(e);
     }
   }
+
+  /**
+   * Create and set up the Grid based on stored information, and then return it.
+   */
+  private void loadFile() throws InvalidShapeException, InvalidGridException, InvalidCellException{
+    extractConfigInfo();
+    System.out.println(configSetUpConfirmationMessage);
+    setRandomVariables();
+    if(customRequested) {
+      createGrid();
+    }
+    else{
+      createRandomGrid();
+    }
+    System.out.println(gridConfirmationMessage);
+  }
+
+  private void setRandomVariables() {
+    randomGridVariables = new double[myStates.size()];
+    for(int i = 0; i<myStates.size(); i++){
+      randomGridVariables[i] = randomGridVariableValue;
+    }
+  }
+
 
   private void setupDocument()
       throws InvalidFileException {
