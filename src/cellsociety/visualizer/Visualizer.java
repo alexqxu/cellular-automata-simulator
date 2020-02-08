@@ -97,11 +97,11 @@ public abstract class Visualizer {
       mySeries.add(tempSeries);
       myGraph.getData().add(tempSeries);
       //System.out.println(myColorMap.get(i).toString() + "YEET");
-      Set<Node> nodes = myGraph.lookupAll(".series");
+      Set<Node> nodes = myGraph.lookupAll(".series" + i);
       for(Node series : nodes){
         StringBuilder style = new StringBuilder();
-        style.append(myColorMap.get(i).toString().substring(2,8)+";");
-        series.setStyle("-fx-stroke: "+style.toString());
+        style.append("-fx-stroke: " + "#"+ myColorMap.get(i).toString().substring(2, 8)+";");
+        series.setStyle(style.toString());
       }
     }
     myGraph.applyCss();
