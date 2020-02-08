@@ -161,11 +161,13 @@ public class Main extends Application {
    *                    the Application
    */
   public void update ( double elapsedTime){
-    secondsElapsed += elapsedTime;
-    if (running && secondsElapsed > speed) {
-      myVisualizer.updateChart(secondsElapsed);
-      secondsElapsed = 0;
-      myVisualizer.stepGrid();
+    if(running) {
+      secondsElapsed += elapsedTime;
+      if (secondsElapsed > speed) {
+        myVisualizer.updateChart(secondsElapsed);
+        secondsElapsed = 0;
+        myVisualizer.stepGrid();
+      }
     }
   }
 
