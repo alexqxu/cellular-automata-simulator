@@ -8,4 +8,5 @@ public class RectGrid extends Grid {
     int[] dc = {0, 1, 1, 1, 0, -1, -1, -1};
     return getSpecificNeighbors(r, c, dr, dc);
   }
+
 }
