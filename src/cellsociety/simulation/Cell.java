@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Cell {
+  public static final int TOROIDAL = -1;
+  public static final int INFINTE = -2;
 
   protected String[] params;
   protected String[] groundParams;
@@ -16,7 +18,7 @@ public abstract class Cell {
   protected int nextState;
   private Map<String, Double> paramMap = new HashMap<>();
   private Map<String, Double> groundParamMap = new HashMap<>();
-  protected int defaultEdge = -1;
+  protected int defaultEdge = TOROIDAL;
   protected boolean pointingUp = false;
 
   /**
@@ -87,7 +89,10 @@ public abstract class Cell {
   public void update() {
     if (nextState == -1) {
       System.out.println("state = " + state);
-      throw new RuntimeException("cell state is -1 so something terrible has happened");
+      System.out.println("cell state is -1 so something terrible has happened");
+      nextState = state;
+      //throw new RuntimeException("cell state is -1 so something terrible has happened");
+
     }
     state = nextState;
     nextState = -1;
@@ -206,5 +211,9 @@ public abstract class Cell {
       str = str.substring(1) + str.charAt(0);
     }
     return ret;
+  }
+
+  public void setNextState(int st) {
+    nextState = st;
   }
 }

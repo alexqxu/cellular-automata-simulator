@@ -13,22 +13,28 @@ public abstract class Grid {
   protected ArrayList<ArrayList<Cell>> grid;
 
   public Grid() {
-    grid = new ArrayList<ArrayList<Cell>>();
+    grid = new ArrayList<>();
   }
 
-  public void update() {
+  public boolean update() {
     LinkedList<Cell> emptyQueue = getEmptyQueue();
-    for (int i = 0; i < grid.size(); i++) {
-      for (int j = 0; j < grid.get(i).size(); j++) {
+    boolean padded = false;
+    if (getCell(0, 0).getDefaultEdge() == Cell.INFINTE) {
+      padded = padGrid();
+    }
+    for (int i = 0; i < getHeight(); i++) {
+      for (int j = 0; j < getWidth(); j++) {
         Cell[] neighbors = getNeighbors(i, j);
-        grid.get(i).get(j).planUpdate(neighbors, emptyQueue);
+        getCell(i, j).planUpdate(neighbors, emptyQueue);
       }
     }
-    for (int i = 0; i < grid.size(); i++) {
-      for (int j = 0; j < grid.get(i).size(); j++) {
+    for (int i = 0; i < getHeight(); i++) {
+      for (int j = 0; j < getWidth(); j++) {
+        System.out.println(""+i+","+j);
         grid.get(i).get(j).update();
       }
     }
+    return padded;
   }
 
   public void incrementCellState(int r, int c) {
@@ -69,7 +75,8 @@ public abstract class Grid {
    */
   protected Cell[] getSpecificNeighbors(int r, int c, int[] dr, int[] dc) {
     Cell[] ret = new Cell[dr.length];
-    if (getCell(r, c).getDefaultEdge() == -1) {
+    if (getCell(r, c).getDefaultEdge() == Cell.TOROIDAL
+        || getCell(r, c).getDefaultEdge() == Cell.INFINTE) {
       for (int i = 0; i < ret.length; i++) {
         ret[i] = grid.get((r + dr[i] + getHeight()) % getHeight())
             .get((c + dc[i] + getWidth()) % getWidth());
@@ -79,18 +86,110 @@ public abstract class Grid {
         try {
           ret[i] = grid.get(r + dr[i]).get(c + dc[i]);
         } catch (IndexOutOfBoundsException e) {
-          Cell cell = null;
-          try {
-            cell = getCell(r, c).getClass().getConstructor().newInstance();
-          } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-            cell = new FireCell(); //FIXME Should never happen due to error handling elsewhere
-          }
+          Cell cell = dupeCell(getCell(r, c));
           cell.setState(getCell(r, c).getDefaultEdge());
           ret[i] = cell;
         }
       }
     }
     return ret;
+  }
+
+  private Cell dupeCell(Cell cell) {
+    Cell ret = null;
+    try {
+      ret = cell.getClass().getConstructor().newInstance();
+    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+      ret = new FireCell(); //FIXME Should never happen due to error handling elsewhere
+    }
+    return cell;
+  }
+
+  private ArrayList<Cell> generateEmptyRow() {
+    ArrayList<Cell> newRow = new ArrayList<>();
+    for (int i = 0; i < getWidth(); i++) {
+      Cell cell = dupeCell(getCell(0, 0));
+      cell.setState(0); //FIXME make changable?
+      cell.setNextState(0);
+      newRow.add(cell);
+    }
+    return newRow;
+  }
+
+  protected boolean padGrid() {
+    boolean ret = false;
+    if (!topRowEmpty()) {
+      ret = true;
+      System.out.println("top");
+      grid.add(0, generateEmptyRow());
+    }
+    if (!bottomRowEmpty()) {
+      ret = true;
+      System.out.println("bot");
+      grid.add(generateEmptyRow());
+    }
+    if (!leftColumnEmpty()) {
+      ret = true;
+      System.out.println("left");
+      for (int r = 0; r < grid.size(); r++) {
+        Cell newCell = dupeCell(getCell(0, 0));
+        newCell.setState(0);
+        newCell.setNextState(0);
+        grid.get(r).add(0, newCell);
+      }
+    }
+    if (!rightColumnEmpty()) {
+      ret = true;
+      System.out.println("right");
+      for (int r = 0; r < grid.size(); r++) {
+        Cell newCell = dupeCell(getCell(0, 0));
+        newCell.setState(0);
+        newCell.setNextState(0);
+        grid.get(r).add(newCell);
+      }
+    }
+    return ret;
+  }
+
+  private boolean rightColumnEmpty() {
+    for (int i = 0; i < grid.size(); i++) {
+      ArrayList<Cell> row = grid.get(i);
+      Cell cell = row.get(row.size() - 1);
+      if (cell.getState() != 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private boolean leftColumnEmpty() {
+    for (int i = 0; i < grid.size(); i++) {
+      Cell cell = grid.get(i).get(0);
+      if (cell.getState() != 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private boolean bottomRowEmpty() {
+    ArrayList<Cell> row = grid.get(grid.size() - 1);
+    for (Cell cell : row) {
+      if (cell.getState() != 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private boolean topRowEmpty() {
+    ArrayList<Cell> row = grid.get(0);
+    for (Cell cell : row) {
+      if (cell.getState() != 0) {
+        return false;
+      }
+    }
+    return true;
   }
 
   protected Cell[] getNeighbors(Cell cell) {
