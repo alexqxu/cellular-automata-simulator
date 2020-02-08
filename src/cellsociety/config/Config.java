@@ -137,9 +137,7 @@ public class Config {
     }
     try {
       doc = builder.parse(myFile);
-    } catch (SAXException e) {
-      throw new InvalidFileException(e);
-    } catch (IOException e) {
+    } catch (SAXException | IOException e) {
       throw new InvalidFileException(e);
     }
     doc.getDocumentElement().normalize();
@@ -309,7 +307,6 @@ public class Config {
 
   /**
    * Based on parameters AND Cell configuration, creates a grid.
-   *
    * @throws InvalidGridException
    */
   private void createGrid()
@@ -327,7 +324,6 @@ public class Config {
     }
     int row = 0;
     NodeList rowNodeList = doc.getElementsByTagName(rowNodeName);
-
     for (int i = 0; i < rowNodeList.getLength(); i++) {
       int col = 0;
       Node singleRowNode = rowNodeList.item(i);
@@ -381,13 +377,7 @@ public class Config {
     Cell cell = null;
     try {
       cell = (Cell) (cellClass.getConstructor().newInstance());
-    } catch (InstantiationException e) {
-      throw new InvalidCellException(e);
-    } catch (IllegalAccessException e) {
-      throw new InvalidCellException(e);
-    } catch (InvocationTargetException e) {
-      throw new InvalidCellException(e);
-    } catch (NoSuchMethodException e) {
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       throw new InvalidCellException(e);
     }
     for (Map.Entry<String, Double> parameterEntry : myParameters.entrySet()) {
