@@ -168,6 +168,8 @@ public class SimulationApp {
         myVisualizer.updateChart(secondsElapsed);
         secondsElapsed = 0;
         myVisualizer.stepGrid();
+        frame.setCenter(myVisualizer.bundledUI()); //FIXME added by maverick
+        myVisualizer.drawGrid(); //FIXME added by maverick
       }
     }
   }
@@ -212,6 +214,8 @@ public class SimulationApp {
     });
     step = makeButton("Step", e -> {
       myVisualizer.stepGrid();
+      frame.setCenter(myVisualizer.bundledUI()); //FIXME added by MC
+      myVisualizer.drawGrid();//FIXME added by MC
     });
     shuffle = makeButton("Shuffle", e->{
       myConfig.createRandomGrid();

@@ -30,7 +30,6 @@ public abstract class Grid {
     }
     for (int i = 0; i < getHeight(); i++) {
       for (int j = 0; j < getWidth(); j++) {
-        System.out.println(""+i+","+j);
         grid.get(i).get(j).update();
       }
     }
@@ -102,7 +101,7 @@ public abstract class Grid {
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
       ret = new FireCell(); //FIXME Should never happen due to error handling elsewhere
     }
-    return cell;
+    return ret;
   }
 
   private ArrayList<Cell> generateEmptyRow() {
@@ -120,17 +119,14 @@ public abstract class Grid {
     boolean ret = false;
     if (!topRowEmpty()) {
       ret = true;
-      System.out.println("top");
       grid.add(0, generateEmptyRow());
     }
     if (!bottomRowEmpty()) {
       ret = true;
-      System.out.println("bot");
       grid.add(generateEmptyRow());
     }
     if (!leftColumnEmpty()) {
       ret = true;
-      System.out.println("left");
       for (int r = 0; r < grid.size(); r++) {
         Cell newCell = dupeCell(getCell(0, 0));
         newCell.setState(0);
@@ -140,7 +136,6 @@ public abstract class Grid {
     }
     if (!rightColumnEmpty()) {
       ret = true;
-      System.out.println("right");
       for (int r = 0; r < grid.size(); r++) {
         Cell newCell = dupeCell(getCell(0, 0));
         newCell.setState(0);

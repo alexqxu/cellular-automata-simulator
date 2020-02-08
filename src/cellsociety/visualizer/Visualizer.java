@@ -126,9 +126,8 @@ public abstract class Visualizer {
   public void stepGrid() {
     if(myGrid.update()){
       instantiateCellGrid();
-    } else {
-      drawGrid();
     }
+    drawGrid();
   }
 
   public void drawGrid() {
@@ -148,7 +147,7 @@ public abstract class Visualizer {
   }
 
   protected Color[][] getColorGrid() {
-    Color[][] colorgrid = new Color[myGrid.getWidth()][myGrid.getHeight()];
+    Color[][] colorgrid = new Color[myGrid.getHeight()][myGrid.getWidth()];
     for (int i = 0; i < colorgrid.length; i++) {
       for (int j = 0; j < colorgrid[i].length; j++) {
         colorgrid[i][j] = myColorMap.get(myGrid.getState(i, j));

@@ -12,6 +12,7 @@ public class ConwayCell extends Cell {
   public ConwayCell() {
     super();
     addStates(new int[]{0, 1});
+    defaultEdge = INFINTE;
   }
 
 
