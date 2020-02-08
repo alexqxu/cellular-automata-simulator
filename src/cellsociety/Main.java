@@ -116,8 +116,7 @@ public class Main extends Application {
   private Scene createScene() {
     frame = new BorderPane();
     frame.setTop(setToolBar());
-    frame.setCenter(myVisualizer.instantiateCellGrid());
-    frame.setBottom(setParamBar());
+    frame.setCenter(myVisualizer.bundledUI());
     running = false;
     setSpeed(myConfig.getSpeed());
     Scene scene = new Scene(frame, Color.AZURE);
@@ -168,6 +167,7 @@ public class Main extends Application {
   public void update ( double elapsedTime){
     secondsElapsed += elapsedTime;
     if (running && secondsElapsed > speed) {
+      myVisualizer.updateChart(secondsElapsed);
       secondsElapsed = 0;
       myVisualizer.stepGrid();
     }
@@ -201,22 +201,19 @@ public class Main extends Application {
     newWindow = makeMenu("New", e -> makeWindow());
     loadFile = makeButton("Load", e -> {
       loadConfigFile(chooseFile());
-      frame.setCenter(myVisualizer.instantiateCellGrid());
-      frame.setBottom(setParamBar());
+      frame.setCenter(myVisualizer.bundledUI());
       myVisualizer.drawGrid();
     });
-    //exit = makeMenu("Exit", e-> System.exit(0)); FIXME
+    //exit = makeMenu("Exit", e-> );
     playpause = makeButton("Play", e -> handlePlayPause(playpause));
     reset = makeButton("Reset", e -> {
       loadConfigFile(myFile);
-      frame.setCenter(myVisualizer.instantiateCellGrid());
-      frame.setBottom(setParamBar());
+      frame.setCenter(myVisualizer.bundledUI());
       myVisualizer.drawGrid();
     });
     step = makeButton("Step", e -> {
       myVisualizer.stepGrid();
     });
-
     slider = new Slider();
     slider.setMin(0);
     slider.setMax(100);
@@ -230,7 +227,8 @@ public class Main extends Application {
         setSpeed(new_val.doubleValue() / 100);
       }
     });
-    //menuBar.getMenus().addAll(loadFile, newWindow);
+    menuBar.getMenus().addAll(newWindow);
+    toolbar.getChildren().add(menuBar);
     toolbar.getChildren().add(playpause);
     toolbar.getChildren().add(step);
     toolbar.getChildren().add(reset);
@@ -240,43 +238,9 @@ public class Main extends Application {
     return toolbar;
   }
 
-  public Node setParamBar(){
-    HBox parameters = new HBox();
-    String[] paramList = myVisualizer.getParameters();
-    for(String s : paramList){
-      TextField paramField = makeParamField(s);
-      parameters.getChildren().add(paramField);
-      final Pane spacer = new Pane();
-      HBox.setHgrow(spacer, Priority.ALWAYS);
-      parameters.getChildren().add(spacer);
-//      Label label = new Label(s);
-//      label.setMinWidth(50);
-//      parameters.getChildren().add(label);
-    }
-    return parameters;
-  }
-
-  private TextField makeParamField(String param){
-    TextField paramField = new TextField();
-    paramField.setPrefColumnCount(50);
-    paramField.setMaxWidth(50);
-    paramField.setOnAction(e -> {
-      if(paramField.getText() != null && !paramField.getText().isEmpty()){
-        double value = Double.parseDouble(paramField.getText());
-        myVisualizer.setParameters(param, value);
-      } else {
-        Alert errorAlert = new Alert(AlertType.WARNING);
-        errorAlert.setHeaderText("Enter a valid double");
-        errorAlert.setContentText("please");
-        errorAlert.showAndWait();
-      }
-    });
-    return paramField;
-  }
-
   //fixme make
   private void makeWindow() {
-    return;
+    Stage newStage = new Stage();
   }
 
   public void loadConfigFile(File file) {
@@ -300,7 +264,6 @@ public class Main extends Application {
     Visualizer myVisualizer = (Visualizer) (visualizerClass.getConstructor().newInstance(myConfig.getGrid()));
      */
     //FIXME uncomment once config.getVisualizer() is working, construct with grid param
-
   }
 
   private void retryLoadFile(String message) {
@@ -369,7 +332,6 @@ public class Main extends Application {
 
   /**
    * Runner method, actually runs the game when a user presses play in the IDE
-   *
    * @param args
    */
   public static void main(String[] args) {
