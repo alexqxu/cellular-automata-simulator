@@ -9,7 +9,6 @@ public class RPSCell extends Cell {
 
   public RPSCell() {
     super();
-    defaultEdge = -1;
   }
 
   protected void setParams() {
