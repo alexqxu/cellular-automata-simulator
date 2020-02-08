@@ -82,7 +82,7 @@ public class Config {
    *
    * @param xmlFile File object passed in, in XML format
    */
-  public Config(File xmlFile) throws InvalidShapeException, InvalidGridException, InvalidCellException{
+  public Config(File xmlFile) throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidFileException{
     myFile = xmlFile;
     setupDocument();
     System.out.println(docSetUpConfirmationMessage);
@@ -137,6 +137,31 @@ public class Config {
    */
   public Map<Integer, Color> getStates() {
     return myStates;
+  }
+  
+  /**
+   * Based on the parameters set, creates a grid with a randomized configuration of CELLS
+   * @throws InvalidCellException
+   * @throws InvalidGridException
+   * @throws InvalidShapeException
+   */
+  public void createRandomGrid()  throws InvalidCellException, InvalidGridException{
+    Class gridClass = null;
+    try {
+      gridClass = Class.forName(packagePrefixName + myShape + gridSuffix);
+    } catch (ClassNotFoundException e) {
+      throw new InvalidShapeException(e);
+    }
+    try {
+      myGrid = (Grid) (gridClass.getConstructor().newInstance());
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+      throw new InvalidGridException(e);
+    }
+    try {
+      myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myWidth, myHeight);
+    } catch (ClassNotFoundException e) {
+      throw new InvalidCellException(e);
+    }
   }
 
   private void setupDocument()
@@ -308,31 +333,6 @@ public class Config {
 
   private void printCustom(){
     System.out.println("Custom cell locations? " + customRequested);
-  }
-
-  /**
-   * Based on the parameters set, creates a grid with a randomized configuration of CELLS
-   * @throws InvalidCellException
-   * @throws InvalidGridException
-   * @throws InvalidShapeException
-   */
-  private void createRandomGrid()  throws InvalidCellException, InvalidGridException{
-    Class gridClass = null;
-    try {
-      gridClass = Class.forName(packagePrefixName + myShape + gridSuffix);
-    } catch (ClassNotFoundException e) {
-      throw new InvalidShapeException(e);
-    }
-    try {
-      myGrid = (Grid) (gridClass.getConstructor().newInstance());
-    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-      throw new InvalidGridException(e);
-    }
-    try {
-      myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myWidth, myHeight);
-    } catch (ClassNotFoundException e) {
-      throw new InvalidCellException(e);
-    }
   }
 
   /**
