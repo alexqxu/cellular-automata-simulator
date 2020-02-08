@@ -55,7 +55,6 @@ public class Main extends Application {
   private static final String STYLESHEET = "default.css";
   private static final int MAX_UPDATE_PERIOD = 2;
 
-
   private String packagePrefixName = "cellsociety.visualizer.";
 
   private BorderPane frame;
@@ -88,6 +87,9 @@ public class Main extends Application {
     myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE);
 
     loadConfigFile(chooseFile());
+    if(myConfig == null){
+      retryLoadFile("Please select a file");
+    }
 
     myStage.setScene(createScene());
     myStage.setTitle(TITLE);
@@ -262,7 +264,13 @@ public class Main extends Application {
     do {
       badFile = false;
       try {
-        myConfig = new Config(chooseFile());
+        File newFile = chooseFile();
+        if(newFile == null){
+          displayError(message);
+          badFile = true;
+        } else{
+          myConfig = new Config(newFile);
+        }
       } catch (InvalidCellException e) {
         displayError(message);
         badFile = true;
