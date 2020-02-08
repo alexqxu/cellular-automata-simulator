@@ -263,21 +263,11 @@ public class Main extends Application {
       Class visualizerClass = null;
       try {
           visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
-      } catch (ClassNotFoundException e) {
-          e.printStackTrace();
+        myVisualizer = (Visualizer) (visualizerClass.getConstructor(Grid.class).newInstance(myConfig.getGrid()));
+      } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+        retryLoadFile("Invalid file selected");
       }
-      try {
-          myVisualizer = (Visualizer) (visualizerClass.getConstructor(Grid.class).newInstance(myConfig.getGrid()));
-      } catch (InstantiationException e) {
-          e.printStackTrace();
-      } catch (IllegalAccessException e) {
-          e.printStackTrace();
-      } catch (InvocationTargetException e) {
-          e.printStackTrace();
-      } catch (NoSuchMethodException e) {
-          e.printStackTrace();
-      }
-      myVisualizer.setColorMap(myConfig.getStates());
+    myVisualizer.setColorMap(myConfig.getStates());
       //FIXME uncomment once config.getVisualizer() is working, construct with grid param
 
   }
