@@ -4,6 +4,7 @@ import cellsociety.config.Config;
 import cellsociety.exceptions.InvalidCellException;
 import cellsociety.exceptions.InvalidFileException;
 import cellsociety.exceptions.InvalidGridException;
+import cellsociety.exceptions.InvalidShapeException;
 import cellsociety.simulation.Grid;
 import cellsociety.visualizer.Visualizer;
 import java.io.File;
@@ -177,7 +178,6 @@ public class SimulationApp {
    *
    * @return the File object representing the .xml file to be used by the simulation
    */
-  //FIXME null
   public File chooseFile() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Choose Simulation File");
@@ -212,6 +212,11 @@ public class SimulationApp {
     });
     step = makeButton("Step", e -> {
       myVisualizer.stepGrid();
+    });
+    shuffle = makeButton("Shuffle", e->{
+      myConfig.createRandomGrid();
+      myVisualizer.setGrid(myConfig.getGrid());
+      myVisualizer.drawGrid();
     });
     slider = new Slider();
     slider.setMin(0);
@@ -259,6 +264,8 @@ public class SimulationApp {
       retryLoadFile("Invalid Shape Specified");
     } catch (InvalidFileException e) {
       retryLoadFile("Invalid File Specified");
+    } catch (InvalidShapeException e){
+      retryLoadFile("Invalid Shape Specified");
     }
 
     Class visualizerClass = null;
@@ -267,7 +274,7 @@ public class SimulationApp {
       myVisualizer = (Visualizer) (visualizerClass.getConstructor(Grid.class)
           .newInstance(myConfig.getGrid()));
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-      retryLoadFile("Invalid file selected");
+      retryLoadFile("Invalid Visualizer Specified");
     }
     myVisualizer.setColorMap(myConfig.getStates());
 
@@ -287,6 +294,9 @@ public class SimulationApp {
         displayError(message);
         badFile = true;
       } catch (InvalidFileException e) {
+        displayError(message);
+        badFile = true;
+      } catch (InvalidShapeException e){
         displayError(message);
         badFile = true;
       }
