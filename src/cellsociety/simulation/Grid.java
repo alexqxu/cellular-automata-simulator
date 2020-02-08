@@ -35,6 +35,16 @@ public abstract class Grid {
     grid.get(r).get(c).incrementState();
   }
 
+  public int[] getPopulations() {
+    int[] ret = new int[getCell(0,0).getHighestState()+1];
+    for (int r = 0; r < getHeight(); r++) {
+      for (int c = 0; c < getWidth(); c++) {
+        ret[getState(r,c)]++;
+      }
+    }
+    return ret;
+  }
+
   abstract Cell[] getNeighbors(int r, int c);
 
   /**
