@@ -8,6 +8,9 @@ import cellsociety.visualizer.Visualizer;
 import cellsociety.exceptions.InvalidFileException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -70,7 +73,7 @@ public class Main extends Application {
   private Menu exit;
   private Button reset;
   private Button step;
-  private List<TextField> 
+  private List<TextField> fieldList;
   private MenuBar menuBar;
   private File myFile;
   private double secondsElapsed;
@@ -237,6 +240,13 @@ public class Main extends Application {
     HBox parameters = new HBox();
     final Pane spacer = new Pane();
     HBox.setHgrow(spacer, Priority.ALWAYS);
+
+    fieldList = new ArrayList<>();
+    String[] paramList = myVisualizer.getParameters();
+    for(String s : paramList){
+      
+    }
+
     return parameters;
   }
   //fixme make
@@ -249,6 +259,7 @@ public class Main extends Application {
       return;
     }
     try {
+      System.out.println(file);
       myConfig = new Config(file);
     } catch (InvalidCellException e) {
       retryLoadFile("Invalid Simulation Specified");
