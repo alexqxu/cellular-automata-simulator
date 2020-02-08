@@ -3,7 +3,7 @@
     <ConfigInfo>
         <Title>WaTorCell</Title>
         <Author>Alex Xu, aqx</Author>
-        <Shape>HexGrid</Shape>
+        <Shape>Hex</Shape>
 
         <Dimensions>
             <Width>20</Width>
