@@ -52,10 +52,11 @@ public class Config {
   private String heightNodeName = "Height";
   private String cellNodeName = "Cell";
   private String shapeNodeName = "Shape";
+  private String defaultStateNodeName = "Default";
 
-  private String docSetUpConfirmationMessage = "Document Setup Complete";
-  private String configSetUpConfirmationMessage = "Config Info Load Complete";
-  private String gridConfirmationMessage = "Grid Created";
+  private String docSetUpConfirmationMessage = "---Document Setup Complete---";
+  private String configSetUpConfirmationMessage = "---Config Info Load Complete---";
+  private String gridConfirmationMessage = "---Grid Created---";
 
   private File myFile;
   private Document doc;
@@ -193,6 +194,7 @@ public class Config {
     if (statesNode.getNodeType() == Node.ELEMENT_NODE) {
       Element statesElement = (Element) statesNode;
 
+      extractDefaultState(statesElement);
       NodeList statesNodeList = statesElement.getElementsByTagName(singleStateNodeName);
 
       for (int i = 0; i < statesNodeList.getLength(); i++) {
@@ -219,6 +221,10 @@ public class Config {
       extractSpeed(dimensionsElement);
       printDimensions();
     }
+  }
+
+  private void extractDefaultState(Element statesElement){
+    defaultState = Integer.parseInt(extractElementValue(statesElement, defaultStateNodeName));
   }
 
   private void extractTitle(Element startingElement) {
@@ -261,6 +267,7 @@ public class Config {
     for (Map.Entry stateID : myStates.entrySet()) {
       System.out.println("State: " + stateID.getKey() + " & Value: " + stateID.getValue());
     }
+    System.out.println("Default State: " + defaultState);
   }
 
   private void printDimensions() {
