@@ -1,13 +1,14 @@
 package cellsociety;
 
+import cellsociety.config.Config;
+import cellsociety.exceptions.InvalidCellException;
+import cellsociety.exceptions.InvalidGridException;
 import cellsociety.visualizer.TriVisualizer;
 import cellsociety.visualizer.Visualizer;
+import cellsociety.exceptions.InvalidFileException;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
-
-import config.Config;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -17,6 +18,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -74,50 +77,50 @@ public class Main extends Application {
   private boolean running;
 
   /**
-     * Start method. Runs game loop after setting up stage and scene data.
-     * @param stage the window in which the application runs
-     * @throws Exception
-     */
-    //FIXME throws
-    @Override
-    public void start(Stage stage) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException { //throws exception?
-      myStage = stage;
-      System.out.println(DEFAULT_RESOURCE_PACKAGE+RESOURCE_PACKAGE);
-      myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE); //FIXME
+   * Start method. Runs game loop after setting up stage and scene data.
+   * @param stage the window in which the application runs
+   * @throws Exception
+   */
+  @Override
+  public void start(Stage stage){ //throws exception?
+    myStage = stage;
+    System.out.println(DEFAULT_RESOURCE_PACKAGE+RESOURCE_PACKAGE);
+    myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE);
 
-      myConfig = new Config(chooseFile());
-      myVisualizer = new TriVisualizer(myConfig.getGrid()); //FIXME
-      myVisualizer.setColorMap(myConfig.getStates());
-      /*
-      Class visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
-      Visualizer myVisualizer = (Visualizer) (visualizerClass.getConstructor().newInstance());
+    loadConfigFile(chooseFile());
 
-       */
-      //FIXME uncomment once config.getVisualizer() is working, construct with grid param
+    myStage.setScene(createScene());
+    myStage.setTitle(TITLE);
+    myStage.show();
 
+    KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->update(SECOND_DELAY));
+    Timeline animation = new Timeline();
+    animation.setCycleCount(Timeline.INDEFINITE);
+    animation.getKeyFrames().add(frame);
+    animation.play();
+  }
 
-      myStage.setScene(createScene());
-      myStage.setTitle(TITLE);
-      myStage.show();
-
-      KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e->update(SECOND_DELAY));
-      Timeline animation = new Timeline();
-      animation.setCycleCount(Timeline.INDEFINITE);
-      animation.getKeyFrames().add(frame);
-      animation.play();
-    }
+  /**
+   * Creates the scene to be rendered in the stage. Calls the creation of UI controls as well as graphics from the visualizer class.
+   * Applies CSS to the UI as well.
+   * @return the scene to be rendered by the application
+   */
   private Scene createScene() {
     frame = new BorderPane();
     frame.setTop(setToolBar());
     frame.setBottom(myVisualizer.instantiateCellGrid());
     running = false;
-    setSpeed(.5); //myconfig.getspeed
+    setSpeed(myConfig.getSpeed());
     Scene scene = new Scene(frame, Color.AZURE);
     scene.getStylesheets()
         .add(getClass().getClassLoader().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
     return scene;
   }
 
+  /**
+   * Handles
+   * @param button
+   */
   public void handlePlayPause (Button button){
     running = !running;
     final String IMAGEFILE_SUFFIXES = String
@@ -167,6 +170,7 @@ public class Main extends Application {
    *
    * @return the File object representing the .xml file to be used by the simulation
    */
+  //FIXME null
   public File chooseFile() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Choose Simulation File");
@@ -177,62 +181,25 @@ public class Main extends Application {
       myFile = file;
       return file;
     } else {
-      System.out.println("Error: File not found");
+      return null;
     }
-    return null;
   }
   public Node setToolBar() {
     HBox toolbar = new HBox();
     final Pane spacer = new Pane();
     HBox.setHgrow(spacer, Priority.ALWAYS);
     menuBar = new MenuBar();
-    //FIXME throws
     newWindow = makeMenu("New", e -> makeWindow());
     loadFile = makeButton("Load", e -> {
-      //FIXME We will die if we dont deal with these exception calls
-      try {
-        loadConfigFile(chooseFile());
-      } catch (IOException ex) {
-        ex.printStackTrace();
-      } catch (SAXException ex) {
-        ex.printStackTrace();
-      } catch (ParserConfigurationException ex) {
-        ex.printStackTrace();
-      } catch (ClassNotFoundException ex) {
-        ex.printStackTrace();
-      } catch (NoSuchMethodException ex) {
-        ex.printStackTrace();
-      } catch (InstantiationException ex) {
-        ex.printStackTrace();
-      } catch (IllegalAccessException ex) {
-        ex.printStackTrace();
-      } catch (InvocationTargetException ex) {
-        ex.printStackTrace();
-      }
+      loadConfigFile(chooseFile());
+      frame.setBottom(myVisualizer.instantiateCellGrid());
       myVisualizer.drawGrid();
     });
     //exit = makeMenu("Exit", e-> System.exit(0)); FIXME
     playpause = makeButton("Play", e -> handlePlayPause(playpause));
-    reset = makeButton("Reset", e -> { //FIXME add intentional exceptions
-      try {
-        loadConfigFile(myFile);
-      } catch (IOException ex) {
-        ex.printStackTrace();
-      } catch (SAXException ex) {
-        ex.printStackTrace();
-      } catch (ParserConfigurationException ex) {
-        ex.printStackTrace();
-      } catch (ClassNotFoundException ex) {
-        ex.printStackTrace();
-      } catch (NoSuchMethodException ex) {
-        ex.printStackTrace();
-      } catch (InstantiationException ex) {
-        ex.printStackTrace();
-      } catch (IllegalAccessException ex) {
-        ex.printStackTrace();
-      } catch (InvocationTargetException ex) {
-        ex.printStackTrace();
-      }
+    reset = makeButton("Reset", e -> {
+      loadConfigFile(myFile);
+      frame.setBottom(myVisualizer.instantiateCellGrid());
       myVisualizer.drawGrid();
     });
     step = makeButton("Step", e -> {
@@ -261,16 +228,59 @@ public class Main extends Application {
     toolbar.getChildren().add(slider);
     return toolbar;
   }
-//fixme make
+  //fixme make
   private void makeWindow() {
     return;
   }
 
-  public void loadConfigFile(File file) throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-    myConfig = new Config(file);
-    myVisualizer.setGrid(myConfig.getGrid());
+  public void loadConfigFile(File file) {
+    if(file == null){
+      return;
+    }
+    try {
+      myConfig = new Config(file);
+    } catch (InvalidCellException e) {
+      retryLoadFile("Invalid Simulation Specified");
+    } catch (InvalidGridException e){
+      retryLoadFile("Invalid Shape Specified");
+    } catch (InvalidFileException e){
+      retryLoadFile("Invalid File Specified");
+    }
+    myVisualizer = new TriVisualizer(myConfig.getGrid()); //FIXME
     myVisualizer.setColorMap(myConfig.getStates());
-    frame.setBottom(myVisualizer.instantiateCellGrid());
+    /*
+    Class visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
+    Visualizer myVisualizer = (Visualizer) (visualizerClass.getConstructor().newInstance(myConfig.getGrid()));
+     */
+    //FIXME uncomment once config.getVisualizer() is working, construct with grid param
+
+  }
+
+  private void retryLoadFile(String message) {
+    boolean badFile;
+    displayError(message);
+    do {
+      badFile = false;
+      try {
+        myConfig = new Config(chooseFile());
+      } catch (InvalidCellException e) {
+        displayError(message);
+        badFile = true;
+      } catch (InvalidGridException e){
+        displayError(message);
+        badFile = true;
+      } catch (InvalidFileException e){
+        displayError(message);
+        badFile = true;
+      }
+    } while (badFile);
+  }
+
+  private void displayError(String message) {
+    Alert errorAlert = new Alert(AlertType.ERROR);
+    errorAlert.setHeaderText(message);
+    errorAlert.setContentText("Please Choose Another File");
+    errorAlert.showAndWait();
   }
 
   private Button makeButton(String property, EventHandler<ActionEvent> handler) {

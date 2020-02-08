@@ -12,9 +12,8 @@ import javafx.scene.shape.StrokeType;
 
 public class RectVisualizer extends Visualizer {
 
-  public RectVisualizer(Grid grid)
-      throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-    super(grid);
+  public RectVisualizer(Grid grid){
+      super(grid);
   }
 
   public Node instantiateCellGrid() {
