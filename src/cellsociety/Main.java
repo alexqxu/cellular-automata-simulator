@@ -8,6 +8,7 @@ import cellsociety.visualizer.Visualizer;
 import cellsociety.exceptions.InvalidFileException;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,11 +25,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -60,6 +59,7 @@ public class Main extends Application {
   private static final String STYLESHEET = "default.css";
   private static final int MAX_UPDATE_PERIOD = 2;
 
+
   private String packagePrefixName = "cellsociety.visualizer.";
 
   private BorderPane frame;
@@ -74,7 +74,6 @@ public class Main extends Application {
   private Menu exit;
   private Button reset;
   private Button step;
-  private List<TextField> fieldList;
   private MenuBar menuBar;
   private File myFile;
   private double secondsElapsed;
@@ -87,15 +86,12 @@ public class Main extends Application {
    * @throws Exception
    */
   @Override
-  public void start(Stage stage){
+  public void start(Stage stage){ //throws exception?
     myStage = stage;
     System.out.println(DEFAULT_RESOURCE_PACKAGE+RESOURCE_PACKAGE);
     myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE);
 
     loadConfigFile(chooseFile());
-    if(myConfig == null){
-      retryLoadFile("Please select a file");
-    }
 
     myStage.setScene(createScene());
     myStage.setTitle(TITLE);
@@ -116,8 +112,7 @@ public class Main extends Application {
   private Scene createScene() {
     frame = new BorderPane();
     frame.setTop(setToolBar());
-    frame.setCenter(myVisualizer.instantiateCellGrid());
-    frame.setBottom(setParamBar());
+    frame.setBottom(myVisualizer.instantiateCellGrid());
     running = false;
     setSpeed(myConfig.getSpeed());
     Scene scene = new Scene(frame, Color.AZURE);
@@ -201,16 +196,14 @@ public class Main extends Application {
     newWindow = makeMenu("New", e -> makeWindow());
     loadFile = makeButton("Load", e -> {
       loadConfigFile(chooseFile());
-      frame.setCenter(myVisualizer.instantiateCellGrid());
-      frame.setBottom(setParamBar());
+      frame.setBottom(myVisualizer.instantiateCellGrid());
       myVisualizer.drawGrid();
     });
     //exit = makeMenu("Exit", e-> System.exit(0)); FIXME
     playpause = makeButton("Play", e -> handlePlayPause(playpause));
     reset = makeButton("Reset", e -> {
       loadConfigFile(myFile);
-      frame.setCenter(myVisualizer.instantiateCellGrid());
-      frame.setBottom(setParamBar());
+      frame.setBottom(myVisualizer.instantiateCellGrid());
       myVisualizer.drawGrid();
     });
     step = makeButton("Step", e -> {
@@ -239,41 +232,6 @@ public class Main extends Application {
     toolbar.getChildren().add(slider);
     return toolbar;
   }
-
-  public Node setParamBar(){
-    HBox parameters = new HBox();
-    String[] paramList = myVisualizer.getParameters();
-    for(String s : paramList){
-      TextField paramField = makeParamField(s);
-      parameters.getChildren().add(paramField);
-      final Pane spacer = new Pane();
-      HBox.setHgrow(spacer, Priority.ALWAYS);
-      parameters.getChildren().add(spacer);
-//      Label label = new Label(s);
-//      label.setMinWidth(50);
-//      parameters.getChildren().add(label);
-    }
-    return parameters;
-  }
-
-  private TextField makeParamField(String param){
-    TextField paramField = new TextField();
-    paramField.setPrefColumnCount(50);
-    paramField.setMaxWidth(50);
-    paramField.setOnAction(e -> {
-      if(paramField.getText() != null && !paramField.getText().isEmpty()){
-        double value = Double.parseDouble(paramField.getText());
-        myVisualizer.setParameters(param, value);
-      } else {
-        Alert errorAlert = new Alert(AlertType.WARNING);
-        errorAlert.setHeaderText("Enter a valid double");
-        errorAlert.setContentText("please");
-        errorAlert.showAndWait();
-      }
-    });
-    return paramField;
-  }
-
   //fixme make
   private void makeWindow() {
     return;
@@ -284,7 +242,6 @@ public class Main extends Application {
       return;
     }
     try {
-      System.out.println(file);
       myConfig = new Config(file);
     } catch (InvalidCellException e) {
       retryLoadFile("Invalid Simulation Specified");
@@ -309,13 +266,7 @@ public class Main extends Application {
     do {
       badFile = false;
       try {
-        File newFile = chooseFile();
-        if(newFile == null){
-          displayError(message);
-          badFile = true;
-        } else{
-          myConfig = new Config(newFile);
-        }
+        myConfig = new Config(chooseFile());
       } catch (InvalidCellException e) {
         displayError(message);
         badFile = true;

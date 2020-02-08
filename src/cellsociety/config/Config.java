@@ -2,6 +2,7 @@ package cellsociety.config;
 
 import cellsociety.exceptions.InvalidCellException;
 import cellsociety.exceptions.InvalidFileException;
+import cellsociety.exceptions.InvalidGridException;
 import cellsociety.simulation.Cell;
 import cellsociety.simulation.Grid;
 import cellsociety.simulation.RectGrid;
@@ -32,6 +33,8 @@ public class Config {
   private static final String INVALID_FILE = "Invalid File Requested";
 
   private String packagePrefixName = "cellsociety.simulation.";
+  private String gridSuffix = "Grid";
+  private String visualizerSuffix = "Visualizer";
 
   private String configNodeName = "ConfigInfo";
   private String titleNodeName = "Title";
@@ -75,9 +78,6 @@ public class Config {
    * Constructor for the Config object. Sets the filepath and sets up the documentBuilder.
    *
    * @param xmlFile File object passed in, in XML format
-   * @throws ParserConfigurationException
-   * @throws SAXException
-   * @throws IOException
    */
   public Config(File xmlFile) {
     myFile = xmlFile;
@@ -119,7 +119,7 @@ public class Config {
    * @return
    */
   public String getVisualizer(){
-    return myShape;
+    return myShape + visualizerSuffix;
   }
 
   public Map<Integer, Color> getStates(){return myStates;}
@@ -292,14 +292,28 @@ public class Config {
   /**
    * Based on parameters AND Cell configuration, creates a grid.
    *
-   * @throws NoSuchMethodException
-   * @throws ClassNotFoundException
-   * @throws IllegalAccessException
-   * @throws InvocationTargetException
-   * @throws InstantiationException
+   * @throws InvalidGridException
    */
-  private void createGrid() {
-    myGrid = new TriGrid(); //FIXME temp fix by Maverick after making Grid abstract
+  private void createGrid()
+          throws InvalidGridException{
+    Class gridClass = null;
+    try {
+      gridClass = Class.forName(packagePrefixName + myShape + gridSuffix);
+    } catch (ClassNotFoundException e) {
+      throw new InvalidGridException(e);
+    }
+    try {
+      myGrid = (Grid) (gridClass.getConstructor().newInstance());
+    } catch (InstantiationException e) {
+      throw new InvalidGridException(e);
+    } catch (IllegalAccessException e) {
+      throw new InvalidGridException(e);
+    } catch (InvocationTargetException e) {
+      throw new InvalidGridException(e);
+    } catch (NoSuchMethodException e) {
+      throw new InvalidGridException(e);
+    }
+    myGrid = new TriGrid();
     int row = 0;
     NodeList rowNodeList = doc.getElementsByTagName(rowNodeName);
 
@@ -343,11 +357,7 @@ public class Config {
    *
    * @param state the specific state of the particular cell
    * @return
-   * @throws NoSuchMethodException
-   * @throws IllegalAccessException
-   * @throws InvocationTargetException
-   * @throws InstantiationException
-   * @throws ClassNotFoundException
+   * @throws InvalidCellException
    */
   private Cell makeCell(int state)
       throws InvalidCellException {
