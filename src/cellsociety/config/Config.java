@@ -285,10 +285,26 @@ public class Config {
 
   /**
    * Based on the parameters set, creates a grid with a randomized configuration of CELLS
+   * @throws InvalidCellException
+   * @throws InvalidGridException
    */
-  private void createRandomGrid() throws ClassNotFoundException {
-    myGrid = new RectGrid(); //FIXME temp fix by Maverick after making Grid abstract
-    myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myWidth, myHeight);
+  private void createRandomGrid()  throws InvalidCellException, InvalidGridException{
+    Class gridClass = null;
+    try {
+      gridClass = Class.forName(packagePrefixName + myShape + gridSuffix);
+    } catch (ClassNotFoundException e) {
+      throw new InvalidGridException(e);
+    }
+    try {
+      myGrid = (Grid) (gridClass.getConstructor().newInstance());
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+      throw new InvalidGridException(e);
+    }
+    try {
+      myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myWidth, myHeight);
+    } catch (ClassNotFoundException e) {
+      throw new InvalidCellException(e);
+    }
   }
 
   /**
@@ -306,13 +322,7 @@ public class Config {
     }
     try {
       myGrid = (Grid) (gridClass.getConstructor().newInstance());
-    } catch (InstantiationException e) {
-      throw new InvalidGridException(e);
-    } catch (IllegalAccessException e) {
-      throw new InvalidGridException(e);
-    } catch (InvocationTargetException e) {
-      throw new InvalidGridException(e);
-    } catch (NoSuchMethodException e) {
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       throw new InvalidGridException(e);
     }
     int row = 0;

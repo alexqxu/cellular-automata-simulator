@@ -3,7 +3,7 @@
     <ConfigInfo>
         <Title>PercolationCell</Title>
         <Author>Alex Xu, aqx</Author>
-        <Shape>Hex</Shape>
+        <Shape>Tri</Shape>
 
         <Dimensions>
             <Width>20</Width>
