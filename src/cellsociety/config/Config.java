@@ -91,8 +91,9 @@ public class Config {
 
   /**
    * Create and set up the Grid based on stored information, and then return it.
+   * @throws InvalidShapeException
    */
-  private void loadFile() {
+  private void loadFile() throws InvalidShapeException, InvalidGridException, InvalidCellException{
     extractConfigInfo();
     System.out.println(configSetUpConfirmationMessage);
     if(customRequested) {
@@ -356,6 +357,7 @@ public class Config {
     int row = 0;
     NodeList rowNodeList = doc.getElementsByTagName(rowNodeName);
     for (int i = 0; i < rowNodeList.getLength(); i++) {
+
       int col = 0;
       Node singleRowNode = rowNodeList.item(i);
       Element singleRowElement = (Element) singleRowNode;

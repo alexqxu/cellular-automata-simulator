@@ -3,10 +3,10 @@
     <ConfigInfo>
         <Title>ConwayCell</Title>
         <Author>Alex Xu, aqx</Author>
-        <Shape>Tri</Shape>
+        <Shape>Rect</Shape>
 
         <Dimensions>
-            <Width>20</Width>
+            <Width>30</Width>
             <Height>20</Height>
             <Speed>0.6</Speed>
         </Dimensions>
