@@ -3,9 +3,10 @@ package cellsociety.config;
 import cellsociety.exceptions.InvalidCellException;
 import cellsociety.exceptions.InvalidFileException;
 import cellsociety.exceptions.InvalidGridException;
+import cellsociety.exceptions.InvalidShapeException;
 import cellsociety.simulation.Cell;
 import cellsociety.simulation.Grid;
-import cellsociety.simulation.RectGrid;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -52,10 +53,12 @@ public class Config {
   private String heightNodeName = "Height";
   private String cellNodeName = "Cell";
   private String shapeNodeName = "Shape";
+  private String defaultStateNodeName = "Default";
+  private String customNodeName = "Custom";
 
-  private String docSetUpConfirmationMessage = "Document Setup Complete";
-  private String configSetUpConfirmationMessage = "Config Info Load Complete";
-  private String gridConfirmationMessage = "Grid Created";
+  private String docSetUpConfirmationMessage = "---Document Setup Complete---";
+  private String configSetUpConfirmationMessage = "---Config Info Load Complete---";
+  private String gridConfirmationMessage = "---Grid Created---";
 
   private File myFile;
   private Document doc;
@@ -64,6 +67,7 @@ public class Config {
   private String myTitle;
   private String myAuthor;
   private String myShape;
+  private boolean customRequested = false;
   private double mySpeed;
   private int myWidth;
   private int myHeight;
@@ -88,10 +92,15 @@ public class Config {
   /**
    * Create and set up the Grid based on stored information, and then return it.
    */
-  public void loadFile() {
+  private void loadFile() {
     extractConfigInfo();
     System.out.println(configSetUpConfirmationMessage);
-    createGrid();
+    if(customRequested) {
+      createGrid();
+    }
+    else{
+      createRandomGrid();
+    }
     System.out.println(gridConfirmationMessage);
   }
 
@@ -116,12 +125,16 @@ public class Config {
   /**
    * Returns a string representing the type of shape/visualizer
    *
-   * @return
+   * @return String, representing visualizer class name
    */
   public String getVisualizer() {
     return myShape + visualizerSuffix;
   }
 
+  /**
+   * Returns color/state mappings.
+   * @return
+   */
   public Map<Integer, Color> getStates() {
     return myStates;
   }
@@ -137,9 +150,7 @@ public class Config {
     }
     try {
       doc = builder.parse(myFile);
-    } catch (SAXException e) {
-      throw new InvalidFileException(e);
-    } catch (IOException e) {
+    } catch (SAXException | IOException e) {
       throw new InvalidFileException(e);
     }
     doc.getDocumentElement().normalize();
@@ -163,6 +174,8 @@ public class Config {
       extractDimensions(configElement);
       extractStates(configElement);
       extractParameters(configElement);
+      extractCustom(configElement);
+      printCustom();
     }
   }
 
@@ -195,6 +208,7 @@ public class Config {
     if (statesNode.getNodeType() == Node.ELEMENT_NODE) {
       Element statesElement = (Element) statesNode;
 
+      extractDefaultState(statesElement);
       NodeList statesNodeList = statesElement.getElementsByTagName(singleStateNodeName);
 
       for (int i = 0; i < statesNodeList.getLength(); i++) {
@@ -223,6 +237,10 @@ public class Config {
     }
   }
 
+  private void extractDefaultState(Element statesElement){
+    defaultState = Integer.parseInt(extractElementValue(statesElement, defaultStateNodeName));
+  }
+
   private void extractTitle(Element startingElement) {
     myTitle = extractElementValue(startingElement, titleNodeName);
   }
@@ -233,6 +251,10 @@ public class Config {
 
   private void extractShape(Element startingElement) {
     myShape = extractElementValue(startingElement, shapeNodeName);
+  }
+
+  private void extractCustom(Element startingElement){
+    customRequested = Boolean.parseBoolean(extractElementValue(startingElement, customNodeName));
   }
 
   private void extractSpeed(Element dimensionsElement) {
@@ -263,6 +285,7 @@ public class Config {
     for (Map.Entry stateID : myStates.entrySet()) {
       System.out.println("State: " + stateID.getKey() + " & Value: " + stateID.getValue());
     }
+    System.out.println("Default State: " + defaultState);
   }
 
   private void printDimensions() {
@@ -283,19 +306,40 @@ public class Config {
     System.out.println("Cell Shape Requested: " + myShape);
   }
 
+  private void printCustom(){
+    System.out.println("Custom cell locations? " + customRequested);
+  }
+
   /**
    * Based on the parameters set, creates a grid with a randomized configuration of CELLS
+   * @throws InvalidCellException
+   * @throws InvalidGridException
+   * @throws InvalidShapeException
    */
 
-  private void createRandomGrid() throws ClassNotFoundException {
-    myGrid = new RectGrid(); //FIXME temp fix by Maverick after making Grid abstract
-    myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myWidth, myHeight);
+  private void createRandomGrid()  throws InvalidCellException, InvalidGridException{
+    Class gridClass = null;
+    try {
+      gridClass = Class.forName(packagePrefixName + myShape + gridSuffix);
+    } catch (ClassNotFoundException e) {
+      throw new InvalidShapeException(e);
+    }
+    try {
+      myGrid = (Grid) (gridClass.getConstructor().newInstance());
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+      throw new InvalidGridException(e);
+    }
+    try {
+      myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myWidth, myHeight);
+    } catch (ClassNotFoundException e) {
+      throw new InvalidCellException(e);
+    }
   }
 
   /**
    * Based on parameters AND Cell configuration, creates a grid.
-   *
    * @throws InvalidGridException
+   * @throws InvalidShapeException
    */
   private void createGrid()
       throws InvalidGridException {
@@ -303,22 +347,15 @@ public class Config {
     try {
       gridClass = Class.forName(packagePrefixName + myShape + gridSuffix);
     } catch (ClassNotFoundException e) {
-      throw new InvalidGridException(e);
+      throw new InvalidShapeException(e);
     }
     try {
       myGrid = (Grid) (gridClass.getConstructor().newInstance());
-    } catch (InstantiationException e) {
-      throw new InvalidGridException(e);
-    } catch (IllegalAccessException e) {
-      throw new InvalidGridException(e);
-    } catch (InvocationTargetException e) {
-      throw new InvalidGridException(e);
-    } catch (NoSuchMethodException e) {
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       throw new InvalidGridException(e);
     }
     int row = 0;
     NodeList rowNodeList = doc.getElementsByTagName(rowNodeName);
-
     for (int i = 0; i < rowNodeList.getLength(); i++) {
       int col = 0;
       Node singleRowNode = rowNodeList.item(i);
@@ -334,9 +371,10 @@ public class Config {
           col++;
         }
       }
-      fillRemainingRow(col, row);
+      fillRow(col, row);
       row++;
     }
+    fillRemainingRows(row);
   }
 
   /**
@@ -346,11 +384,18 @@ public class Config {
    * @param col the starting location in the row
    * @param row the row to be filled
    */
-  private void fillRemainingRow(int col, int row) {
+  private void fillRow(int col, int row) {
     while (col < myWidth) {
       Cell myCell = makeCell(defaultState);
       myGrid.placeCell(col, row, myCell);
       col++;
+    }
+  }
+
+  private void fillRemainingRows(int row){
+    while(row < myHeight){
+      fillRow(0, row);
+      row++;
     }
   }
 
@@ -372,13 +417,7 @@ public class Config {
     Cell cell = null;
     try {
       cell = (Cell) (cellClass.getConstructor().newInstance());
-    } catch (InstantiationException e) {
-      throw new InvalidCellException(e);
-    } catch (IllegalAccessException e) {
-      throw new InvalidCellException(e);
-    } catch (InvocationTargetException e) {
-      throw new InvalidCellException(e);
-    } catch (NoSuchMethodException e) {
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       throw new InvalidCellException(e);
     }
     for (Map.Entry<String, Double> parameterEntry : myParameters.entrySet()) {
