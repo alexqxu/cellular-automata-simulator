@@ -1,4 +1,6 @@
-package cellsociety.simulation;
+package cellsociety.simulation.grid;
+
+import cellsociety.simulation.cell.Cell;
 
 public class HexGrid extends Grid {
 

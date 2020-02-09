@@ -1,12 +1,11 @@
 package cellsociety.visualizer;
 
-import cellsociety.simulation.Grid;
+import cellsociety.simulation.grid.Grid;
 import java.util.ArrayList;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
 
 public class RectVisualizer extends Visualizer {

@@ -1,4 +1,4 @@
-package cellsociety.simulation;
+package cellsociety.simulation.cell;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,11 +15,11 @@ public abstract class Cell {
   protected String[] groundParams;
   protected int state;
   protected int nextState;
-  private Map<String, Double> paramMap = new HashMap<>();
-  private Map<String, Double> groundParamMap = new HashMap<>();
   protected int defaultEdge = TOROIDAL;
   protected boolean pointingUp = false;
   protected int[] mask = new int[0];
+  private Map<String, Double> paramMap = new HashMap<>();
+  private Map<String, Double> groundParamMap = new HashMap<>();
 
   /**
    * Default constructor for all Cells. Sets the parameters to an empty array.
@@ -93,8 +93,8 @@ public abstract class Cell {
     if (mask.length != neighbors.length) {
       return;
     }
-    for (int i = 0; i < neighbors.length; i++){
-      if (neighbors[i].state==0 && mask[i]<=0) {
+    for (int i = 0; i < neighbors.length; i++) {
+      if (neighbors[i].state == 0 && mask[i] <= 0) {
         neighbors[i].state = -mask[i];
         //System.out.println("mask[i] = " + mask[i]);
         mask[i] = 0;
@@ -106,8 +106,8 @@ public abstract class Cell {
     if (mask.length != neighbors.length) {
       return;
     }
-    for (int i = 0; i < mask.length; i++){
-      if (mask[i]==0) {
+    for (int i = 0; i < mask.length; i++) {
+      if (mask[i] == 0) {
         System.out.println("mask[i] = " + mask[i]);
         mask[i] = -neighbors[i].state;
         neighbors[i].state = 0;

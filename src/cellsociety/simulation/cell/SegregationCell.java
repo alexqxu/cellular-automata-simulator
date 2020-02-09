@@ -1,4 +1,4 @@
-package cellsociety.simulation;
+package cellsociety.simulation.cell;
 
 import java.util.Collections;
 import java.util.LinkedList;

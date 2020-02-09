@@ -1,4 +1,4 @@
-package cellsociety.simulation;
+package cellsociety.simulation.cell;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -57,9 +57,9 @@ public class WaTorCell extends Cell {
   }
 
   @Override
-  public void incrementState(int max){
+  public void incrementState(int max) {
     super.incrementState(max);
-    if (state==2) {
+    if (state == 2) {
       setParam(energy, getParam(SHARK_START_ENERGY));
       setParam(reproductionTimer, getParam(SHARK_BREED_TIME));
     }

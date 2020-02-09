@@ -1,6 +1,8 @@
-package cellsociety.simulation;
+package cellsociety.simulation.grid;
 
 import cellsociety.exceptions.InvalidCellException;
+import cellsociety.simulation.cell.Cell;
+import cellsociety.simulation.cell.FireCell;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,12 +14,43 @@ import java.util.Set;
 
 public abstract class Grid {
 
-  public static final String SIMULATION_PREFIX = "cellsociety.simulation.";
+  public static final String CELL_PREFIX = "cellsociety.simulation.cell.";
   protected ArrayList<ArrayList<Cell>> grid;
   private Set<Integer> states = new HashSet<>();
 
   public Grid() {
     grid = new ArrayList<>();
+  }
+
+  public static Cell getRandomCell(String className, Map<String, Double> paramMap,
+      double[] stateChances) throws ClassNotFoundException {
+    Class cellClass = null;
+    Cell cell = null;
+    try {
+      cellClass = Class.forName(CELL_PREFIX + className);
+      cell = (Cell) (cellClass.getConstructor().newInstance());
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+        NoSuchMethodException | InvocationTargetException e) {
+      throw new InvalidCellException(e);
+    }
+    for (String param : paramMap.keySet()) {
+      cell.setParam(param, paramMap.get(param));
+    }
+    double chanceSum = 0;
+    for (int i = 0; i < stateChances.length; i++) {
+      chanceSum += stateChances[i];
+    }
+    Random rand = new Random();
+    double roll = rand.nextDouble() * chanceSum;
+    int state = 0;
+    for (int i = 0; i < stateChances.length; i++) {
+      roll -= stateChances[i];
+      if (roll <= 0) {
+        cell.setState(i);
+        break;
+      }
+    }
+    return cell;
   }
 
   public boolean update() {
@@ -220,37 +253,6 @@ public abstract class Grid {
       ret.add(row);
     }
     grid = ret;
-  }
-
-  public static Cell getRandomCell(String className, Map<String, Double> paramMap,
-      double[] stateChances) throws ClassNotFoundException {
-    Class cellClass = null;
-    Cell cell = null;
-    try {
-      cellClass = Class.forName(SIMULATION_PREFIX + className);
-      cell = (Cell) (cellClass.getConstructor().newInstance());
-    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
-        NoSuchMethodException | InvocationTargetException e) {
-      throw new InvalidCellException(e);
-    }
-    for (String param : paramMap.keySet()) {
-      cell.setParam(param, paramMap.get(param));
-    }
-    double chanceSum = 0;
-    for (int i = 0; i < stateChances.length; i++) {
-      chanceSum += stateChances[i];
-    }
-    Random rand = new Random();
-    double roll = rand.nextDouble() * chanceSum;
-    int state = 0;
-    for (int i = 0; i < stateChances.length; i++) {
-      roll -= stateChances[i];
-      if (roll <= 0) {
-        cell.setState(i);
-        break;
-      }
-    }
-    return cell;
   }
 
   public int getWidth() {

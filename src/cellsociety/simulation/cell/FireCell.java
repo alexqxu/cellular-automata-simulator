@@ -1,4 +1,4 @@
-package cellsociety.simulation;
+package cellsociety.simulation.cell;
 
 import java.util.LinkedList;
 import java.util.Random;

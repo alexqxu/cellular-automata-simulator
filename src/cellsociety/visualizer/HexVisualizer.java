@@ -1,6 +1,6 @@
 package cellsociety.visualizer;
 
-import cellsociety.simulation.Grid;
+import cellsociety.simulation.grid.Grid;
 import java.util.ArrayList;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
