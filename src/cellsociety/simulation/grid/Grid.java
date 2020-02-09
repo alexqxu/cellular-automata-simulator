@@ -95,6 +95,11 @@ public abstract class Grid {
     return ret;
   }
 
+  //FIXME: By Alex X to make XMLWriterWork. Modeled after getParams()
+  public double getParam(String param) {
+    return getCell(0, 0).getParam(param);
+  }
+
   public String[] getParams() {
     return getCell(0, 0).getParams();
   }
