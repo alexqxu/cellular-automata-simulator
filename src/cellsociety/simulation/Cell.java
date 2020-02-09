@@ -19,7 +19,7 @@ public abstract class Cell {
   private Map<String, Double> groundParamMap = new HashMap<>();
   protected int defaultEdge = TOROIDAL;
   protected boolean pointingUp = false;
-  protected int[] mask;
+  protected int[] mask = new int[0];
 
   /**
    * Default constructor for all Cells. Sets the parameters to an empty array.
@@ -94,10 +94,11 @@ public abstract class Cell {
       return;
     }
     for (int i = 0; i < neighbors.length; i++){
-      if (neighbors[i].state==0) {
-        neighbors[i].state = mask[i];
+      if (neighbors[i].state==0 && mask[i]<=0) {
+        neighbors[i].state = -mask[i];
+        //System.out.println("mask[i] = " + mask[i]);
+        mask[i] = 0;
       }
-      mask[i] = 0;
     }
   }
 
@@ -107,7 +108,8 @@ public abstract class Cell {
     }
     for (int i = 0; i < mask.length; i++){
       if (mask[i]==0) {
-        mask[i] = neighbors[i].state;
+        System.out.println("mask[i] = " + mask[i]);
+        mask[i] = -neighbors[i].state;
         neighbors[i].state = 0;
       }
     }
