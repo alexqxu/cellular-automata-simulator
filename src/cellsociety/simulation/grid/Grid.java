@@ -33,8 +33,8 @@ public abstract class Grid {
         NoSuchMethodException | InvocationTargetException e) {
       throw new InvalidCellException(e);
     }
-    for (String param : paramMap.keySet()) {
-      cell.setParam(param, paramMap.get(param));
+    for (Map.Entry<String, Double> param : paramMap.entrySet()) {
+      cell.setParam(param.getKey(), param.getValue());
     }
     double chanceSum = 0;
     for (int i = 0; i < stateChances.length; i++) {

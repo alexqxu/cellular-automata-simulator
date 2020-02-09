@@ -67,8 +67,8 @@ public abstract class Cell {
     for (String s : getAllParams()) {
       other.setParam(s, getParam(s));
     }
-    for (String s : tempMap.keySet()) {
-      setParam(s, tempMap.get(s));
+    for (Map.Entry<String, Double> s : tempMap.entrySet()) {
+      setParam(s.getKey(), s.getValue());
     }
 
     other.nextState = state;
