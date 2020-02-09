@@ -1,9 +1,6 @@
 package cellsociety.config;
 
-import cellsociety.exceptions.InvalidCellException;
-import cellsociety.exceptions.InvalidFileException;
-import cellsociety.exceptions.InvalidGridException;
-import cellsociety.exceptions.InvalidShapeException;
+import cellsociety.exceptions.*;
 import cellsociety.simulation.cell.Cell;
 import cellsociety.simulation.grid.Grid;
 
@@ -13,6 +10,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.paint.Color;
+
+import javax.xml.crypto.dsig.XMLValidateContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,6 +30,7 @@ public class Config {
   public static final double RANDOM_GRID_VARIABLE_VALUE = 0.5;
   //private static final String INVALID_CELL = "Invalid Cell Thrown";
   //private static final String INVALID_FILE = "Invalid File Requested";
+  private static final String INVALID_XML_STRUCTURE = "Invalid XML Config Structure";
 
   private String packagePrefixName = "cellsociety.simulation.";
   private String gridPrefixName = packagePrefixName+"grid.";
@@ -83,11 +83,16 @@ public class Config {
    *
    * @param xmlFile File object passed in, in XML format
    */
-  public Config(File xmlFile) throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidFileException{
-    myFile = xmlFile;
-    setupDocument();
-    System.out.println(docSetUpConfirmationMessage);
-    loadFile();
+  public Config(File xmlFile) throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidFileException, InvalidXMLStructureException{
+    if(XMLValidator.validateXMLStructure(xmlFile)) {
+      myFile = xmlFile;
+      setupDocument();
+      System.out.println(docSetUpConfirmationMessage);
+      loadFile();
+    }
+    else{
+      throw new InvalidXMLStructureException(INVALID_XML_STRUCTURE, xmlFile);
+    }
   }
 
   /**
