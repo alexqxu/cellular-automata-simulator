@@ -4,8 +4,8 @@ import cellsociety.exceptions.InvalidCellException;
 import cellsociety.exceptions.InvalidFileException;
 import cellsociety.exceptions.InvalidGridException;
 import cellsociety.exceptions.InvalidShapeException;
-import cellsociety.simulation.Cell;
-import cellsociety.simulation.Grid;
+import cellsociety.simulation.cell.Cell;
+import cellsociety.simulation.grid.Grid;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +33,8 @@ public class Config {
   //private static final String INVALID_FILE = "Invalid File Requested";
 
   private String packagePrefixName = "cellsociety.simulation.";
+  private String gridPrefixName = packagePrefixName+"grid.";
+  private String cellPrefixName = packagePrefixName+"cell.";
   private String gridSuffix = "Grid";
   private String visualizerSuffix = "Visualizer";
 
@@ -132,7 +134,7 @@ public class Config {
   public void createRandomGrid(int width, int height)  throws InvalidCellException, InvalidGridException{
     Class gridClass = null;
     try {
-      gridClass = Class.forName(packagePrefixName + myShape + gridSuffix);
+      gridClass = Class.forName(gridPrefixName + myShape + gridSuffix);
     } catch (ClassNotFoundException e) {
       throw new InvalidShapeException(e);
     }
@@ -145,6 +147,9 @@ public class Config {
       myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, width, height);
     } catch (ClassNotFoundException e) {
       throw new InvalidCellException(e);
+    }
+    for (int i: myStates.keySet()) {
+      myGrid.addState(i);
     }
   }
 
@@ -362,7 +367,7 @@ public class Config {
       throws InvalidGridException {
     Class gridClass = null;
     try {
-      gridClass = Class.forName(packagePrefixName + myShape + gridSuffix);
+      gridClass = Class.forName(gridPrefixName + myShape + gridSuffix);
     } catch (ClassNotFoundException e) {
       throw new InvalidShapeException(e);
     }
@@ -394,6 +399,9 @@ public class Config {
       }
     }
     fillRemainingRows(row);
+    for (int i: myStates.keySet()) {
+      myGrid.addState(i);
+    }
   }
 
   /**
@@ -429,7 +437,7 @@ public class Config {
       throws InvalidCellException {
     Class cellClass = null;
     try {
-      cellClass = Class.forName(packagePrefixName + myTitle);
+      cellClass = Class.forName(cellPrefixName + myTitle);
     } catch (ClassNotFoundException e) {
       throw new InvalidCellException(e);
     }

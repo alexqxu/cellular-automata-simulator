@@ -1,6 +1,6 @@
-package cellsociety.simulation;
+package cellsociety.simulation.cell;
 
-import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 
 public class FireCell extends Cell {
@@ -11,7 +11,6 @@ public class FireCell extends Cell {
   public FireCell() {
     super();
     defaultEdge = 0;
-    addStates(new int[]{0, 1, 2});
   }
 
   public FireCell(double probCatch) {
@@ -25,7 +24,7 @@ public class FireCell extends Cell {
   }
 
   @Override
-  void planUpdate(Cell[] neighbors, LinkedList<Cell> emptyQueue) {
+  void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
     if (pointingUp) {
       neighbors = rotateNeighbors(neighbors);
     }

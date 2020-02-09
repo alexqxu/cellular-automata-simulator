@@ -1,19 +1,56 @@
-package cellsociety.simulation;
+package cellsociety.simulation.grid;
 
 import cellsociety.exceptions.InvalidCellException;
+import cellsociety.simulation.cell.Cell;
+import cellsociety.simulation.cell.FireCell;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public abstract class Grid {
 
-  public static final String SIMULATION_PREFIX = "cellsociety.simulation.";
+  public static final String CELL_PREFIX = "cellsociety.simulation.cell.";
   protected ArrayList<ArrayList<Cell>> grid;
+  private Set<Integer> states = new HashSet<>();
 
   public Grid() {
     grid = new ArrayList<>();
+  }
+
+  public static Cell getRandomCell(String className, Map<String, Double> paramMap,
+      double[] stateChances) throws ClassNotFoundException {
+    Class cellClass = null;
+    Cell cell = null;
+    try {
+      cellClass = Class.forName(CELL_PREFIX + className);
+      cell = (Cell) (cellClass.getConstructor().newInstance());
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+        NoSuchMethodException | InvocationTargetException e) {
+      throw new InvalidCellException(e);
+    }
+    for (Map.Entry<String, Double> param : paramMap.entrySet()) {
+      cell.setParam(param.getKey(), param.getValue());
+    }
+    double chanceSum = 0;
+    for (int i = 0; i < stateChances.length; i++) {
+      chanceSum += stateChances[i];
+    }
+    Random rand = new Random();
+    double roll = rand.nextDouble() * chanceSum;
+    int state = 0;
+    for (int i = 0; i < stateChances.length; i++) {
+      roll -= stateChances[i];
+      if (roll <= 0) {
+        cell.setState(i);
+        break;
+      }
+    }
+    return cell;
   }
 
   public boolean update() {
@@ -25,7 +62,7 @@ public abstract class Grid {
     for (int i = 0; i < getHeight(); i++) {
       for (int j = 0; j < getWidth(); j++) {
         Cell[] neighbors = getNeighbors(i, j);
-        getCell(i, j).planUpdate(neighbors, emptyQueue);
+        getCell(i, j).planUpdateFull(neighbors, emptyQueue);
       }
     }
     for (int i = 0; i < getHeight(); i++) {
@@ -37,11 +74,19 @@ public abstract class Grid {
   }
 
   public void incrementCellState(int r, int c) {
-    grid.get(r).get(c).incrementState();
+    grid.get(r).get(c).incrementState(getHighestState()); //FIXME
+  }
+
+  private int getHighestState() {
+    return Collections.max(states);
+  }
+
+  public void addState(int st) {
+    states.add(st);
   }
 
   public int[] getPopulations() {
-    int[] ret = new int[getCell(0, 0).getHighestState() + 1];
+    int[] ret = new int[getHighestState() + 1];
     for (int r = 0; r < getHeight(); r++) {
       for (int c = 0; c < getWidth(); c++) {
         ret[getState(r, c)]++;
@@ -208,37 +253,6 @@ public abstract class Grid {
       ret.add(row);
     }
     grid = ret;
-  }
-
-  public static Cell getRandomCell(String className, Map<String, Double> paramMap,
-      double[] stateChances) throws ClassNotFoundException {
-    Class cellClass = null;
-    Cell cell = null;
-    try {
-      cellClass = Class.forName(SIMULATION_PREFIX + className);
-      cell = (Cell) (cellClass.getConstructor().newInstance());
-    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
-        NoSuchMethodException | InvocationTargetException e) {
-      throw new InvalidCellException(e);
-    }
-    for (String param : paramMap.keySet()) {
-      cell.setParam(param, paramMap.get(param));
-    }
-    double chanceSum = 0;
-    for (int i = 0; i < stateChances.length; i++) {
-      chanceSum += stateChances[i];
-    }
-    Random rand = new Random();
-    double roll = rand.nextDouble() * chanceSum;
-    int state = 0;
-    for (int i = 0; i < stateChances.length; i++) {
-      roll -= stateChances[i];
-      if (roll <= 0) {
-        cell.setState(i);
-        break;
-      }
-    }
-    return cell;
   }
 
   public int getWidth() {

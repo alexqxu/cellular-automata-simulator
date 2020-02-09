@@ -2,7 +2,7 @@ package cellsociety.visualizer;
 
 
 import cellsociety.config.Config;
-import cellsociety.simulation.Grid;
+import cellsociety.simulation.grid.Grid;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
