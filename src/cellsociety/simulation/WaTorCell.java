@@ -60,8 +60,8 @@ public class WaTorCell extends Cell {
       ArrayList<Cell> fish) {
     Random rand = new Random();
     Cell movedTo = null;
-    if (fish.size() > 0 || open.size() > 0) {
-      if (fish.size() > 0) {
+    if (fish.isEmpty() || open.isEmpty()) {
+      if (fish.isEmpty()) {
         int nextLoc = rand.nextInt(fish.size());
         movedTo = fish.get(nextLoc);
       } else {
@@ -92,7 +92,7 @@ public class WaTorCell extends Cell {
   private void fishPlanUpdate(LinkedList<Cell> updatedQueue, ArrayList<Cell> open) {
     Random rand = new Random();
     Cell movedTo = null;
-    if (open.size() > 0) {
+    if (open.isEmpty()) {
       int nextLoc = rand.nextInt(open.size());
       movedTo = open.get(nextLoc);
       updatedQueue.remove(movedTo);
