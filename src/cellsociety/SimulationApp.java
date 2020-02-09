@@ -253,30 +253,30 @@ public class SimulationApp {
 
   public void loadConfigFile(File file) {
     if (file == null) {
-      return;
-    }
-    try {
-      myConfig = new Config(file);
-    } catch (InvalidCellException e) {
-      retryLoadFile("Invalid Simulation Specified");
-    } catch (InvalidGridException e) {
-      retryLoadFile("Invalid Shape Specified");
-    } catch (InvalidFileException e) {
-      retryLoadFile("Invalid File Specified");
-    } catch (InvalidShapeException e){
-      retryLoadFile("Invalid Shape Specified");
-    }
+      myStage.close();
+    } else {
+      try {
+        myConfig = new Config(file);
+      } catch (InvalidCellException e) {
+        retryLoadFile("Invalid Simulation Specified");
+      } catch (InvalidGridException e) {
+        retryLoadFile("Invalid Shape Specified");
+      } catch (InvalidFileException e) {
+        retryLoadFile("Invalid File Specified");
+      } catch (InvalidShapeException e) {
+        retryLoadFile("Invalid Shape Specified");
+      }
 
     Class visualizerClass = null;
     try {
       visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
       myVisualizer = (Visualizer) (visualizerClass.getConstructor(Grid.class)
           .newInstance(myConfig.getGrid()));
-    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-      retryLoadFile("Invalid Visualizer Specified");
+      } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+        retryLoadFile("Invalid Visualizer Specified");
+      }
+      myVisualizer.setColorMap(myConfig.getStates());
     }
-    myVisualizer.setColorMap(myConfig.getStates());
-
   }
 
   private void retryLoadFile(String message) {
