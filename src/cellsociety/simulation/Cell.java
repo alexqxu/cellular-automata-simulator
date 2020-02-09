@@ -1,13 +1,13 @@
 package cellsociety.simulation;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public abstract class Cell {
+
   public static final int TOROIDAL = -1;
   public static final int INFINTE = -2;
 
@@ -82,6 +82,36 @@ public abstract class Cell {
    * @param cellQueue Other information about the grid that the cell might need to plan its update.
    */
   abstract void planUpdate(Cell[] neighbors, LinkedList<Cell> cellQueue);
+
+  public void planUpdateFull(Cell[] neighbors, LinkedList<Cell> cellQueue) {
+    applyMask(neighbors);
+    planUpdate(neighbors, cellQueue);
+    removeMask(neighbors);
+  }
+
+  private void removeMask(Cell[] neighbors) {
+    if (mask.length != neighbors.length) {
+      return;
+    }
+    for (int i = 0; i < neighbors.length; i++){
+      if (neighbors[i].state==0) {
+        neighbors[i].state = mask[i];
+      }
+      mask[i] = 0;
+    }
+  }
+
+  private void applyMask(Cell[] neighbors) {
+    if (mask.length != neighbors.length) {
+      return;
+    }
+    for (int i = 0; i < mask.length; i++){
+      if (mask[i]==0) {
+        mask[i] = neighbors[i].state;
+        neighbors[i].state = 0;
+      }
+    }
+  }
 
   /**
    * Update the state of this cell to its planned next state.

@@ -29,7 +29,7 @@ public abstract class Grid {
     for (int i = 0; i < getHeight(); i++) {
       for (int j = 0; j < getWidth(); j++) {
         Cell[] neighbors = getNeighbors(i, j);
-        getCell(i, j).planUpdate(neighbors, emptyQueue);
+        getCell(i, j).planUpdateFull(neighbors, emptyQueue);
       }
     }
     for (int i = 0; i < getHeight(); i++) {

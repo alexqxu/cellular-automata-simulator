@@ -40,10 +40,10 @@ public class LangtonLoopCell extends Cell {
       nextState = state;
       return;
     }
-    String surround = "";
+    StringBuilder surround = new StringBuilder();
     for (int i = 0; i < neighbors.length; i += 2) {
-      surround += neighbors[i];
+      surround.append(neighbors[i]);
     }
-    nextState = stateRules.getOrDefault(surround, state);
+    nextState = stateRules.getOrDefault(surround.toString(), state);
   }
 }
