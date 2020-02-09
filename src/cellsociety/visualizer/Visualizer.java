@@ -1,6 +1,8 @@
 package cellsociety.visualizer;
 
 
+import static cellsociety.SimulationApp.DEFAULT_RESOURCE_FOLDER;
+
 import cellsociety.config.Config;
 import cellsociety.simulation.grid.Grid;
 import java.io.File;
@@ -39,6 +41,7 @@ public abstract class Visualizer {
   private static final int MAX_UPDATE_PERIOD = 2;
 
   protected Grid myGrid;
+  private BorderPane bundle;
   private Scene myScene;
   private Stage myStage;
   private Config myConfig;
@@ -61,12 +64,12 @@ public abstract class Visualizer {
   protected Map<Integer, Color> myColorMap; //FIXME maverick's change
   private LineChart<Number, Number> myGraph;
   private List<Series> mySeries;
-  private double timeElapsed;
+  private long stepsElapsed;
 
 
   public Visualizer(Grid grid) {
     myGrid = grid;
-    timeElapsed = 0;
+    stepsElapsed = -1;
   }
 
 
@@ -84,10 +87,16 @@ public abstract class Visualizer {
     final NumberAxis xAxis = new NumberAxis();
     final NumberAxis yAxis = new NumberAxis();
 
-    xAxis.setLabel("Time (seconds)");
+    xAxis.setLabel("Steps");
     yAxis.setLabel("Population");
 
     myGraph = new LineChart<>(xAxis, yAxis);
+
+    myGraph.applyCss();
+//    myGraph.setCreateSymbols(false);
+    myGraph.getStylesheets()
+        .add(getClass().getClassLoader().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET)
+            .toExternalForm());
     myGraph.setTitle("Cell Population");
 
     mySeries = new ArrayList<XYChart.Series>();
@@ -96,8 +105,17 @@ public abstract class Visualizer {
       XYChart.Series tempSeries = new XYChart.Series<>();
       mySeries.add(tempSeries);
       myGraph.getData().add(tempSeries);
-      System.out.println(myGraph.lookupAll(".series"+i));
-      Set<Node> nodes = myGraph.lookupAll(".series" + i);
+    }
+    updateChart();
+    return myGraph;
+  }
+
+  public void updateChart() {
+    stepsElapsed += 1;
+    for (int i = 0; i < mySeries.size(); i++) {
+      XYChart.Data point = new XYChart.Data(stepsElapsed, myGrid.getPopulations()[i]);
+      mySeries.get(i).getData().add(point);
+      Set<Node> nodes = myGraph.lookupAll(".series"+i);
       for(Node series : nodes){
         StringBuilder style = new StringBuilder();
         style.append("-fx-stroke: " + "#"+myColorMap.get(i).toString().substring(2, 8)+"; ");
@@ -105,19 +123,10 @@ public abstract class Visualizer {
         series.setStyle(style.toString());
       }
     }
-    myGraph.applyCss();
-    return myGraph;
-  }
-
-  public void updateChart(double secondsElapsed) {
-    timeElapsed += secondsElapsed;
-    for (int i = 0; i < mySeries.size(); i++) {
-      mySeries.get(i).getData().add(new XYChart.Data(timeElapsed, myGrid.getPopulations()[i]));
-    }
   }
 
   public Node bundledUI() {
-    BorderPane bundle = new BorderPane();
+    bundle = new BorderPane();
     bundle.setCenter(instantiateCellGrid());
     bundle.setRight(setGraph());
     bundle.setBottom(setParamBar());
@@ -126,7 +135,7 @@ public abstract class Visualizer {
 
   public void stepGrid() {
     if(myGrid.update()){
-      instantiateCellGrid();
+      bundle.setCenter(instantiateCellGrid());
     }
     drawGrid();
   }
