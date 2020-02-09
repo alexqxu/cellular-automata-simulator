@@ -28,7 +28,7 @@ public class SegregationCell extends Cell {
     Collections.shuffle(emptyQueue);
     if (getState() != 0) {
       if (!happy(neighbors)) {
-        if (emptyQueue.size() == 0) {
+        if (emptyQueue.isEmpty()) {
           nextState = state;
           return;
         }
