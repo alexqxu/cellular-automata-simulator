@@ -162,11 +162,9 @@ public class SimulationApp {
     if (running) {
       secondsElapsed += elapsedTime;
       if (secondsElapsed > speed) {
-        myVisualizer.updateChart(secondsElapsed);
-        secondsElapsed = 0;
         myVisualizer.stepGrid();
-        frame.setCenter(myVisualizer.bundledUI()); //FIXME added by maverick
-        myVisualizer.drawGrid(); //FIXME added by maverick
+        myVisualizer.updateChart();
+        secondsElapsed = 0;
       }
     }
   }
@@ -211,8 +209,7 @@ public class SimulationApp {
     });
     step = makeButton("Step", e -> {
       myVisualizer.stepGrid();
-      frame.setCenter(myVisualizer.bundledUI()); //FIXME added by MC
-      myVisualizer.drawGrid();//FIXME added by MC
+      myVisualizer.updateChart();
     });
     shuffle = makeButton("Shuffle", e->{
       myConfig.createRandomGrid(myVisualizer.getHeight(), myVisualizer.getWidth());
