@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.paint.Color;
 
-import javax.xml.crypto.dsig.XMLValidateContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -38,23 +37,24 @@ public class Config {
   private String gridSuffix = "Grid";
   private String visualizerSuffix = "Visualizer";
 
-  private String configNodeName = "ConfigInfo";
-  private String titleNodeName = "Title";
-  private String authorNodeName = "Author";
-  private String parametersNodeName = "SpecialParameters";
+  public static final String CONFIG_NODE_NAME = "ConfigInfo";
+  public static final String CELLS_NODE_NAME = "Cells";
+  public static final String TITLE_NODE_NAME = "Title";
+  public static final String AUTHOR_NODE_NAME = "Author";
+  public static final String PARAMETERS_NODE_NAME = "SpecialParameters";
   private String statesNodeName = "States";
-  private String singleParameterNodeName = "Parameter";
+  public static final String SINGLE_PARAMETER_NODE_NAME = "Parameter";
   private String singleStateNodeName = "State";
-  private String parameterNameAttributeName = "name";
+  public static final String PARAMETER_NAME_ATTRIBUTE_NAME = "name";
   private String rowNodeName = "Row";
   private String stateIDNodeName = "ID";
   private String colorNodeName = "Color";
-  private String dimensionsNodeName = "Dimensions";
-  private String speedNodeName = "Speed";
-  private String widthNodeName = "Width";
-  private String heightNodeName = "Height";
+  public static final String DIMENSIONS_NODE_NAME = "Dimensions";
+  public static final String SPEED_NODE_NAME = "Speed";
+  public static final String WIDTH_NODE_NAME = "Width";
+  public static final String HEIGHT_NODE_NAME = "Height";
   private String cellNodeName = "Cell";
-  private String shapeNodeName = "Shape";
+  public static final String SHAPE_NODE_NAME = "Shape";
   private String defaultStateNodeName = "Default";
   private String customNodeName = "Custom";
 
@@ -79,7 +79,7 @@ public class Config {
   private double[] randomGridVariables;
 
   /**
-   * Constructor for the Config object. Sets the filepath and sets up the documentBuilder.
+   * Constructor for the Config object. Sets the file and sets up the documentBuilder. Then loads the file content.
    *
    * @param xmlFile File object passed in, in XML format
    */
@@ -129,6 +129,23 @@ public class Config {
   public Map<Integer, Color> getStates() {
     return myStates;
   }
+
+  public String getTitle(){
+    return myTitle;
+  }
+  public String getAuthor(){
+    return myAuthor;
+  }
+  public String getShape(){
+    return myShape;
+  }
+  public int getWidth(){
+    return myWidth;
+  }
+  public int getHeight(){
+    return myHeight;
+  }
+
 
   /**
    * Based on the parameters set, creates a grid with a randomized configuration of CELLS
@@ -213,7 +230,7 @@ public class Config {
    * Extracts all information in the XML Document that lies within <ConfigInfo>.
    */
   private void extractConfigInfo() {
-    NodeList configNodeList = doc.getElementsByTagName(configNodeName);
+    NodeList configNodeList = doc.getElementsByTagName(CONFIG_NODE_NAME);
     Node configNode = configNodeList.item(0);
 
     if (configNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -235,17 +252,17 @@ public class Config {
   private void extractParameters(Element configElement) {
     myParameters = new HashMap<>();
 
-    Node parametersNode = configElement.getElementsByTagName(parametersNodeName).item(0);
+    Node parametersNode = configElement.getElementsByTagName(PARAMETERS_NODE_NAME).item(0);
     if (parametersNode.getNodeType() == Node.ELEMENT_NODE) {
       Element parametersElement = (Element) parametersNode;
 
-      NodeList parametersNodeList = parametersElement.getElementsByTagName(singleParameterNodeName);
+      NodeList parametersNodeList = parametersElement.getElementsByTagName(SINGLE_PARAMETER_NODE_NAME);
 
       for (int i = 0; i < parametersNodeList.getLength(); i++) {
         Node singleParameterNode = parametersNodeList.item(i);
         if (singleParameterNode.getNodeType() == Node.ELEMENT_NODE) {
           Element singleParameterElement = (Element) singleParameterNode;
-          String parameterName = singleParameterElement.getAttribute(parameterNameAttributeName);
+          String parameterName = singleParameterElement.getAttribute(PARAMETER_NAME_ATTRIBUTE_NAME);
           Double parameterValue = Double.valueOf(singleParameterElement.getTextContent());
           myParameters.put(parameterName, parameterValue);
         }
@@ -280,7 +297,7 @@ public class Config {
   }
 
   private void extractDimensions(Element startingElement) {
-    Node dimensionsNode = startingElement.getElementsByTagName(dimensionsNodeName).item(0);
+    Node dimensionsNode = startingElement.getElementsByTagName(DIMENSIONS_NODE_NAME).item(0);
     if (dimensionsNode.getNodeType() == Node.ELEMENT_NODE) {
       Element dimensionsElement = (Element) dimensionsNode;
       extractHeight(dimensionsElement);
@@ -295,15 +312,15 @@ public class Config {
   }
 
   private void extractTitle(Element startingElement) {
-    myTitle = extractElementValue(startingElement, titleNodeName);
+    myTitle = extractElementValue(startingElement, TITLE_NODE_NAME);
   }
 
   private void extractAuthor(Element startingElement) {
-    myAuthor = extractElementValue(startingElement, authorNodeName);
+    myAuthor = extractElementValue(startingElement, AUTHOR_NODE_NAME);
   }
 
   private void extractShape(Element startingElement) {
-    myShape = extractElementValue(startingElement, shapeNodeName);
+    myShape = extractElementValue(startingElement, SHAPE_NODE_NAME);
   }
 
   private void extractCustom(Element startingElement){
@@ -311,15 +328,15 @@ public class Config {
   }
 
   private void extractSpeed(Element dimensionsElement) {
-    mySpeed = Double.parseDouble(extractElementValue(dimensionsElement, speedNodeName).trim());
+    mySpeed = Double.parseDouble(extractElementValue(dimensionsElement, SPEED_NODE_NAME).trim());
   }
 
   private void extractWidth(Element dimensionsElement) {
-    myWidth = Integer.parseInt(extractElementValue(dimensionsElement, widthNodeName).trim());
+    myWidth = Integer.parseInt(extractElementValue(dimensionsElement, WIDTH_NODE_NAME).trim());
   }
 
   private void extractHeight(Element dimensionsElement) {
-    myHeight = Integer.parseInt(extractElementValue(dimensionsElement, heightNodeName).trim());
+    myHeight = Integer.parseInt(extractElementValue(dimensionsElement, HEIGHT_NODE_NAME).trim());
   }
 
   private String extractElementValue(Element parentElement, String nodeName) {
