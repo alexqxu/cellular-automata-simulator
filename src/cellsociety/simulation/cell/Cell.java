@@ -2,9 +2,9 @@ package cellsociety.simulation.cell;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 public abstract class Cell {
 
@@ -81,9 +81,9 @@ public abstract class Cell {
    * @param neighbors Neighbors of the cell.
    * @param cellQueue Other information about the grid that the cell might need to plan its update.
    */
-  abstract void planUpdate(Cell[] neighbors, LinkedList<Cell> cellQueue);
+  abstract void planUpdate(Cell[] neighbors, Queue<Cell> cellQueue);
 
-  public void planUpdateFull(Cell[] neighbors, LinkedList<Cell> cellQueue) {
+  public void planUpdateFull(Cell[] neighbors, Queue<Cell> cellQueue) {
     applyMask(neighbors);
     planUpdate(neighbors, cellQueue);
     removeMask(neighbors);
@@ -96,7 +96,6 @@ public abstract class Cell {
     for (int i = 0; i < neighbors.length; i++) {
       if (neighbors[i].state == 0 && mask[i] <= 0) {
         neighbors[i].state = -mask[i];
-        //System.out.println("mask[i] = " + mask[i]);
         mask[i] = 0;
       }
     }

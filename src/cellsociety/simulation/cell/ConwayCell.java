@@ -1,6 +1,6 @@
 package cellsociety.simulation.cell;
 
-import java.util.LinkedList;
+import java.util.Queue;
 
 public class ConwayCell extends Cell {
 
@@ -16,7 +16,7 @@ public class ConwayCell extends Cell {
 
 
   @Override
-  void planUpdate(Cell[] neighbors, LinkedList<Cell> emptyQueue) {
+  void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
     int sum = 0;
     for (int i = 0; i < neighbors.length; i++) {
       sum += neighbors[i].getState();

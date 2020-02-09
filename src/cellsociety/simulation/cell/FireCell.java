@@ -1,6 +1,6 @@
 package cellsociety.simulation.cell;
 
-import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 
 public class FireCell extends Cell {
@@ -24,7 +24,7 @@ public class FireCell extends Cell {
   }
 
   @Override
-  void planUpdate(Cell[] neighbors, LinkedList<Cell> emptyQueue) {
+  void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
     if (pointingUp) {
       neighbors = rotateNeighbors(neighbors);
     }

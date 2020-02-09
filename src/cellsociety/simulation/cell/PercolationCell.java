@@ -1,6 +1,6 @@
 package cellsociety.simulation.cell;
 
-import java.util.LinkedList;
+import java.util.Queue;
 
 public class PercolationCell extends Cell {
 
@@ -10,7 +10,7 @@ public class PercolationCell extends Cell {
   }
 
   @Override
-  void planUpdate(Cell[] neighbors, LinkedList<Cell> emptyQueue) {
+  void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
     if (neighbors[0].getState() == 3) {
       neighbors[0].setState(2); //this is okay because cells with state 3 are dummy cells
     }

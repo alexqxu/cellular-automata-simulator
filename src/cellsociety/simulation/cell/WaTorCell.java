@@ -1,7 +1,7 @@
 package cellsociety.simulation.cell;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 
 public class WaTorCell extends Cell {
@@ -23,7 +23,7 @@ public class WaTorCell extends Cell {
   }
 
   @Override
-  void planUpdate(Cell[] neighbors, LinkedList<Cell> updatedQueue) {
+  void planUpdate(Cell[] neighbors, Queue<Cell> updatedQueue) {
     if (!updatedQueue.contains(this)) {
       return;
     }
@@ -65,7 +65,7 @@ public class WaTorCell extends Cell {
     }
   }
 
-  private void sharkPlanUpdate(LinkedList<Cell> updatedQueue, ArrayList<Cell> open,
+  private void sharkPlanUpdate(Queue<Cell> updatedQueue, ArrayList<Cell> open,
       ArrayList<Cell> fish) {
     Random rand = new Random();
     Cell movedTo = null;
@@ -98,7 +98,7 @@ public class WaTorCell extends Cell {
     nextState = 2;
   }
 
-  private void fishPlanUpdate(LinkedList<Cell> updatedQueue, ArrayList<Cell> open) {
+  private void fishPlanUpdate(Queue<Cell> updatedQueue, ArrayList<Cell> open) {
     Random rand = new Random();
     Cell movedTo = null;
     if (!open.isEmpty()) {

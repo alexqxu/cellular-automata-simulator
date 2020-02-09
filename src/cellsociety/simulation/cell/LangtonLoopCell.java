@@ -1,8 +1,8 @@
 package cellsociety.simulation.cell;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 public class LangtonLoopCell extends Cell {
 
@@ -33,7 +33,7 @@ public class LangtonLoopCell extends Cell {
   }
 
   @Override
-  void planUpdate(Cell[] neighbors, LinkedList<Cell> cellQueue) {
+  void planUpdate(Cell[] neighbors, Queue<Cell> cellQueue) {
     Map<String, Integer> stateRules = ruleMap.get(state);
     if (stateRules == null) {
       nextState = state;

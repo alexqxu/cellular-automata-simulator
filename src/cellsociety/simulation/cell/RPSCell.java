@@ -1,6 +1,6 @@
 package cellsociety.simulation.cell;
 
-import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 
 public class RPSCell extends Cell {
@@ -20,7 +20,7 @@ public class RPSCell extends Cell {
   }
 
   @Override
-  void planUpdate(Cell[] neighbors, LinkedList<Cell> cellQueue) {
+  void planUpdate(Cell[] neighbors, Queue<Cell> cellQueue) {
     int max = state;
     for (Cell cell : neighbors) {
       max = Math.max(max, cell.state);
