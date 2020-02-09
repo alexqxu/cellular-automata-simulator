@@ -146,6 +146,9 @@ public class Config {
     } catch (ClassNotFoundException e) {
       throw new InvalidCellException(e);
     }
+    for (int i: myStates.keySet()) {
+      myGrid.addState(i);
+    }
   }
 
   /**
@@ -394,6 +397,9 @@ public class Config {
       }
     }
     fillRemainingRows(row);
+    for (int i: myStates.keySet()) {
+      myGrid.addState(i);
+    }
   }
 
   /**

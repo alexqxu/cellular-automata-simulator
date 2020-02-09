@@ -11,7 +11,6 @@ public class FireCell extends Cell {
   public FireCell() {
     super();
     defaultEdge = 0;
-    addStates(new int[]{0, 1, 2});
   }
 
   public FireCell(double probCatch) {

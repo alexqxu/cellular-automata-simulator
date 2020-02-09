@@ -13,7 +13,6 @@ public abstract class Cell {
 
   protected String[] params;
   protected String[] groundParams;
-  private ArrayList<Integer> usedStates = new ArrayList<>();
   protected int state;
   protected int nextState;
   private Map<String, Double> paramMap = new HashMap<>();
@@ -143,24 +142,10 @@ public abstract class Cell {
     return "" + getState();
   }
 
-  protected int getHighestState() {
-    return Collections.max(usedStates);
-  }
-
-  public void incrementState() {
-    int max = getHighestState();
+  public void incrementState(int max) {
     state = (state + 1) % (max + 1);
   }
 
-  public void addState(int st) {
-    usedStates.add(st);
-  }
-
-  public void addStates(int[] states) {
-    for (int i : states) {
-      addState(i);
-    }
-  }
 
   protected int getSideOffset(int len) {
     if (len % 4 == 0) {

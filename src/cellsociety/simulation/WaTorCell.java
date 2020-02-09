@@ -15,7 +15,6 @@ public class WaTorCell extends Cell {
 
   public WaTorCell() {
     super();
-    addStates(new int[]{0, 1, 2});
   }
 
   @Override
@@ -31,7 +30,8 @@ public class WaTorCell extends Cell {
     updatedQueue.remove(this);
     ArrayList<Cell> open = new ArrayList<>();
     ArrayList<Cell> fish = new ArrayList<>();
-    for (int i = 0; i < neighbors.length; i += 2) {
+    int offset = getSideOffset(neighbors.length);
+    for (int i = 0; i < neighbors.length; i += offset) {
       if (neighbors[i].getState() == 0) {
         open.add(neighbors[i]);
       }
@@ -56,12 +56,21 @@ public class WaTorCell extends Cell {
     }
   }
 
+  @Override
+  public void incrementState(int max){
+    super.incrementState(max);
+    if (state==2) {
+      setParam(energy, getParam(SHARK_START_ENERGY));
+      setParam(reproductionTimer, getParam(SHARK_BREED_TIME));
+    }
+  }
+
   private void sharkPlanUpdate(LinkedList<Cell> updatedQueue, ArrayList<Cell> open,
       ArrayList<Cell> fish) {
     Random rand = new Random();
     Cell movedTo = null;
-    if (fish.isEmpty() || open.isEmpty()) {
-      if (fish.isEmpty()) {
+    if (!fish.isEmpty() || !open.isEmpty()) {
+      if (!fish.isEmpty()) {
         int nextLoc = rand.nextInt(fish.size());
         movedTo = fish.get(nextLoc);
       } else {
@@ -92,7 +101,7 @@ public class WaTorCell extends Cell {
   private void fishPlanUpdate(LinkedList<Cell> updatedQueue, ArrayList<Cell> open) {
     Random rand = new Random();
     Cell movedTo = null;
-    if (open.isEmpty()) {
+    if (!open.isEmpty()) {
       int nextLoc = rand.nextInt(open.size());
       movedTo = open.get(nextLoc);
       updatedQueue.remove(movedTo);

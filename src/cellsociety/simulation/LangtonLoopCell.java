@@ -30,8 +30,7 @@ public class LangtonLoopCell extends Cell {
   public LangtonLoopCell() {
     super();
     ruleMap = getRuleTableMap(RULE_TABLE);
-    defaultEdge = -2;
-    addStates(new int[]{0, 1, 2, 3, 4, 5, 6, 7});
+    defaultEdge = Cell.INFINTE;
   }
 
   @Override
