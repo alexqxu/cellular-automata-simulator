@@ -96,11 +96,12 @@ public abstract class Visualizer {
       XYChart.Series tempSeries = new XYChart.Series<>();
       mySeries.add(tempSeries);
       myGraph.getData().add(tempSeries);
-      //System.out.println(myColorMap.get(i).toString() + "YEET");
+      System.out.println(myGraph.lookupAll(".series"+i));
       Set<Node> nodes = myGraph.lookupAll(".series" + i);
       for(Node series : nodes){
         StringBuilder style = new StringBuilder();
-        style.append("-fx-stroke: " + "#"+ myColorMap.get(i).toString().substring(2, 8)+";");
+        style.append("-fx-stroke: " + "#"+myColorMap.get(i).toString().substring(2, 8)+"; ");
+        style.append("-fx-background-color: "+"#"+myColorMap.get(i).toString().substring(2,8)+", white;");
         series.setStyle(style.toString());
       }
     }
