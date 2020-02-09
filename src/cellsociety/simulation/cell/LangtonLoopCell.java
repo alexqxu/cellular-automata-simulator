@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 
-public class LangtonLoopCell extends Cell {
+public class LangtonLoopCell extends RuleTableCell {
 
   public static final String RULE_TABLE = "000000 000012 000020 000030 000050 000063 000071 000112 "
       + "000122 000132 000212 000220 000230 000262 000272 000320 000525 000622 000722 001022 001120 "
@@ -24,25 +24,21 @@ public class LangtonLoopCell extends Cell {
       + "500232 500272 500520 502022 502122 502152 502220 502244 502722 512122 512220 512422 512722 "
       + "600011 600021 602120 612125 612131 612225 700077 701120 701220 701250 702120 702221 702251 "
       + "702321 702525 702720";
-  private Map<Integer, HashMap<String, Integer>> ruleMap;
+
 
   public LangtonLoopCell() {
     super();
+    ruleTable = RULE_TABLE;
     ruleMap = getRuleTableMap(RULE_TABLE);
-    defaultEdge = Cell.INFINTE;
   }
 
-  @Override
-  void planUpdate(Cell[] neighbors, Queue<Cell> cellQueue) {
-    Map<String, Integer> stateRules = ruleMap.get(state);
-    if (stateRules == null) {
-      nextState = state;
-      return;
-    }
+  protected String getSurrounds(Cell[] neighbors) {
     StringBuilder surround = new StringBuilder();
     for (int i = 0; i < neighbors.length; i += 2) {
       surround.append(neighbors[i]);
     }
-    nextState = stateRules.getOrDefault(surround.toString(), state);
+    return surround.toString();
   }
+
+
 }
