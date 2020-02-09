@@ -10,7 +10,6 @@ public class SegregationCell extends Cell {
   public SegregationCell() {
     super();
     defaultEdge = 0;
-    addStates(new int[]{0, 1, 2});
   }
 
   public SegregationCell(double happinessThresh) {

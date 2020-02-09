@@ -3,14 +3,18 @@ package cellsociety.simulation;
 import cellsociety.exceptions.InvalidCellException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public abstract class Grid {
 
   public static final String SIMULATION_PREFIX = "cellsociety.simulation.";
   protected ArrayList<ArrayList<Cell>> grid;
+  private Set<Integer> states = new HashSet<>();
 
   public Grid() {
     grid = new ArrayList<>();
@@ -37,11 +41,19 @@ public abstract class Grid {
   }
 
   public void incrementCellState(int r, int c) {
-    grid.get(r).get(c).incrementState();
+    grid.get(r).get(c).incrementState(getHighestState()); //FIXME
+  }
+
+  private int getHighestState() {
+    return Collections.max(states);
+  }
+
+  public void addState(int st) {
+    states.add(st);
   }
 
   public int[] getPopulations() {
-    int[] ret = new int[getCell(0, 0).getHighestState() + 1];
+    int[] ret = new int[getHighestState() + 1];
     for (int r = 0; r < getHeight(); r++) {
       for (int c = 0; c < getWidth(); c++) {
         ret[getState(r, c)]++;

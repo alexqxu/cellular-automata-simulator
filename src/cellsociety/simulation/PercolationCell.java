@@ -6,7 +6,6 @@ public class PercolationCell extends Cell {
 
   public PercolationCell() {
     super();
-    addStates(new int[]{0, 1, 2});
     defaultEdge = 3;
   }
 
