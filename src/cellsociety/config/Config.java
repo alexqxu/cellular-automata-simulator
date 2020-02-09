@@ -28,9 +28,9 @@ import org.xml.sax.SAXException;
  * @author Alex Xu aqx
  */
 public class Config {
-
-  private static final String INVALID_CELL = "Invalid Cell Thrown";
-  private static final String INVALID_FILE = "Invalid File Requested";
+  public static final double RANDOM_GRID_VARIABLE_VALUE = 0.5;
+  //private static final String INVALID_CELL = "Invalid Cell Thrown";
+  //private static final String INVALID_FILE = "Invalid File Requested";
 
   private String packagePrefixName = "cellsociety.simulation.";
   private String gridSuffix = "Grid";
@@ -74,8 +74,7 @@ public class Config {
   private Map<Integer, Color> myStates;
   private Map<String, Double> myParameters;
   private int defaultState = 0;
-
-  private double[] randomGridVariables = new double[]{.2, .7, 0};
+  private double[] randomGridVariables;
 
   /**
    * Constructor for the Config object. Sets the filepath and sets up the documentBuilder.
@@ -87,21 +86,6 @@ public class Config {
     setupDocument();
     System.out.println(docSetUpConfirmationMessage);
     loadFile();
-  }
-
-  /**
-   * Create and set up the Grid based on stored information, and then return it.
-   */
-  private void loadFile() throws InvalidShapeException, InvalidGridException, InvalidCellException{
-    extractConfigInfo();
-    System.out.println(configSetUpConfirmationMessage);
-    if(customRequested) {
-      createGrid();
-    }
-    else{
-      createRandomGrid();
-    }
-    System.out.println(gridConfirmationMessage);
   }
 
   /**
@@ -145,7 +129,7 @@ public class Config {
    * @throws InvalidGridException
    * @throws InvalidShapeException
    */
-  public void createRandomGrid()  throws InvalidCellException, InvalidGridException{
+  public void createRandomGrid(int width, int height)  throws InvalidCellException, InvalidGridException{
     Class gridClass = null;
     try {
       gridClass = Class.forName(packagePrefixName + myShape + gridSuffix);
@@ -158,11 +142,45 @@ public class Config {
       throw new InvalidGridException(e);
     }
     try {
-      myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myWidth, myHeight);
+      myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, width, height);
     } catch (ClassNotFoundException e) {
       throw new InvalidCellException(e);
     }
   }
+
+  /**
+   * Based on the parameters set, creates a grid with a randomized configuration of CELLS (with XML read dimensions)
+   * @throws InvalidCellException
+   * @throws InvalidGridException
+   * @throws InvalidShapeException
+   */
+  public void createRandomGrid() throws InvalidCellException, InvalidGridException{
+    createRandomGrid(myWidth, myHeight);
+  }
+
+  /**
+   * Create and set up the Grid based on stored information, and then return it.
+   */
+  private void loadFile() throws InvalidShapeException, InvalidGridException, InvalidCellException{
+    extractConfigInfo();
+    System.out.println(configSetUpConfirmationMessage);
+    setRandomVariables();
+    if(customRequested) {
+      createGrid();
+    }
+    else{
+      createRandomGrid();
+    }
+    System.out.println(gridConfirmationMessage);
+  }
+
+  private void setRandomVariables() {
+    randomGridVariables = new double[myStates.size()];
+    for(int i = 0; i<myStates.size(); i++){
+      randomGridVariables[i] = RANDOM_GRID_VARIABLE_VALUE;
+    }
+  }
+
 
   private void setupDocument()
       throws InvalidFileException {
