@@ -129,7 +129,7 @@ public class Config {
    * @throws InvalidGridException
    * @throws InvalidShapeException
    */
-  public void createRandomGrid()  throws InvalidCellException, InvalidGridException{
+  public void createRandomGrid(int width, int height)  throws InvalidCellException, InvalidGridException{
     Class gridClass = null;
     try {
       gridClass = Class.forName(packagePrefixName + myShape + gridSuffix);
@@ -142,10 +142,20 @@ public class Config {
       throw new InvalidGridException(e);
     }
     try {
-      myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myWidth, myHeight);
+      myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, width, height);
     } catch (ClassNotFoundException e) {
       throw new InvalidCellException(e);
     }
+  }
+
+  /**
+   * Based on the parameters set, creates a grid with a randomized configuration of CELLS (with XML read dimensions)
+   * @throws InvalidCellException
+   * @throws InvalidGridException
+   * @throws InvalidShapeException
+   */
+  public void createRandomGrid() throws InvalidCellException, InvalidGridException{
+    createRandomGrid(myWidth, myHeight);
   }
 
   /**
