@@ -20,6 +20,7 @@ public abstract class Cell {
   private Map<String, Double> groundParamMap = new HashMap<>();
   protected int defaultEdge = TOROIDAL;
   protected boolean pointingUp = false;
+  protected int[] mask;
 
   /**
    * Default constructor for all Cells. Sets the parameters to an empty array.
@@ -215,5 +216,9 @@ public abstract class Cell {
 
   public void setNextState(int st) {
     nextState = st;
+  }
+
+  public void setMask(int[] msk) {
+    mask = msk;
   }
 }
