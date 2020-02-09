@@ -1,7 +1,8 @@
-package cellsociety.simulation;
+package cellsociety.simulation.cell;
 
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Queue;
 
 public class SegregationCell extends Cell {
 
@@ -10,7 +11,6 @@ public class SegregationCell extends Cell {
   public SegregationCell() {
     super();
     defaultEdge = 0;
-    addStates(new int[]{0, 1, 2});
   }
 
   public SegregationCell(double happinessThresh) {
@@ -24,11 +24,16 @@ public class SegregationCell extends Cell {
   }
 
   @Override
-  void planUpdate(Cell[] neighbors, LinkedList<Cell> emptyQueue) {
-    Collections.shuffle(emptyQueue);
+  void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
+    LinkedList<Cell> cellQueue = new LinkedList<>(emptyQueue);
+    Collections.shuffle(cellQueue);
+    emptyQueue.clear();
+    while (!cellQueue.isEmpty()) {
+      emptyQueue.add(cellQueue.remove());
+    }
     if (getState() != 0) {
       if (!happy(neighbors)) {
-        if (emptyQueue.size() == 0) {
+        if (emptyQueue.isEmpty()) {
           nextState = state;
           return;
         }
@@ -36,11 +41,10 @@ public class SegregationCell extends Cell {
         empty.nextState = state;
         nextState = 0;
         emptyQueue.add(this);
-        return;
       } else {
         nextState = state;
-        return;
       }
+      return;
     }
     if (nextState == -1) {
       nextState = 0;

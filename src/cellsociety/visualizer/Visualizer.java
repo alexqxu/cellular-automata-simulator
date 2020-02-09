@@ -2,7 +2,7 @@ package cellsociety.visualizer;
 
 
 import cellsociety.config.Config;
-import cellsociety.simulation.Grid;
+import cellsociety.simulation.grid.Grid;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,9 +127,8 @@ public abstract class Visualizer {
   public void stepGrid() {
     if(myGrid.update()){
       instantiateCellGrid();
-    } else {
-      drawGrid();
     }
+    drawGrid();
   }
 
   public void drawGrid() {
@@ -149,7 +148,7 @@ public abstract class Visualizer {
   }
 
   protected Color[][] getColorGrid() {
-    Color[][] colorgrid = new Color[myGrid.getWidth()][myGrid.getHeight()];
+    Color[][] colorgrid = new Color[myGrid.getHeight()][myGrid.getWidth()];
     for (int i = 0; i < colorgrid.length; i++) {
       for (int j = 0; j < colorgrid[i].length; j++) {
         colorgrid[i][j] = myColorMap.get(myGrid.getState(i, j));
@@ -206,5 +205,13 @@ public abstract class Visualizer {
 
   public int[] getPopulations() {
     return myGrid.getPopulations();
+  }
+
+  public int getWidth() {
+    return myGrid.getWidth();
+  }
+
+  public int getHeight() {
+    return myGrid.getHeight();
   }
 }

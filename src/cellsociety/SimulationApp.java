@@ -5,14 +5,13 @@ import cellsociety.exceptions.InvalidCellException;
 import cellsociety.exceptions.InvalidFileException;
 import cellsociety.exceptions.InvalidGridException;
 import cellsociety.exceptions.InvalidShapeException;
-import cellsociety.simulation.Grid;
+import cellsociety.simulation.grid.Grid;
 import cellsociety.visualizer.Visualizer;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -29,8 +28,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -168,6 +165,8 @@ public class SimulationApp {
         myVisualizer.updateChart(secondsElapsed);
         secondsElapsed = 0;
         myVisualizer.stepGrid();
+        frame.setCenter(myVisualizer.bundledUI()); //FIXME added by maverick
+        myVisualizer.drawGrid(); //FIXME added by maverick
       }
     }
   }
@@ -212,9 +211,11 @@ public class SimulationApp {
     });
     step = makeButton("Step", e -> {
       myVisualizer.stepGrid();
+      frame.setCenter(myVisualizer.bundledUI()); //FIXME added by MC
+      myVisualizer.drawGrid();//FIXME added by MC
     });
     shuffle = makeButton("Shuffle", e->{
-      myConfig.createRandomGrid();
+      myConfig.createRandomGrid(myVisualizer.getHeight(), myVisualizer.getWidth());
       myVisualizer.setGrid(myConfig.getGrid());
       myVisualizer.drawGrid();
     });

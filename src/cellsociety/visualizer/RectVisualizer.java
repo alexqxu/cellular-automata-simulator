@@ -1,12 +1,11 @@
 package cellsociety.visualizer;
 
-import cellsociety.simulation.Grid;
+import cellsociety.simulation.grid.Grid;
 import java.util.ArrayList;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
 
 public class RectVisualizer extends Visualizer {
@@ -17,10 +16,13 @@ public class RectVisualizer extends Visualizer {
 
   public Node instantiateCellGrid() {
     GridPane gridpane = new GridPane();
-    cellGrid = new ArrayList<ArrayList<Shape>>();
+    if (cellGrid == null) {
+      cellGrid = new ArrayList<>();
+    }
+    cellGrid.clear();
     Color[][] colorgrid = getColorGrid();
     for (int i = 0; i < colorgrid.length; i++) {
-      cellGrid.add(new ArrayList<Shape>());
+      cellGrid.add(new ArrayList<>());
       for (int j = 0; j < colorgrid[i].length; j++) {
         Rectangle cell = new Rectangle();
         cell.setFill(colorgrid[i][j]);
