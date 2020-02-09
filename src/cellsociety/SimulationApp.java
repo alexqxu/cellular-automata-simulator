@@ -218,7 +218,7 @@ public class SimulationApp {
       myVisualizer.drawGrid();//FIXME added by MC
     });
     shuffle = makeButton("Shuffle", e->{
-      myConfig.createRandomGrid();
+      myConfig.createRandomGrid(myVisualizer.getWidth(), myVisualizer.getHeight());
       myVisualizer.setGrid(myConfig.getGrid());
       myVisualizer.drawGrid();
     });

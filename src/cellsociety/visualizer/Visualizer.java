@@ -205,4 +205,12 @@ public abstract class Visualizer {
   public int[] getPopulations() {
     return myGrid.getPopulations();
   }
+
+  public int getWidth() {
+    return myGrid.getWidth();
+  }
+
+  public int getHeight() {
+    return myGrid.getHeight();
+  }
 }
