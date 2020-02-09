@@ -18,6 +18,12 @@ public class TriGrid extends Grid {
     return getSpecificNeighbors(r, c, dr, dc);
   }
 
+  @Override
+  protected boolean padGrid() {
+    boolean ret = super.padGrid();
+    return (ret || checkSides());
+  }
+
   private int[] rotate(int[] arr) {
     int[] ret = new int[arr.length];
     for (int i = 0; i < arr.length; i++) {

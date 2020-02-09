@@ -175,6 +175,11 @@ public abstract class Grid {
       ret = true;
       grid.add(generateEmptyRow());
     }
+    return (ret || checkSides());
+  }
+
+  protected boolean checkSides() {
+    boolean ret = false;
     if (!leftColumnEmpty()) {
       ret = true;
       for (int r = 0; r < grid.size(); r++) {
