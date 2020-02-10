@@ -196,7 +196,8 @@ Known Bugs:
 
 Extra credit:
 * Implemented more features than the minimum required
-* Work-in-progress of ImageReader, which uses an image to initialize the grid.
+* Work-in-progress of ImageReader, which uses an image to initialize the grid. There are small bugs that need to be fixed
+before this can be functional, which is planned if there is more time.
 
 ### Impressions
 * Cellular Autonoma is really interesting and mesmerising once you get the really nifty simulations running.
