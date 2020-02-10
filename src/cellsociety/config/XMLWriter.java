@@ -72,7 +72,8 @@ public class XMLWriter {
         configInfo.appendChild(createEndNode(Config.TITLE_NODE_NAME, myConfig.getTitle()));
         configInfo.appendChild(createEndNode(Config.AUTHOR_NODE_NAME, myConfig.getAuthor()));
         configInfo.appendChild(createEndNode(Config.SHAPE_NODE_NAME, myConfig.getShape()));
-        configInfo.appendChild(createEndNode(Config.BORDER_TYPE_NODE, ""+myConfig.getBorderType()));
+        configInfo.appendChild(createEndNode(Config.BORDER_TYPE_NODE, myConfig.getBorderType()));
+        configInfo.appendChild(createEndNode(Config.MASK_NODE_NAME, myConfig.getMask()));
         configInfo.appendChild(getDimensionsInfo());
         configInfo.appendChild(getSpecialParametersInfo());
         configInfo.appendChild(getStatesInfo());
@@ -116,7 +117,7 @@ public class XMLWriter {
 
     private Node getStatesInfo(){
         Element statesInfoNode = myDocument.createElement(Config.STATES_NODE_NAME);
-        statesInfoNode.appendChild(createEndNode(Config.DEFAULT_STATE_NODE_NAME, ""+myConfig.getDefaultState()));
+        statesInfoNode.appendChild(createEndNode(Config.DEFAULT_STATE_NODE_NAME, myConfig.getDefaultState()));
 
         Map<Integer, Color> statesMap = myConfig.getStates();
         for(Integer state : statesMap.keySet()){
@@ -138,11 +139,9 @@ public class XMLWriter {
         return node;
     }
 
-    //FIXME: May need to refactor later to call the other constructor instead of duplicate code
     private Node createEndNode(String name, String value, String attributeName, String attributeValue){
-        Element node = myDocument.createElement(name);
+        Element node = (Element) createEndNode(name, value);
         node.setAttribute(attributeName, attributeValue);
-        node.appendChild(myDocument.createTextNode(value));
         return node;
     }
 }

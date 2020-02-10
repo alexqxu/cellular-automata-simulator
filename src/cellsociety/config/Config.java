@@ -7,6 +7,7 @@ import cellsociety.simulation.grid.Grid;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.paint.Color;
@@ -139,11 +140,14 @@ public class Config {
   public String getShape(){
     return myShape;
   }
-  public int getDefaultState(){
-    return defaultState;
+  public String getDefaultState(){
+    return ""+defaultState;
   }
-  public int getBorderType(){
-    return myBorderType;
+  public String getBorderType(){
+    return ""+myBorderType;
+  }
+  public String getMask(){
+      return Arrays.toString(myMask);
   }
 
   /**
@@ -504,6 +508,7 @@ public class Config {
     }
     cell.setState(state);
     cell.setDefaultEdge(myBorderType);
+    cell.setMask(myMask);
     return cell;
   }
 }
