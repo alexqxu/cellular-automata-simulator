@@ -108,6 +108,9 @@ Can be one of Rect, Tri, or Hex. Inputting something else will cause the reader 
 Indicates the edge type of the simulation. Inputting a non-negative number will treat all cells beyond the visible edge as that
 type. Inputting a -1 will treat the grid as a toroid, and inputting a -2 will make the grid scale infinitely.
 
+Percolation must have a border type of 3, or else the system will not generate water from the top. It still functions in other ways
+(e.g. if the user clicks on a cell to change it to water).
+
 #### Mask
 Indicates the neighborhood of each cell. Must match in dimension to the maximum number of possible neighbors for the given shape
 (e.g. 12 for triangle) or it will be ignored. Put a 0 for every neighbor the cell should ignore, and a 1 for all other neighbors.
@@ -138,6 +141,13 @@ Each row has a numbr field, which has no effect on the simulation and is purely 
 However, it will ask for a new file if it is larger than 255. The cells list is the states of the cells to be put on each row.
 If it is larger than the stated dimensions, it will be truncated, and if it is smaller, the remaining cells will
 be filled in with the default state.
+
+### Simulation-specific notes
+* The loops must be run in rectangular grids, or they will not update.
+* The loops must be run in the initial configuration specified by their XML or else they will not self replicate.
+* RPSImageCell is nonfunctional and is not used anywhere.
+* RPSCell can take any number of states, although even numbers will favor some types of cell.
+* Percolation will only percolate from the top.
 
 ### Notes/Assumptions
 Assumptions or Simplifications:
