@@ -8,12 +8,23 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
+/**
+ * @author: axo
+ */
 public class RectVisualizer extends Visualizer {
 
+  /**
+   * Constructor for Rectangle Visualizer. Calls parent Visualizer constructor with the same grid object
+   * @param grid
+   */
   public RectVisualizer(Grid grid) {
     super(grid);
   }
 
+  /**
+   * Extended form of InstantiateCellGrid. Creates Rectangles with on-click actions and rendered colors and places them inside a GridPane
+   * @return a GridPane containing the desired size and configuration of Rectangles to be rendered in the scene.
+   */
   public Node instantiateCellGrid() {
     GridPane gridpane = new GridPane();
     if (cellGrid == null) {
