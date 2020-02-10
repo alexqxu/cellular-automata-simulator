@@ -28,8 +28,6 @@ import org.xml.sax.SAXException;
  */
 public class Config {
   public static final double RANDOM_GRID_VARIABLE_VALUE = 0.5;
-  //private static final String INVALID_CELL = "Invalid Cell Thrown";
-  //private static final String INVALID_FILE = "Invalid File Requested";
 
   public static final String CONFIG_NODE_NAME = "ConfigInfo";
   public static final String CELLS_NODE_NAME = "Cells";
@@ -88,7 +86,7 @@ public class Config {
    * @param xmlFile File object passed in, in XML format
    */
   public Config(File xmlFile) throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidFileException, InvalidXMLStructureException{
-    if(true) {//XMLValidator.validateXMLStructure(xmlFile)
+    if(XMLValidator.validateXMLStructure(xmlFile)) {
       myFile = xmlFile;
       setupDocument();
       System.out.println(docSetUpConfirmationMessage);
