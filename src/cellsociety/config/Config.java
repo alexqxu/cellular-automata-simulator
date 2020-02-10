@@ -516,6 +516,7 @@ public class Config {
     }
     else{
       cell.setState(defaultState);
+      throw new InvalidCellException(new RuntimeException()); //FIXME added by maverick
     }
     cell.setDefaultEdge(myBorderType);
     cell.setMask(myMask);
