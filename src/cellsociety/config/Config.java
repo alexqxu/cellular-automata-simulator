@@ -506,7 +506,12 @@ public class Config {
     for (Map.Entry<Integer, Color> stateEntry : myStates.entrySet()) {
       myStates.put(stateEntry.getKey(), stateEntry.getValue());
     }
-    cell.setState(state);
+    if(myStates.keySet().contains(state)) {
+      cell.setState(state);
+    }
+    else{
+      cell.setState(defaultState);
+    }
     cell.setDefaultEdge(myBorderType);
     cell.setMask(myMask);
     return cell;
