@@ -195,7 +195,6 @@ public abstract class Visualizer {
       parameters.getChildren().add(paramField);
       final Pane spacer = new Pane();
       Label label = new Label(s);
-      label.setMinWidth(50);
       parameters.getChildren().add(label);
       HBox.setHgrow(spacer, Priority.ALWAYS);
       parameters.getChildren().add(spacer);
