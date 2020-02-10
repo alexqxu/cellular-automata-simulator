@@ -4,6 +4,8 @@
         <Title>PercolationCell</Title>
         <Author>Alex Xu, aqx</Author>
         <Shape>Tri</Shape>
+        <!-- 0: Normal -1: Toroidal -2:Infinite. Special simulations like Percolation take different values. Please see README for more info -->
+        <BorderType>0</BorderType>
 
         <Dimensions>
             <Width>20</Width>

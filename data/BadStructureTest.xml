@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SimulationBADTEST>
+<Simulation>
     <ConfigInfo>
         <Title>ConwayCell</Title>
         <Author>Alex Xu, aqx</Author>
         <Shape>Rect</Shape>
+        <!-- 0: Normal -1: Toroidal -2:Infinite. Special simulations like Percolation take different values. Please see README for more info -->
+        <BorderType>0</BorderType>
 
         <Dimensions>
             <Width>10</Width>
@@ -300,4 +302,4 @@
             <Cell>1</Cell>
         </Row>
     </Cells>
-</SimulationBADTEST>
+</Simulation>

@@ -50,6 +50,7 @@ public class Config {
   public static final String SHAPE_NODE_NAME = "Shape";
   public static final String DEFAULT_STATE_NODE_NAME = "Default";
   public static final String CUSTOM_NODE_NAME = "Custom";
+  public static final String BORDER_TYPE_NODE = "BorderType";
 
   private String packagePrefixName = "cellsociety.simulation.";
   private String gridPrefixName = packagePrefixName+"grid.";
@@ -75,6 +76,7 @@ public class Config {
   private Map<Integer, Color> myStates;
   private Map<String, Double> myParameters;
   private int defaultState = 0;
+  private int myBorderType = 0;
   private double[] randomGridVariables;
 
   /**
@@ -137,6 +139,9 @@ public class Config {
   }
   public int getDefaultState(){
     return defaultState;
+  }
+  public int getBorderType(){
+    return myBorderType;
   }
 
   /**
@@ -233,6 +238,8 @@ public class Config {
       printAuthor();
       extractShape(configElement);
       printShape();
+      extractBorderType(configElement);
+      printBorderType();
       extractDimensions(configElement);
       extractStates(configElement);
       extractParameters(configElement);
@@ -315,6 +322,10 @@ public class Config {
     myShape = extractElementValue(startingElement, SHAPE_NODE_NAME);
   }
 
+  private void extractBorderType(Element startingElement){
+    myBorderType = Integer.parseInt(extractElementValue(startingElement, BORDER_TYPE_NODE));
+  }
+
   private void extractCustom(Element startingElement){
     customRequested = Boolean.parseBoolean(extractElementValue(startingElement, CUSTOM_NODE_NAME));
   }
@@ -370,6 +381,10 @@ public class Config {
 
   private void printCustom(){
     System.out.println("Custom cell locations? " + customRequested);
+  }
+
+  private void printBorderType(){
+    System.out.println("Border Type: " + myBorderType);
   }
 
    /**
@@ -468,6 +483,7 @@ public class Config {
       myStates.put(stateEntry.getKey(), stateEntry.getValue());
     }
     cell.setState(state);
+    cell.setDefaultEdge(myBorderType);
     return cell;
   }
 }

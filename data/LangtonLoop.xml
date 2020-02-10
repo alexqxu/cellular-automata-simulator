@@ -4,6 +4,8 @@
     <Title>LangtonLoopCell</Title>
     <Author>Maverick Chung, mc608</Author>
     <Shape>Rect</Shape>
+    <!-- 0: Normal -1: Toroidal -2:Infinite. Special simulations like Percolation take different values. Please see README for more info -->
+    <BorderType>0</BorderType>
 
     <Dimensions>
       <Width>17</Width>

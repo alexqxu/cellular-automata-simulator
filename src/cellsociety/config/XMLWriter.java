@@ -72,6 +72,7 @@ public class XMLWriter {
         configInfo.appendChild(createEndNode(Config.TITLE_NODE_NAME, myConfig.getTitle()));
         configInfo.appendChild(createEndNode(Config.AUTHOR_NODE_NAME, myConfig.getAuthor()));
         configInfo.appendChild(createEndNode(Config.SHAPE_NODE_NAME, myConfig.getShape()));
+        configInfo.appendChild(createEndNode(Config.BORDER_TYPE_NODE, ""+myConfig.getBorderType()));
         configInfo.appendChild(getDimensionsInfo());
         configInfo.appendChild(getSpecialParametersInfo());
         configInfo.appendChild(getStatesInfo());
