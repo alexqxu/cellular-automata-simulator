@@ -151,6 +151,9 @@ public abstract class Grid {
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
       ret = new FireCell(); //FIXME Should never happen due to error handling elsewhere
     }
+    for (String s : cell.getParams()) {
+      ret.setParam(s, cell.getParam(s));
+    }
     return ret;
   }
 
@@ -253,12 +256,15 @@ public abstract class Grid {
   }
 
   public void setRandomGrid(String className, Map<String, Double> paramMap, double[] stateChances,
-      int rows, int cols) throws ClassNotFoundException {
+      int borderState, int[] mask, int rows, int cols) throws ClassNotFoundException {
     ArrayList<ArrayList<Cell>> ret = new ArrayList<>();
     for (int i = 0; i < rows; i++) {
       ArrayList<Cell> row = new ArrayList<>();
       for (int j = 0; j < cols; j++) {
-        row.add(getRandomCell(className, paramMap, stateChances));
+        Cell cell = getRandomCell(className, paramMap, stateChances);
+        cell.setDefaultEdge(borderState);
+        cell.setMask(mask);
+        row.add(cell);
       }
       ret.add(row);
     }
