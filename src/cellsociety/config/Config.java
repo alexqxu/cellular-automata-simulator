@@ -145,8 +145,8 @@ public class Config {
   public String getBorderType(){
     return ""+myBorderType;
   }
-  public String getMask(){
-      return Arrays.toString(myMask);
+  public int[] getMask(){
+      return myMask;
   }
 
   /**
