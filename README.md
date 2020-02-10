@@ -25,6 +25,10 @@ February 9, 2020
     the scene, as well as generating the graph of cell populations and the simulation-specific parameter-tuning text fields. This visualizer passes
     its generated nodes to the Application for placing in the stage along with the general UI controls.
 * Alex Xu:
+    - Wrote Configuration portion of assignment which reads XML files and uses their data to specify 
+    the creation of the correct shape, dimensions, parameters, and types of simulations.
+    - Created an XMLWrite class which saves a simulation's current status and parameters to a new XML file
+    - 
 * Maverick Chung:
     - Wrote Cell class and subclasses to implement the cellular simulations, including making a Rule Table subclass to read simulation
     rules from a String table.
