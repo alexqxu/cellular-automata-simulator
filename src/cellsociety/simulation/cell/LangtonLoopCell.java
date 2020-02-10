@@ -32,13 +32,5 @@ public class LangtonLoopCell extends RuleTableCell {
     ruleMap = getRuleTableMap(RULE_TABLE);
   }
 
-  protected String getSurrounds(Cell[] neighbors) {
-    StringBuilder surround = new StringBuilder();
-    for (int i = 0; i < neighbors.length; i += 2) {
-      surround.append(neighbors[i]);
-    }
-    return surround.toString();
-  }
-
 
 }

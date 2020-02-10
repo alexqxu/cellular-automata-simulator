@@ -24,7 +24,13 @@ public abstract class RuleTableCell extends Cell{
     nextState = stateRules.getOrDefault(surround, state);
   }
 
-  protected abstract String getSurrounds(Cell[] neighbors);
+  protected String getSurrounds(Cell[] neighbors) {
+    StringBuilder surround = new StringBuilder();
+    for (int i = 0; i < neighbors.length; i += 2) {
+      surround.append(neighbors[i]);
+    }
+    return surround.toString();
+  }
 
   public Map<Integer, HashMap<String, Integer>> getRuleTableMap(String ruleTable) {
     String[] rules = ruleTable.split(" ");
