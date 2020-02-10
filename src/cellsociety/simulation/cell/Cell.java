@@ -136,7 +136,7 @@ public abstract class Cell {
    * @param value the double value of the param
    */
   public void setParam(String param, double value) {
-    paramMap.put(param, value);
+    paramMap.put(param.toLowerCase(), value);
   }
 
   /**
@@ -146,7 +146,7 @@ public abstract class Cell {
    * @return the value of the parameter
    */
   public double getParam(String param) {
-    Double ret = paramMap.get(param);
+    Double ret = paramMap.get(param.toLowerCase());
     if (ret == null) {
       throw new RuntimeException("param (" + param + ") asked for but not set.");
     }
