@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.paint.Color;
 
+import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -84,11 +85,15 @@ public class Config {
   /**
    * Constructor for the Config object. Sets the file and sets up the documentBuilder. Then loads the file content.
    *
-   * @param xmlFile File object passed in, in XML format
+   * @param file File object passed in, in XML format or Image
    */
-  public Config(File xmlFile) throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidFileException, InvalidXMLStructureException{
-    if(XMLValidator.validateXMLStructure(xmlFile)){
-      myFile = xmlFile;
+  public Config(File file) throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidFileException, InvalidXMLStructureException, InvalidImageException{
+    if(isImageFile(file)){
+      ImageReader imageReader = new ImageReader(file);
+      myGrid = imageReader.generateGrid();
+    }
+    else if(XMLValidator.validateXMLStructure(file)){
+      myFile = file;
       setupDocument();
       System.out.println(docSetUpConfirmationMessage);
       loadFile();
@@ -515,5 +520,21 @@ public class Config {
     cell.setDefaultEdge(myBorderType);
     cell.setMask(myMask);
     return cell;
+  }
+
+  private String getFileExtension(File file) {
+    String fileName = file.getName();
+    if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+      return fileName.substring(fileName.lastIndexOf(".")+1);
+    else return "";
+  }
+
+  private boolean isImageFile(File file){
+    String fileExtension = getFileExtension(file);
+    for(String extension : ImageIO.getReaderFileSuffixes()){
+      if(!fileExtension.equals(extension));
+      return false;
+    }
+    return true;
   }
 }
