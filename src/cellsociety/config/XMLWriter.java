@@ -36,7 +36,7 @@ public class XMLWriter {
      * @param config
      * @param grid
      */
-    public XMLWriter(Config config, Grid grid){
+    public XMLWriter(Config config, Grid grid) throws XMLWriteException{
         myGrid = grid;
         myConfig = config;
         try {
@@ -50,7 +50,7 @@ public class XMLWriter {
      * Saves an XML file at the given filepath
      * @param filepath
      */
-    public void saveXML(String filepath){
+    public void saveXML(String filepath) throws XMLWriteException{
         addNodes();
         try {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
