@@ -56,25 +56,29 @@ public class RPSCell extends Cell {
     }
   }
 
+  private boolean rps(int i, int st) {
+    int num = (int) getParam(NUM_STATES);
+    return rps(i, st, num);
+  }
+
   /**
    * Returns true if i beats state
    *
    * @param i
-   * @param state
+   * @param st
    * @return
    */
-  private boolean rps(int i, int state) {
-    if (state == 0) {
+  public static boolean rps(int i, int st, int num) {
+    if (st == 0) {
       return true;
     }
     if (i == 0) {
       return false;
     }
-    int num = (int) getParam(NUM_STATES);
-    int tempstate = state - 1;
-    int tempi = i - 1;
-    if (Math.abs(tempstate - tempi) <= num / 2) {
-      return tempi > tempstate;
+    int tempstate = st-1;
+    int tempi = i-1;
+    if (Math.abs(tempstate-tempi)<=num/2){
+      return tempi>tempstate;
     }
     return tempi < tempstate;
   }
