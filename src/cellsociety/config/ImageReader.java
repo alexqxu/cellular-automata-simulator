@@ -1,5 +1,6 @@
 package cellsociety.config;
 
+import cellsociety.exceptions.InvalidImageException;
 import cellsociety.simulation.cell.Cell;
 import cellsociety.simulation.cell.RPSCell;
 import cellsociety.simulation.grid.Grid;
@@ -25,11 +26,15 @@ public class ImageReader {
      * @param imageFile
      * @throws IOException
      */
-    public ImageReader(File imageFile) throws IOException {
+    public ImageReader(File imageFile) throws InvalidImageException{
         myFile = imageFile;
-        myImage = ImageIO.read(myFile);
-        imageWidth = myImage.getWidth();
-        imageHeight = myImage.getHeight();
+        try {
+            myImage = ImageIO.read(myFile);
+            imageWidth = myImage.getWidth();
+            imageHeight = myImage.getHeight();
+        }catch(IOException e){
+            throw new InvalidImageException(e);
+        }
     }
 
     /**
