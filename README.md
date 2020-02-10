@@ -88,15 +88,21 @@ Features implemented:
 
 
 ### Notes/Assumptions
-
 Assumptions or Simplifications:
-*
+* Assuming that states are continuous (if there are 3 states they are always specified as 0, 1, 2, not 1, 3, 5): This allows us to click to cycle through cell states dynamically
+* Loop simulations assume the grid is of rectangles
+* 
+
 Interesting data files:
+* LangtonLoop.xml is an interesting example of an infinitely-scaling, growing loop
+* If you look at the smaller loops (ChouReggia or Byl) and put it on high speed, they form a fractal-like pattern which is really mesmerising to watch.
 
 Known Bugs:
-
+* Cannot specify size 0,0 in xml.
 Extra credit:
 
 
 ### Impressions
-
+* Cellular Autonoma is really interesting and mesmerising once you get the really nifty simulations running.
+ It shows the more concrete and scientific applications of computer science and application building as well as the importance
+ of separating the frontend and the backend.

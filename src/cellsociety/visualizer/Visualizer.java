@@ -248,7 +248,13 @@ public abstract class Visualizer {
    */
   public Grid getGrid() {return myGrid;}
 
+  /**
+   * Sets whether gridLines should be rendered or not
+   */
   public void setGridLines(boolean newGridLines) {gridLines = newGridLines;}
 
+  /**
+   * @return whether gridLines should be rendered or not
+   */
   public boolean getGridLines(){return gridLines;}
 }
