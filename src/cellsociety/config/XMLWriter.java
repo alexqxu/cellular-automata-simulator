@@ -93,7 +93,7 @@ public class XMLWriter {
         Element rowNode = myDocument.createElement(Config.ROW_NODE_NAME);
         rowNode.setAttribute(ROW_NUMBER_NAME, ""+row);
         for(int c = 0; c<myGrid.getWidth(); c++){
-            rowNode.appendChild(createEndNode(Config.CELLS_NODE_NAME, ""+myGrid.getState(row, c)));
+            rowNode.appendChild(createEndNode(Config.CELL_NODE_NAME, ""+myGrid.getState(row, c)));
         }
         return rowNode;
     }
