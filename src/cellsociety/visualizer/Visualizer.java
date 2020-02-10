@@ -26,7 +26,6 @@ import javafx.scene.shape.Shape;
  * Handles rendering of cell grid based on Grid object data and passes it up to the SimulationApp application
  */
 public abstract class Visualizer {
-
   protected static final int SIZE = 400;
 
   protected Grid myGrid;

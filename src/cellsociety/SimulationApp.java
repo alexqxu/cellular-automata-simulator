@@ -58,6 +58,9 @@ public class SimulationApp {
   private static final String ERROR_DIALOG = "Please Choose Another File";
   private static final String PACKAGE_PREFIX_NAME = "cellsociety.visualizer.";
   private static final String XML_FILEPATH = "user.dir";
+  public static final String INVALID_CELL = "Invalid Cell/Simulation Type Specified";
+  public static final String INVALID_SHAPE = "Invalid Shape Specified";
+  public static final String INVALID_FILE = "Invalid File Specified";
   private BorderPane frame;
   private Stage myStage;
   private Config myConfig;
@@ -157,6 +160,9 @@ public class SimulationApp {
     fileChooser.setTitle("Choose Simulation File");
     fileChooser.setInitialDirectory(new File(System.getProperty(XML_FILEPATH)));
     fileChooser.getExtensionFilters().add(new ExtensionFilter("XML Files", "*.xml"));
+    fileChooser.getExtensionFilters().add(new ExtensionFilter("PNG Files", "*.png"));
+    fileChooser.getExtensionFilters().add(new ExtensionFilter("JPG Files", "*.jpg"));
+    fileChooser.getExtensionFilters().add(new ExtensionFilter("JPEG Files", "*.jpeg"));
     File file = fileChooser.showOpenDialog(myStage);
     if (file != null) {
       myFile = file;
@@ -178,11 +184,11 @@ public class SimulationApp {
       try {
         myConfig = new Config(file);
       } catch (InvalidCellException e) {
-        retryLoadFile("Invalid Cell/Simulation Type Specified");
+        retryLoadFile(INVALID_CELL);
       } catch (InvalidGridException e) {
-        retryLoadFile("Invalid Shape Specified");
+        retryLoadFile(INVALID_SHAPE);
       } catch (InvalidFileException e) {
-        retryLoadFile("Invalid File Specified");
+        retryLoadFile(INVALID_FILE);
       } catch (InvalidXMLStructureException e){
         retryLoadFile(e.getMessage());
       } catch (Exception e){
@@ -195,7 +201,7 @@ public class SimulationApp {
         myVisualizer = (Visualizer) (visualizerClass.getConstructor(Grid.class)
             .newInstance(myConfig.getGrid()));
       } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-        retryLoadFile("Invalid Shape Specified");
+        retryLoadFile(INVALID_SHAPE);
       } catch (NullPointerException e){
         return;
       }
