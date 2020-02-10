@@ -89,7 +89,7 @@ public abstract class Cell {
     removeMask(neighbors);
   }
 
-  private void removeMask(Cell[] neighbors) {
+  protected void removeMask(Cell[] neighbors) {
     if (mask.length != neighbors.length) {
       return;
     }
@@ -101,7 +101,7 @@ public abstract class Cell {
     }
   }
 
-  private void applyMask(Cell[] neighbors) {
+  protected void applyMask(Cell[] neighbors) {
     if (mask.length != neighbors.length) {
       return;
     }

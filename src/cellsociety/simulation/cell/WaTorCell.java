@@ -1,6 +1,8 @@
 package cellsociety.simulation.cell;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
@@ -23,7 +25,8 @@ public class WaTorCell extends Cell {
   }
 
   @Override
-  void planUpdate(Cell[] neighbors, Queue<Cell> updatedQueue) {
+  void planUpdate(Cell[] neighbors, Queue<Cell> cellQueue) {
+    ArrayList<Cell> updatedQueue = new ArrayList<>(cellQueue);
     if (!updatedQueue.contains(this)) {
       return;
     }
@@ -53,6 +56,8 @@ public class WaTorCell extends Cell {
     if (state == 0 && nextState == -1) {
       nextState = 0;
     }
+    cellQueue.clear();
+    cellQueue.addAll(updatedQueue);
   }
 
   @Override
@@ -64,8 +69,7 @@ public class WaTorCell extends Cell {
     }
   }
 
-  private void sharkPlanUpdate(Queue<Cell> updatedQueue, ArrayList<Cell> open,
-      ArrayList<Cell> fish) {
+  private void sharkPlanUpdate(List<Cell> updatedQueue, List<Cell> open, List<Cell> fish) {
     Random rand = new Random();
     Cell movedTo = null;
     if (!fish.isEmpty() || !open.isEmpty()) {
@@ -97,7 +101,7 @@ public class WaTorCell extends Cell {
     nextState = 2;
   }
 
-  private void fishPlanUpdate(Queue<Cell> updatedQueue, ArrayList<Cell> open) {
+  private void fishPlanUpdate(List<Cell> updatedQueue, List<Cell> open) {
     Random rand = new Random();
     Cell movedTo = null;
     if (!open.isEmpty()) {
@@ -118,6 +122,30 @@ public class WaTorCell extends Cell {
       return;
     }
     nextState = 1;
+  }
+
+  protected void removeMask(Cell[] neighbors) {
+    if (mask.length != neighbors.length) {
+      return;
+    }
+    for (int i = 0; i < neighbors.length; i++) {
+      if (neighbors[i].state == -1 && mask[i] <= 0) {
+        neighbors[i].state = -mask[i];
+        mask[i] = 0;
+      }
+    }
+  }
+
+  protected void applyMask(Cell[] neighbors) {
+    if (mask.length != neighbors.length) {
+      return;
+    }
+    for (int i = 0; i < mask.length; i++) {
+      if (mask[i] == 0) {
+        mask[i] = -neighbors[i].state;
+        neighbors[i].state = -1;
+      }
+    }
   }
 
   @Override

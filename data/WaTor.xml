@@ -21,7 +21,7 @@
             <Parameter name = "happinessThresh">0.3</Parameter>
             <Parameter name = "sharkBreedTime">35.0</Parameter>
             <Parameter name = "fishBreedTime">3.0</Parameter>
-            <Parameter name = "fishFeedEnergy">1.5</Parameter>
+            <Parameter name = "fishFeedEnergy">1.1</Parameter>
             <Parameter name = "sharkStartEnergy">3.5</Parameter>
         </SpecialParameters>
 
