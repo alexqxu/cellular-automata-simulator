@@ -87,7 +87,7 @@ public class Config {
    *
    * @param file File object passed in, in XML format or Image
    */
-  public Config(File file) throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidFileException, InvalidXMLStructureException, InvalidImageException{
+  public Config(File file) throws InvalidGridException, InvalidCellException, InvalidFileException, InvalidXMLStructureException, InvalidImageException{
     if(isImageFile(file)){
       ImageReader imageReader = new ImageReader(file);
       myGrid = imageReader.generateGrid();
@@ -158,14 +158,13 @@ public class Config {
    * Based on the parameters set, creates a grid with a randomized configuration of CELLS
    * @throws InvalidCellException
    * @throws InvalidGridException
-   * @throws InvalidShapeException
    */
   public void createRandomGrid(int width, int height)  throws InvalidCellException, InvalidGridException{
     Class gridClass = null;
     try {
       gridClass = Class.forName(gridPrefixName + myShape + gridSuffix);
     } catch (ClassNotFoundException e) {
-      throw new InvalidShapeException(e);
+      throw new InvalidGridException(e);
     }
     try {
       myGrid = (Grid) (gridClass.getConstructor().newInstance());
@@ -186,7 +185,6 @@ public class Config {
    * Based on the parameters set, creates a grid with a randomized configuration of CELLS (with XML read dimensions)
    * @throws InvalidCellException
    * @throws InvalidGridException
-   * @throws InvalidShapeException
    */
   public void createRandomGrid() throws InvalidCellException, InvalidGridException{
     createRandomGrid(myWidth, myHeight);
@@ -195,7 +193,7 @@ public class Config {
   /**
    * Create and set up the Grid based on stored information, and then return it.
    */
-  private void loadFile() throws InvalidShapeException, InvalidGridException, InvalidCellException{
+  private void loadFile() throws InvalidGridException, InvalidCellException{
     extractConfigInfo();
     System.out.println(configSetUpConfirmationMessage);
     setRandomVariables();
@@ -419,7 +417,6 @@ public class Config {
    /**
    * Based on parameters AND Cell configuration, creates a grid.
    * @throws InvalidGridException
-   * @throws InvalidShapeException
    */
   private void createGrid()
       throws InvalidGridException {
@@ -427,7 +424,7 @@ public class Config {
     try {
       gridClass = Class.forName(gridPrefixName + myShape + gridSuffix);
     } catch (ClassNotFoundException e) {
-      throw new InvalidShapeException(e);
+      throw new InvalidGridException(e);
     }
     try {
       myGrid = (Grid) (gridClass.getConstructor().newInstance());

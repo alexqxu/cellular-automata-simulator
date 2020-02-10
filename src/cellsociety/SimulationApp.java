@@ -5,7 +5,6 @@ import cellsociety.config.XMLWriter;
 import cellsociety.exceptions.InvalidCellException;
 import cellsociety.exceptions.InvalidFileException;
 import cellsociety.exceptions.InvalidGridException;
-import cellsociety.exceptions.InvalidShapeException;
 import cellsociety.exceptions.InvalidXMLStructureException;
 import cellsociety.exceptions.XMLWriteException;
 import cellsociety.simulation.grid.Grid;
@@ -184,8 +183,6 @@ public class SimulationApp {
         retryLoadFile("Invalid Shape Specified");
       } catch (InvalidFileException e) {
         retryLoadFile("Invalid File Specified");
-      } catch (InvalidShapeException e) {
-        retryLoadFile("Invalid Shape Specified");
       } catch (InvalidXMLStructureException e){
         retryLoadFile(e.getMessage());
       } catch (Exception e){
@@ -198,7 +195,7 @@ public class SimulationApp {
         myVisualizer = (Visualizer) (visualizerClass.getConstructor(Grid.class)
             .newInstance(myConfig.getGrid()));
       } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-        retryLoadFile("Invalid Visualizer Specified");
+        retryLoadFile("Invalid Shape Specified");
       } catch (NullPointerException e){
         return;
       }
@@ -225,9 +222,6 @@ public class SimulationApp {
         displayError(message);
         badFile = true;
       } catch (InvalidFileException e) {
-        displayError(message);
-        badFile = true;
-      } catch (InvalidShapeException e){
         displayError(message);
         badFile = true;
       } catch (NullPointerException e){
