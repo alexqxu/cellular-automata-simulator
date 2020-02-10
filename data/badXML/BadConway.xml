@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Simulation>
+    <ConfigInfo>
+        <Title>ConwayCell</Title>
+        <Author>Alex Xu, aqx</Author>
+        <Shape>Rect</Shape>
+        <!-- 0: Normal -1: Toroidal -2:Infinite. Special simulations like Percolation take different values. Please see README for more info -->
+        <BorderType>-2</BorderType>
+        <!-- Mask Defines the Neighborhood-->
+        <Mask>1 1 1 1 1 1 1 1</Mask>
+
+        <Dimensions>
+            <Width>10</Width>
+            <Height>10</Height>
+            <Speed>0.6</Speed>
+        </Dimensions>
+
+        <!-- There can be extra parameters, only those relevant will be used. -->
+        <SpecialParameters>
+            <Parameter name = "probCatch">0.7</Parameter>
+            <Parameter name = "happinessThresh">0.3</Parameter>
+            <Parameter name = "sharkBreedTime">40.0</Parameter>
+            <Parameter name = "fishBreedTime">5.0</Parameter>
+            <Parameter name = "fishFeedEnergy">2.0</Parameter>
+            <Parameter name = "sharkStartEnergy">5.0</Parameter>
+        </SpecialParameters>
+
+        <!-- Default is the cells that are filled if there are not enough cells. Color names must be standard HTML Names -->
+        <!-- If not specified, DEFAULT is aways the first State (ID: 0)-->
+        <States>
+            <Default>0</Default>
+            <State>
+                <ID>0</ID>
+                <Color>fakeColor</Color>
+            </State>
+
+            <State>
+                <ID>1</ID>
+                <Color>black</Color>
+            </State>
+        </States>
+
+        <!-- Case insensitive. TRUE means you want to use custom cell locations, below in the <Cells> section. FALSE means you want to have a random grid based on parameters above -->
+        <Custom>true</Custom>
+
+    </ConfigInfo>
+
+    <Cells>
+        <Row numbr = "0">
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+        </Row>
+        <Row numbr = "1">
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+        </Row>
+        <Row numbr = "2">
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+        </Row>
+        <Row numbr = "3">
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+        </Row>
+        <Row numbr = "4">
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+        </Row>
+        <Row numbr = "5">
+            <Cell>0</Cell>
+        </Row>
+        <Row numbr = "6">
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+        </Row>
+        <Row numbr = "7">
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+        </Row>
+        <Row numbr = "8">
+            <Cell>1</Cell>
+        </Row>
+        <Row numbr = "9">
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+        </Row>
+        <Row numbr = "10">
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+        </Row>
+        <Row numbr = "11">
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+        </Row>
+        <Row numbr = "12">
+            <Cell>1</Cell>
+        </Row>
+        <Row numbr = "13">
+            <Cell>1</Cell>
+        </Row>
+        <Row numbr = "14">
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+        </Row>
+        <Row numbr = "15">
+            <Cell>1</Cell>
+        </Row>
+        <Row numbr = "16">
+            <Cell>1</Cell>
+        </Row>
+        <Row numbr = "17">
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+        </Row>
+        <Row numbr = "18">
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+        </Row>
+        <Row numbr = "19">
+            <Cell>1</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>0</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+            <Cell>1</Cell>
+        </Row>
+    </Cells>
+</Simulation>

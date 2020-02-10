@@ -30,6 +30,8 @@ import org.xml.sax.SAXException;
 public class Config {
   public static final double RANDOM_GRID_VARIABLE_VALUE = 0.5;
   public static final double FIRST_RANDOM_GRID_VARIABLE_VALUE = 0.25;
+  public static final int INVALID_DIMENSION_THRESHOLD = 1;
+  public static final String INVALID_DIMENSION_MESSAGE = "You have requested an invalid Simulation Size in XML: ";
 
   public static final String CONFIG_NODE_NAME = "ConfigInfo";
   public static final String CELLS_NODE_NAME = "Cells";
@@ -84,13 +86,17 @@ public class Config {
 
   /**
    * Constructor for the Config object. Sets the file and sets up the documentBuilder. Then loads the file content.
-   *
+   * Image Loading is currently not working.
    * @param file File object passed in, in XML format or Image
    */
-  public Config(File file) throws InvalidGridException, InvalidCellException, InvalidFileException, InvalidXMLStructureException, InvalidImageException{
+  public Config(File file) throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidFileException, InvalidXMLStructureException, InvalidImageException, InvalidDimensionsException{
     if(isImageFile(file)){
       ImageReader imageReader = new ImageReader(file);
       myGrid = imageReader.generateGrid();
+      myStates = imageReader.getStates();
+      myShape = "Rect";
+      myTitle = "RPSCell";
+      myBorderType = 0;
     }
     else if(XMLValidator.validateXMLStructure(file)){
       myFile = file;
@@ -193,7 +199,7 @@ public class Config {
   /**
    * Create and set up the Grid based on stored information, and then return it.
    */
-  private void loadFile() throws InvalidGridException, InvalidCellException{
+  private void loadFile() throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidDimensionsException{
     extractConfigInfo();
     System.out.println(configSetUpConfirmationMessage);
     setRandomVariables();
@@ -235,7 +241,7 @@ public class Config {
   /**
    * Extracts all information in the XML Document that lies within <ConfigInfo>.
    */
-  private void extractConfigInfo() {
+  private void extractConfigInfo() throws InvalidDimensionsException{
     NodeList configNodeList = doc.getElementsByTagName(CONFIG_NODE_NAME);
     Node configNode = configNodeList.item(0);
 
@@ -306,13 +312,19 @@ public class Config {
     printStates();
   }
 
-  private void extractDimensions(Element startingElement) {
+  private void extractDimensions(Element startingElement) throws InvalidDimensionsException {
     Node dimensionsNode = startingElement.getElementsByTagName(DIMENSIONS_NODE_NAME).item(0);
     if (dimensionsNode.getNodeType() == Node.ELEMENT_NODE) {
       Element dimensionsElement = (Element) dimensionsNode;
       extractHeight(dimensionsElement);
       extractWidth(dimensionsElement);
       extractSpeed(dimensionsElement);
+      if(myHeight < INVALID_DIMENSION_THRESHOLD){
+        throw new InvalidDimensionsException(INVALID_DIMENSION_MESSAGE, myHeight);
+      }
+      if(myWidth < INVALID_DIMENSION_THRESHOLD){
+        throw new InvalidDimensionsException(INVALID_DIMENSION_MESSAGE, myWidth);
+      }
       printDimensions();
     }
   }
@@ -334,7 +346,7 @@ public class Config {
   }
 
   private void extractBorderType(Element startingElement){
-    myBorderType = Integer.parseInt(extractElementValue(startingElement, BORDER_TYPE_NODE));
+    myBorderType = Integer.parseInt(extractElementValue(startingElement, BORDER_TYPE_NODE).trim());
   }
 
   private void extractMask(Element startingElement){
@@ -505,15 +517,12 @@ public class Config {
     for (Map.Entry<String, Double> parameterEntry : myParameters.entrySet()) {
       cell.setParam(parameterEntry.getKey(), parameterEntry.getValue());
     }
-    for (Map.Entry<Integer, Color> stateEntry : myStates.entrySet()) {
-      myStates.put(stateEntry.getKey(), stateEntry.getValue());
-    }
     if(myStates.keySet().contains(state)) {
       cell.setState(state);
     }
     else{
       cell.setState(defaultState);
-      throw new InvalidCellException(new RuntimeException()); //FIXME added by maverick
+      throw new InvalidCellException(new RuntimeException());
     }
     cell.setDefaultEdge(myBorderType);
     cell.setMask(myMask);
@@ -530,9 +539,10 @@ public class Config {
   private boolean isImageFile(File file){
     String fileExtension = getFileExtension(file);
     for(String extension : ImageIO.getReaderFileSuffixes()){
-      if(!fileExtension.equals(extension));
-      return false;
+      if(fileExtension.equals(extension)) {
+        return true;
+      }
     }
-    return true;
+    return false;
   }
 }
