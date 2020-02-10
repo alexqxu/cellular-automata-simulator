@@ -49,6 +49,8 @@ public class ImageReader {
                 int color = myImage.getRGB(column, row);
                 Cell myCell = new RPSCell();
                 myCell.setState(color);
+
+                myGrid.placeCell(row, column, myCell);
             }
         }
         return myGrid;
