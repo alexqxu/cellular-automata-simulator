@@ -43,7 +43,8 @@
   -fx-padding: 0.25em; /* 3 */ /* linear-gradient(#33cc33, #ff3300); */
 }
 
-.chart-legend{
-  visibility: hidden;
+.menu-bar{
+  -fx-min-height: 50;
+  -fx-background-color: linear-gradient(to bottom, #969696 0%, #6699ff 100%);
 }
 

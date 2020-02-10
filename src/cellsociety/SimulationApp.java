@@ -14,15 +14,20 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.css.Styleable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventTarget;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Skinnable;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -41,7 +46,7 @@ import javax.imageio.ImageIO;
 public class SimulationApp {
 
   public static final String TITLE = "Cell Simulator";
-  public static final int FRAMES_PER_SECOND = 60; //FIXME Maverick changed to 60 from 120 for testing
+  public static final int FRAMES_PER_SECOND = 60;
   public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
   public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
   private static final String RESOURCES = "resources";
@@ -49,7 +54,10 @@ public class SimulationApp {
   public static final String DEFAULT_RESOURCE_FOLDER = RESOURCES + "/";
   private static final String RESOURCE_PACKAGE = "Image";
   private static final String STYLESHEET = "default.css";
+  private static final String IMAGEFILE_SUFFIXES = String
+      .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
   private static final int MAX_UPDATE_PERIOD = 2;
+  private static final String ERRORDIALOG = "Please Choose Another File";
 
 
   private String packagePrefixName = "cellsociety.visualizer.";
@@ -60,32 +68,36 @@ public class SimulationApp {
   private Visualizer myVisualizer;
   private Slider slider;
   private Button playpause;
-  private Button loadFile;
+  private MenuItem loadFile;
   private Button shuffle;
   private ResourceBundle myResources;
-  private Button newWindow;
-  private Button exit;
+  private MenuItem newWindow;
+  private MenuItem exit;
   private Button reset;
   private Button step;
   private MenuBar menuBar;
+  private Menu menu;
   private File myFile;
   private double secondsElapsed;
   private double speed;
   private boolean running;
 
   /**
-   * Start method. Runs game loop after setting up stage and scene data.
+   * Constructor method. Runs game loop after setting up stage and scene data by creating
+   * Config and Visualizer objects.
    *
    * @param stage the window in which the application runs
    * @throws Exception
    */
-
   public SimulationApp(Stage stage) {
     myStage = stage;
     System.out.println(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE);
     myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE);
 
     loadConfigFile(chooseFile());
+    if(myConfig == null){
+      System.exit(0);
+    }
 
     myStage.setScene(createScene());
     myStage.setTitle(TITLE);
@@ -115,38 +127,6 @@ public class SimulationApp {
         .add(getClass().getClassLoader().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET)
             .toExternalForm());
     return scene;
-  }
-
-  /**
-   * Handles
-   *
-   * @param button
-   */
-  public void handlePlayPause(Button button) {
-    running = !running;
-    final String IMAGEFILE_SUFFIXES = String
-        .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
-    String label = "";
-    if (running) {
-      label = myResources.getString("Pause");
-    } else {
-      label = myResources.getString("Play");
-    }
-    if (label.matches(IMAGEFILE_SUFFIXES)) {
-      button.setGraphic(
-          new ImageView(new Image(
-              getClass().getClassLoader().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
-    }
-  }
-
-  /**
-   * Takes in a double representing a percent value. This reflects a percent of the max speed.
-   *
-   * @param percentSpeed the percent of the max speed to which to set the simulation
-   */
-  public void setSpeed(double percentSpeed) {
-    percentSpeed *= MAX_UPDATE_PERIOD;
-    speed = MAX_UPDATE_PERIOD - percentSpeed;
   }
 
   /**
@@ -189,18 +169,95 @@ public class SimulationApp {
     }
   }
 
+  /**
+   * Loads a config file specified by the file selector in the chooseFile() method. Creates a
+   * Config object and handles errors in selecting an invalid XML file.
+   * @param file - the XML file to be loaded into the Config object
+   */
+  public void loadConfigFile(File file) {
+    if (file == null) {
+      myStage.close();
+    } else {
+      try {
+        myConfig = new Config(file);
+      } catch (InvalidCellException e) {
+        retryLoadFile("Invalid Simulation Specified");
+      } catch (InvalidGridException e) {
+        retryLoadFile("Invalid Shape Specified");
+      } catch (InvalidFileException e) {
+        retryLoadFile("Invalid File Specified");
+      } catch (InvalidShapeException e) {
+        retryLoadFile("Invalid Shape Specified");
+      }
+
+      Class visualizerClass = null;
+      try {
+        visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
+        myVisualizer = (Visualizer) (visualizerClass.getConstructor(Grid.class)
+            .newInstance(myConfig.getGrid()));
+      } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+        retryLoadFile("Invalid Visualizer Specified");
+      }
+      myVisualizer.setColorMap(myConfig.getStates());
+    }
+  }
+
+  /**
+   * Helps with error handling by creating a loop which will pop up an error message until the user has
+   * selected a valid XML file
+   * @param message - The string message to be displayed by the error popup
+   */
+  private void retryLoadFile(String message) {
+    boolean badFile;
+    displayError(message);
+    do {
+      badFile = false;
+      try {
+        myConfig = new Config(chooseFile());
+      } catch (InvalidCellException e) {
+        displayError(message);
+        badFile = true;
+      } catch (InvalidGridException e) {
+        displayError(message);
+        badFile = true;
+      } catch (InvalidFileException e) {
+        displayError(message);
+        badFile = true;
+      } catch (InvalidShapeException e){
+        displayError(message);
+        badFile = true;
+      }
+    } while (badFile);
+  }
+
+  /**
+   * Creates the error dialog box which pops up on handling different forms of exceptions
+   * for an invalid XML file
+   * @param message - The message to be displayed by the error dialog
+   */
+  private void displayError(String message) {
+    Alert errorAlert = new Alert(AlertType.ERROR);
+    errorAlert.setHeaderText(message);
+    errorAlert.setContentText(ERRORDIALOG);
+    errorAlert.showAndWait();
+  }
+
+  /**
+   * Creates the UI toolbar with all user-interactable menus, buttons, and sliders. Creates their eventhandlers
+   * and bundles them into one Pane to be rendered in the scene
+   * @return - an HBox pane with all of the UI tools inside of it.
+   */
   public Node setToolBar() {
     HBox toolbar = new HBox();
-//    final Pane spacer = new Pane();
-//    HBox.setHgrow(spacer, Priority.ALWAYS);
     menuBar = new MenuBar();
-    newWindow = makeButton("New", e -> makeWindow());
-    loadFile = makeButton("Load", e -> {
+    menu = makeMenu("Menu");
+    newWindow = makeMenuItem("New", e -> makeWindow());
+    loadFile = makeMenuItem("Load", e -> {
       loadConfigFile(chooseFile());
       frame.setCenter(myVisualizer.bundledUI());
       myVisualizer.drawGrid();
     });
-    exit = makeButton("Exit", e-> closeWindow());
+    exit = makeMenuItem("Exit", e-> closeWindow());
     playpause = makeButton("Play", e -> handlePlayPause(playpause));
     reset = makeButton("Reset", e -> {
       loadConfigFile(myFile);
@@ -229,109 +286,27 @@ public class SimulationApp {
         setSpeed(new_val.doubleValue() / 100);
       }
     });
-//    menuBar.getMenus().addAll(newWindow);
-    toolbar.getChildren().add(shuffle);
+    menuBar.getMenus().add(menu);
+    menu.getItems().addAll(newWindow, loadFile, exit);
     toolbar.getChildren().add(menuBar);
+    toolbar.getChildren().add(shuffle);
     toolbar.getChildren().add(playpause);
     toolbar.getChildren().add(step);
     toolbar.getChildren().add(reset);
-    toolbar.getChildren().add(loadFile);
-    toolbar.getChildren().add(newWindow);
-    toolbar.getChildren().add(exit);
     toolbar.getChildren().add(slider);
     return toolbar;
   }
 
-  private void closeWindow() {
-    myStage.close();
-  }
+  //FIXME Write about how I have duplicated code but Buttons and Menus inherit setGraphic() and setText() from different parents so cannot extract one unitary method
 
-  //fixme make
-  private void makeWindow() {
-    SimulationApp newWindow = new SimulationApp(new Stage());
-  }
-
-  public void loadConfigFile(File file) {
-    if (file == null) {
-      myStage.close();
-    } else {
-      try {
-        myConfig = new Config(file);
-      } catch (InvalidCellException e) {
-        retryLoadFile("Invalid Simulation Specified");
-      } catch (InvalidGridException e) {
-        retryLoadFile("Invalid Shape Specified");
-      } catch (InvalidFileException e) {
-        retryLoadFile("Invalid File Specified");
-      } catch (InvalidShapeException e) {
-        retryLoadFile("Invalid Shape Specified");
-      }
-
-    Class visualizerClass = null;
-    try {
-      visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
-      myVisualizer = (Visualizer) (visualizerClass.getConstructor(Grid.class)
-          .newInstance(myConfig.getGrid()));
-      } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-        retryLoadFile("Invalid Visualizer Specified");
-      }
-      myVisualizer.setColorMap(myConfig.getStates());
-    }
-  }
-
-  private void retryLoadFile(String message) {
-    boolean badFile;
-    displayError(message);
-    do {
-      badFile = false;
-      try {
-        myConfig = new Config(chooseFile());
-      } catch (InvalidCellException e) {
-        displayError(message);
-        badFile = true;
-      } catch (InvalidGridException e) {
-        displayError(message);
-        badFile = true;
-      } catch (InvalidFileException e) {
-        displayError(message);
-        badFile = true;
-      } catch (InvalidShapeException e){
-        displayError(message);
-        badFile = true;
-      }
-    } while (badFile);
-  }
-
-  private void displayError(String message) {
-    Alert errorAlert = new Alert(AlertType.ERROR);
-    errorAlert.setHeaderText(message);
-    errorAlert.setContentText("Please Choose Another File");
-    errorAlert.showAndWait();
-  }
-
+  /**
+   * Creates a button and handles the rendering of images from the .properties file
+   * @param property - The string which corresponds to a string or image in the .properties file
+   * @param handler - The eventhandler which will trigger when the button is pressed
+   * @return a button object with a label from the .properties file and an event on action
+   */
   private Button makeButton(String property, EventHandler<ActionEvent> handler) {
     Button result = new Button();
-
-    final String IMAGEFILE_SUFFIXES = String
-        .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
-    String label = myResources.getString(property);
-    if (label.matches(IMAGEFILE_SUFFIXES)) {
-      result.setGraphic(
-          new ImageView(new Image(
-              getClass().getClassLoader().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
-    } else {
-      result.setText(label);
-    }
-    result.setOnAction(handler);
-    return result;
-  }
-
-  //FIXME
-  private Menu makeMenu(String property, EventHandler<ActionEvent> handler) {
-    Menu result = new Menu();
-
-    final String IMAGEFILE_SUFFIXES = String
-        .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     String label = myResources.getString(property);
     if (label.matches(IMAGEFILE_SUFFIXES)) {
       result.setGraphic(
@@ -345,11 +320,87 @@ public class SimulationApp {
   }
 
   /**
-   * Runner method, actually runs the game when a user presses play in the IDE
-   *
-   * @param args
+   * Handles the toggling of the play/pause button. Switches between playing the animation and stopping it.
+   * @param button - the button which gets its image swapped between play and pause when clicked
    */
-//  public static void main(String[] args) {
-//    launch(args);
-//  }
+  public void handlePlayPause(Button button) {
+    running = !running;
+    final String IMAGEFILE_SUFFIXES = String
+        .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
+    String label = "";
+    if (running) {
+      label = myResources.getString("Pause");
+    } else {
+      label = myResources.getString("Play");
+    }
+    if (label.matches(IMAGEFILE_SUFFIXES)) {
+      button.setGraphic(
+          new ImageView(new Image(
+              getClass().getClassLoader().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
+    }
+  }
+
+  /**
+   * Takes in a double representing a percent value. This reflects a percent of the max speed.
+   * @param percentSpeed the percent of the max speed to which to set the simulation
+   */
+  public void setSpeed(double percentSpeed) {
+    percentSpeed *= MAX_UPDATE_PERIOD;
+    speed = MAX_UPDATE_PERIOD - percentSpeed;
+  }
+
+  /**
+   * Closes the current window in which the exit button was pressed
+   */
+  private void closeWindow() {
+    myStage.close();
+  }
+
+  /**
+   * Creates a new window with a copy of the application running in it
+   */
+  private void makeWindow() {
+    SimulationApp newWindow = new SimulationApp(new Stage());
+  }
+
+  /**
+   * Handles the creation of Menu and MenuItem labels
+   * @param property - the label to be applied to the items, from the .properties file
+   * @param result - the menu item to which the label is applied
+   */
+  private void createLabel(String property, MenuItem result) {
+    String label = myResources.getString(property);
+    if (label.matches(IMAGEFILE_SUFFIXES)) {
+      result.setGraphic(
+          new ImageView(new Image(
+              getClass().getClassLoader().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
+    } else {
+      result.setText(label);
+    }
+  }
+
+  /**
+   * Handles the creation of MenuItem objects, applies a label to them as specified in the createLabel method and
+   * gives them an action on click.
+   * @param property - the label to be applied to the object specified in the .properties file
+   * @param handler - the action to occur when the menu item is clicked
+   * @return a MenuItem to be placed in a Menu object with a label and action on click
+   */
+  private MenuItem makeMenuItem(String property, EventHandler<ActionEvent> handler) {
+    MenuItem result = new MenuItem();
+    createLabel(property, result);
+    result.setOnAction(handler);
+    return result;
+  }
+
+  /**
+   * Handles the creation of Menu objects, applies a label to them as specified in the createLabel method
+   * @param property - the label to be applied to the menu, from the .properties file
+   * @return a Menu to be rendered on stage with a label
+   */
+  private Menu makeMenu(String property) {
+    Menu result = new Menu();
+    createLabel(property, result);
+    return result;
+  }
 }
