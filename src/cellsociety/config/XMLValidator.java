@@ -17,8 +17,10 @@ import org.xml.sax.SAXException;
  * @author Alex Xu, aqx
  */
 public class XMLValidator {
-    public static final String XSD_SCHEMA_FILEPATH = "src\\cellsociety\\config\\schema.xsd";
+    public static final String XSD_SCHEMA_FILEPATH = "src\\cellsociety\\config\\schema_v2.xsd";
     public static final String INVALID_XML_STRUCTURE = "(Invalid XML Config Structure)";
+
+    private XMLValidator(){}
 
     /**
      * Validates a XML file against the XSD file that is given as part of the program.

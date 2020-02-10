@@ -3,7 +3,11 @@
     <ConfigInfo>
         <Title>PercolationCell</Title>
         <Author>Alex Xu, aqx</Author>
-        <Shape>Tri</Shape>
+        <Shape>Hex</Shape>
+        <!-- 0: Normal -1: Toroidal -2:Infinite. Special simulations like Percolation take different values. Please see README for more info -->
+        <BorderType>3</BorderType>
+        <!-- Mask Defines the Neighborhood-->
+        <Mask>1 1 1 1 1 1</Mask>
 
         <Dimensions>
             <Width>20</Width>

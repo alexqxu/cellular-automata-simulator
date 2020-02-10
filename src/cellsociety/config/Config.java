@@ -7,6 +7,7 @@ import cellsociety.simulation.grid.Grid;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.paint.Color;
@@ -27,8 +28,7 @@ import org.xml.sax.SAXException;
  */
 public class Config {
   public static final double RANDOM_GRID_VARIABLE_VALUE = 0.5;
-  //private static final String INVALID_CELL = "Invalid Cell Thrown";
-  //private static final String INVALID_FILE = "Invalid File Requested";
+  public static final double FIRST_RANDOM_GRID_VARIABLE_VALUE = 0.25;
 
   public static final String CONFIG_NODE_NAME = "ConfigInfo";
   public static final String CELLS_NODE_NAME = "Cells";
@@ -50,6 +50,8 @@ public class Config {
   public static final String SHAPE_NODE_NAME = "Shape";
   public static final String DEFAULT_STATE_NODE_NAME = "Default";
   public static final String CUSTOM_NODE_NAME = "Custom";
+  public static final String BORDER_TYPE_NODE = "BorderType";
+  public static final String MASK_NODE_NAME = "Mask";
 
   private String packagePrefixName = "cellsociety.simulation.";
   private String gridPrefixName = packagePrefixName+"grid.";
@@ -75,7 +77,9 @@ public class Config {
   private Map<Integer, Color> myStates;
   private Map<String, Double> myParameters;
   private int defaultState = 0;
+  private int myBorderType = 0;
   private double[] randomGridVariables;
+  private int[] myMask;
 
   /**
    * Constructor for the Config object. Sets the file and sets up the documentBuilder. Then loads the file content.
@@ -83,7 +87,7 @@ public class Config {
    * @param xmlFile File object passed in, in XML format
    */
   public Config(File xmlFile) throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidFileException, InvalidXMLStructureException{
-    if(XMLValidator.validateXMLStructure(xmlFile)) {
+    if(XMLValidator.validateXMLStructure(xmlFile)){
       myFile = xmlFile;
       setupDocument();
       System.out.println(docSetUpConfirmationMessage);
@@ -135,8 +139,14 @@ public class Config {
   public String getShape(){
     return myShape;
   }
-  public int getDefaultState(){
-    return defaultState;
+  public String getDefaultState(){
+    return ""+defaultState;
+  }
+  public String getBorderType(){
+    return ""+myBorderType;
+  }
+  public String getMask(){
+      return Arrays.toString(myMask);
   }
 
   /**
@@ -158,7 +168,7 @@ public class Config {
       throw new InvalidGridException(e);
     }
     try {
-      myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, width, height);
+      myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myBorderType, myMask, width, height);
     } catch (ClassNotFoundException e) {
       throw new InvalidCellException(e);
     }
@@ -195,7 +205,8 @@ public class Config {
 
   private void setRandomVariables() {
     randomGridVariables = new double[myStates.size()];
-    for(int i = 0; i<myStates.size(); i++){
+    randomGridVariables[0] = FIRST_RANDOM_GRID_VARIABLE_VALUE;
+    for(int i = 1; i<myStates.size(); i++){
       randomGridVariables[i] = RANDOM_GRID_VARIABLE_VALUE;
     }
   }
@@ -233,6 +244,10 @@ public class Config {
       printAuthor();
       extractShape(configElement);
       printShape();
+      extractBorderType(configElement);
+      printBorderType();
+      extractMask(configElement);
+      printMask();
       extractDimensions(configElement);
       extractStates(configElement);
       extractParameters(configElement);
@@ -315,6 +330,18 @@ public class Config {
     myShape = extractElementValue(startingElement, SHAPE_NODE_NAME);
   }
 
+  private void extractBorderType(Element startingElement){
+    myBorderType = Integer.parseInt(extractElementValue(startingElement, BORDER_TYPE_NODE));
+  }
+
+  private void extractMask(Element startingElement){
+      String[] maskStrings = extractElementValue(startingElement, MASK_NODE_NAME).split(" ");
+      myMask = new int[maskStrings.length];
+      for(int i = 0; i<maskStrings.length; i++){
+          myMask[i] = Integer.parseInt(maskStrings[i]);
+      }
+  }
+
   private void extractCustom(Element startingElement){
     customRequested = Boolean.parseBoolean(extractElementValue(startingElement, CUSTOM_NODE_NAME));
   }
@@ -370,6 +397,18 @@ public class Config {
 
   private void printCustom(){
     System.out.println("Custom cell locations? " + customRequested);
+  }
+
+  private void printBorderType(){
+    System.out.println("Border Type: " + myBorderType);
+  }
+
+  private void printMask(){
+      System.out.print("Mask applied: ");
+      for(int i : myMask){
+          System.out.print(i + " ");
+      }
+      System.out.println();
   }
 
    /**
@@ -468,6 +507,8 @@ public class Config {
       myStates.put(stateEntry.getKey(), stateEntry.getValue());
     }
     cell.setState(state);
+    cell.setDefaultEdge(myBorderType);
+    cell.setMask(myMask);
     return cell;
   }
 }

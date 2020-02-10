@@ -1,5 +1,6 @@
 package cellsociety.config;
 
+import cellsociety.exceptions.XMLWriteException;
 import cellsociety.simulation.grid.Grid;
 import javafx.scene.paint.Color;
 import org.w3c.dom.Document;
@@ -35,23 +36,31 @@ public class XMLWriter {
      * @param config
      * @param grid
      */
-    public XMLWriter(Config config, Grid grid) throws ParserConfigurationException {
+    public XMLWriter(Config config, Grid grid){
         myGrid = grid;
         myConfig = config;
-        setupDocument();
+        try {
+            setupDocument();
+        } catch (ParserConfigurationException e) {
+            throw new XMLWriteException(e);
+        }
     }
 
     /**
      * Saves an XML file at the given filepath
      * @param filepath
      */
-    public void saveXML(String filepath) throws TransformerException {
+    public void saveXML(String filepath){
         addNodes();
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        DOMSource domSource = new DOMSource(myDocument);
-        StreamResult streamResult = new StreamResult(new File(filepath));
-        transformer.transform(domSource, streamResult);
+        try {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource domSource = new DOMSource(myDocument);
+            StreamResult streamResult = new StreamResult(new File(filepath));
+            transformer.transform(domSource, streamResult);
+        }catch(TransformerException e){
+            throw new XMLWriteException(e);
+        }
     }
 
     private void setupDocument() throws ParserConfigurationException {
@@ -72,6 +81,8 @@ public class XMLWriter {
         configInfo.appendChild(createEndNode(Config.TITLE_NODE_NAME, myConfig.getTitle()));
         configInfo.appendChild(createEndNode(Config.AUTHOR_NODE_NAME, myConfig.getAuthor()));
         configInfo.appendChild(createEndNode(Config.SHAPE_NODE_NAME, myConfig.getShape()));
+        configInfo.appendChild(createEndNode(Config.BORDER_TYPE_NODE, myConfig.getBorderType()));
+        configInfo.appendChild(createEndNode(Config.MASK_NODE_NAME, myConfig.getMask()));
         configInfo.appendChild(getDimensionsInfo());
         configInfo.appendChild(getSpecialParametersInfo());
         configInfo.appendChild(getStatesInfo());
@@ -91,7 +102,7 @@ public class XMLWriter {
         Element rowNode = myDocument.createElement(Config.ROW_NODE_NAME);
         rowNode.setAttribute(ROW_NUMBER_NAME, ""+row);
         for(int c = 0; c<myGrid.getWidth(); c++){
-            rowNode.appendChild(createEndNode(Config.CELLS_NODE_NAME, ""+myGrid.getState(row, c)));
+            rowNode.appendChild(createEndNode(Config.CELL_NODE_NAME, ""+myGrid.getState(row, c)));
         }
         return rowNode;
     }
@@ -115,11 +126,11 @@ public class XMLWriter {
 
     private Node getStatesInfo(){
         Element statesInfoNode = myDocument.createElement(Config.STATES_NODE_NAME);
-        statesInfoNode.appendChild(createEndNode(Config.DEFAULT_STATE_NODE_NAME, ""+myConfig.getDefaultState()));
+        statesInfoNode.appendChild(createEndNode(Config.DEFAULT_STATE_NODE_NAME, myConfig.getDefaultState()));
 
         Map<Integer, Color> statesMap = myConfig.getStates();
-        for(Integer state : statesMap.keySet()){
-            statesInfoNode.appendChild(createStateNode(state, statesMap.get(state)));
+        for(Map.Entry<Integer, Color> entry : statesMap.entrySet()){
+            statesInfoNode.appendChild(createStateNode(entry.getKey(), entry.getValue()));
         }
         return statesInfoNode;
     }
@@ -137,11 +148,9 @@ public class XMLWriter {
         return node;
     }
 
-    //FIXME: May need to refactor later to call the other constructor instead of duplicate code
     private Node createEndNode(String name, String value, String attributeName, String attributeValue){
-        Element node = myDocument.createElement(name);
+        Element node = (Element) createEndNode(name, value);
         node.setAttribute(attributeName, attributeValue);
-        node.appendChild(myDocument.createTextNode(value));
         return node;
     }
 }

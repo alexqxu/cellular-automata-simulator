@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Simulation>
+  <ConfigInfo>
+    <Title>BylLoopCell</Title>
+    <Author>Maverick Chung, mc608</Author>
+    <Shape>Rect</Shape>
+    <!-- 0: Normal -1: Toroidal -2:Infinite. Special simulations like Percolation take different values. Please see README for more info -->
+    <BorderType>-2</BorderType>
+    <!-- Mask Defines the Neighborhood-->
+    <Mask>1 1 1 1 1 1 1 1</Mask>
+
+
+    <Dimensions>
+      <Width>6</Width>
+      <Height>6</Height>
+      <Speed>0.95</Speed>
+    </Dimensions>
+
+
+
+    <!-- There can be extra parameters, only those relevant will be used. -->
+    <SpecialParameters>
+      <Parameter name="probCatch">0.7</Parameter>
+      <Parameter name="probGrow">0.1</Parameter>
+      <Parameter name="happinessThresh">0.3</Parameter>
+      <Parameter name="sharkBreedTime">40.0</Parameter>
+      <Parameter name="fishBreedTime">5.0</Parameter>
+      <Parameter name="fishFeedEnergy">2.0</Parameter>
+      <Parameter name="sharkStartEnergy">5.0</Parameter>
+    </SpecialParameters>
+
+    <!-- Default is the cells that are filled if there are not enough cells. Color names must be standard HTML Names -->
+    <!-- If not specified, DEFAULT is aways the first State (ID: 0)-->
+    <States>
+      <Default>0</Default>
+      <State>
+        <ID>0</ID>
+        <Color>black</Color>
+      </State>
+
+      <State>
+        <ID>1</ID>
+        <Color>blue</Color>
+      </State>
+
+      <State>
+        <ID>2</ID>
+        <Color>red</Color>
+      </State>
+
+      <State>
+        <ID>3</ID>
+        <Color>green</Color>
+      </State>
+
+      <State>
+        <ID>4</ID>
+        <Color>yellow</Color>
+      </State>
+
+      <State>
+        <ID>5</ID>
+        <Color>pink</Color>
+      </State>
+
+      <State>
+        <ID>6</ID>
+        <Color>white</Color>
+      </State>
+
+    </States>
+
+    <!-- Case insensitive. TRUE means you want to use custom cell locations, below in the <Cells> section. FALSE means you want to have a random grid based on parameters above -->
+    <Custom>true</Custom>
+  </ConfigInfo>
+
+  <Cells>
+    <Row numbr="0">
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="1">
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>2</Cell>
+    </Row>
+
+    <Row numbr="2">
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>3</Cell>
+      <Cell>1</Cell>
+      <Cell>2</Cell>
+    </Row>
+
+    <Row numbr="3">
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>3</Cell>
+      <Cell>4</Cell>
+      <Cell>2</Cell>
+    </Row>
+
+    <Row numbr="4">
+      <Cell>0</Cell>
+      <Cell>0</Cell>
+      <Cell>2</Cell>
+      <Cell>5</Cell>
+      <Cell>0</Cell>
+    </Row>
+
+    <Row numbr="5">
+      <Cell>0</Cell>
+    </Row>
+
+  </Cells>
+</Simulation>

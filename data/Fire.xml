@@ -3,7 +3,11 @@
     <ConfigInfo>
         <Title>FireCell</Title>
         <Author>Alex Xu, aqx</Author>
-        <Shape>Hex</Shape>
+        <Shape>Rect</Shape>
+        <!-- 0: Normal -1: Toroidal -2:Infinite. Special simulations like Percolation take different values. Please see README for more info -->
+        <BorderType>0</BorderType>
+        <!-- Mask Defines the Neighborhood-->
+        <Mask>1 0 1 0 1 0 1 0</Mask>
 
         <Dimensions>
             <Width>20</Width>
