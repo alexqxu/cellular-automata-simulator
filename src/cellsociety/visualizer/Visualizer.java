@@ -36,32 +36,12 @@ import javafx.stage.Stage;
 public abstract class Visualizer {
 
   protected static final int SIZE = 400;
-  private static final String RESOURCE_PACKAGE = "Image";
   private static final String STYLESHEET = "default.css";
-  private static final int MAX_UPDATE_PERIOD = 2;
 
   protected Grid myGrid;
   private BorderPane bundle;
-  private Scene myScene;
-  private Stage myStage;
-  private Config myConfig;
-  private ResourceBundle myResources;
-  private BorderPane frame;
   protected ArrayList<ArrayList<Shape>> cellGrid;
-  private Slider slider;
-  private Button playpause;
-  private Button loadFile;
-  private Menu newWindow;
-  private Menu exit;
-  private Button reset;
-  private Button step;
-  private MenuBar menuBar;
-  private File currentFile;
-  //private Map<Integer, Color> myColorMap;
-  private double secondsElapsed;
-  private double speed;
-  private boolean running;
-  protected Map<Integer, Color> myColorMap; //FIXME maverick's change
+  protected Map<Integer, Color> myColorMap;
   private LineChart<Number, Number> myGraph;
   private List<Series> mySeries;
   private long stepsElapsed;
@@ -72,7 +52,6 @@ public abstract class Visualizer {
     stepsElapsed = -1;
   }
 
-
   /**
    * Instantiates a grid of rectangles in a gridpane to be rendered by the scene. Takes color data
    * from the Grid class and uses it to create scaled rectangles at the correct size and dimension
@@ -80,7 +59,6 @@ public abstract class Visualizer {
    *
    * @return A gridpane containing all the rectangles in the simulation
    */
-  //FIXME I set the width equal to the size/num vert cells. This will only work for squares, I am wondering why it is breaking like this.
   public abstract Node instantiateCellGrid();
 
   private Node setGraph() {
