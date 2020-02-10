@@ -516,9 +516,6 @@ public class Config {
     for (Map.Entry<String, Double> parameterEntry : myParameters.entrySet()) {
       cell.setParam(parameterEntry.getKey(), parameterEntry.getValue());
     }
-    for (Map.Entry<Integer, Color> stateEntry : myStates.entrySet()) {
-      myStates.put(stateEntry.getKey(), stateEntry.getValue());
-    }
     if(myStates.keySet().contains(state)) {
       cell.setState(state);
     }
