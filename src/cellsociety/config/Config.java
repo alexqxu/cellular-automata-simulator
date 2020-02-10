@@ -7,6 +7,7 @@ import cellsociety.simulation.grid.Grid;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.paint.Color;
@@ -27,8 +28,6 @@ import org.xml.sax.SAXException;
  */
 public class Config {
   public static final double RANDOM_GRID_VARIABLE_VALUE = 0.5;
-  //private static final String INVALID_CELL = "Invalid Cell Thrown";
-  //private static final String INVALID_FILE = "Invalid File Requested";
 
   public static final String CONFIG_NODE_NAME = "ConfigInfo";
   public static final String CELLS_NODE_NAME = "Cells";
@@ -51,6 +50,7 @@ public class Config {
   public static final String DEFAULT_STATE_NODE_NAME = "Default";
   public static final String CUSTOM_NODE_NAME = "Custom";
   public static final String BORDER_TYPE_NODE = "BorderType";
+  public static final String MASK_NODE_NAME = "Mask";
 
   private String packagePrefixName = "cellsociety.simulation.";
   private String gridPrefixName = packagePrefixName+"grid.";
@@ -78,6 +78,7 @@ public class Config {
   private int defaultState = 0;
   private int myBorderType = 0;
   private double[] randomGridVariables;
+  private int[] myMask;
 
   /**
    * Constructor for the Config object. Sets the file and sets up the documentBuilder. Then loads the file content.
@@ -137,11 +138,14 @@ public class Config {
   public String getShape(){
     return myShape;
   }
-  public int getDefaultState(){
-    return defaultState;
+  public String getDefaultState(){
+    return ""+defaultState;
   }
-  public int getBorderType(){
-    return myBorderType;
+  public String getBorderType(){
+    return ""+myBorderType;
+  }
+  public String getMask(){
+      return Arrays.toString(myMask);
   }
 
   /**
@@ -163,7 +167,7 @@ public class Config {
       throw new InvalidGridException(e);
     }
     try {
-      myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, width, height);
+      myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myBorderType, myMask, width, height);
     } catch (ClassNotFoundException e) {
       throw new InvalidCellException(e);
     }
@@ -240,6 +244,8 @@ public class Config {
       printShape();
       extractBorderType(configElement);
       printBorderType();
+      extractMask(configElement);
+      printMask();
       extractDimensions(configElement);
       extractStates(configElement);
       extractParameters(configElement);
@@ -326,6 +332,14 @@ public class Config {
     myBorderType = Integer.parseInt(extractElementValue(startingElement, BORDER_TYPE_NODE));
   }
 
+  private void extractMask(Element startingElement){
+      String[] maskStrings = extractElementValue(startingElement, MASK_NODE_NAME).split(" ");
+      myMask = new int[maskStrings.length];
+      for(int i = 0; i<maskStrings.length; i++){
+          myMask[i] = Integer.parseInt(maskStrings[i]);
+      }
+  }
+
   private void extractCustom(Element startingElement){
     customRequested = Boolean.parseBoolean(extractElementValue(startingElement, CUSTOM_NODE_NAME));
   }
@@ -385,6 +399,14 @@ public class Config {
 
   private void printBorderType(){
     System.out.println("Border Type: " + myBorderType);
+  }
+
+  private void printMask(){
+      System.out.print("Mask applied: ");
+      for(int i : myMask){
+          System.out.print(i + " ");
+      }
+      System.out.println();
   }
 
    /**
@@ -484,6 +506,7 @@ public class Config {
     }
     cell.setState(state);
     cell.setDefaultEdge(myBorderType);
+    cell.setMask(myMask);
     return cell;
   }
 }
