@@ -25,7 +25,13 @@ February 9, 2020
     the scene, as well as generating the graph of cell populations and the simulation-specific parameter-tuning text fields. This visualizer passes
     its generated nodes to the Application for placing in the stage along with the general UI controls.
 * Alex Xu:
-* Maverick Chung
+* Maverick Chung:
+    - Wrote Cell class and subclasses to implement the cellular simulations, including making a Rule Table subclass to read simulation
+    rules from a String table.
+    - Wrote Grid class and subclasses to implement different types of grid shapes, including rectangular, triangular, and hexagonal.
+    - Implemented different types of neighborhoods for cells to interact with their neighbors, changeable by XML.
+    - Implemented different types of edges for simulations, including finite, toroidal, and infinite.
+
 
 ### Resources Used
 * Stack Overflow
@@ -87,6 +93,51 @@ Features implemented:
         I decided to allow running independently as users can always run two simulations they want themselves and compare them, even if 
         these simulations are not exactly in lock-step.
 
+### XML Guide
+Note: In general, poorly formatted XML or bad options (e.g. setting size to `Pentagon`) will cause the XML reader
+to ask you to pick a new file, while giving bad numbers will likely result in undesirable behavior (e.g. giving a 
+negative shark breeding time will result in sharks breeding every timestep.)
+
+#### Title and Author
+Self-explanatory, indicating the title and author.
+
+#### Shape
+Can be one of Rect, Tri, or Hex. Inputting something else will cause the reader to ask for a new file.
+
+#### Border Type
+Indicates the edge type of the simulation. Inputting a non-negative number will treat all cells beyond the visible edge as that
+type. Inputting a -1 will treat the grid as a toroid, and inputting a -2 will make the grid scale infinitely.
+
+#### Mask
+Indicates the neighborhood of each cell. Must match in dimension to the maximum number of possible neighbors for the given shape
+(e.g. 12 for triangle) or it will be ignored. Put a 0 for every neighbor the cell should ignore, and a 1 for all other neighbors.
+The first value is the northmost neighbor, and they rotate clockwise from there (e.g. the mask `1 0 0 1 0 0`) will only check
+neighbors directly above or below the cell in a hex grid.
+
+#### Dimensions
+* Width and Height: Must both be integer values larger than 0.
+* Speed: A float between 0 and 1, indicating the speed of the simulation. Speed of 1 updates every frame, while speed of 0
+updates once every two seconds. Indicating a speed higher than 1 has the same effect of inputting 1, while inputting a 
+negative speed will cause the speed to be update slower than once per two seconds.
+
+#### Special Parameters
+These are the parameters for the simulations, in the format `<Parameter name = "fishFeedEnergy">1.1</Parameter>`.
+Putting parameters in a simulation that does not require them will have no effect. Not including required parameters
+will cause the reader to ask for a new file.
+
+#### States
+* Default: the default state used to fill in unspecified cells.
+* State: a tag pairing a state to a color. The colors can be standard HTML names or hex strings (e.g. "00cc00").
+Deleting a required state will ask for a new file.
+
+#### Custom
+True or false, indicating whether or not the grid should use the custom configuration or be random.
+
+#### Cell Rows
+Each row has a numbr field, which has no effect on the simulation and is purely there to be human readable.
+However, it will ask for a new file if it is larger than 255. The cells list is the states of the cells to be put on each row.
+If it is larger than the stated dimensions, it will be truncated, and if it is smaller, the remaining cells will
+be filled in with the default state.
 
 ### Notes/Assumptions
 Assumptions or Simplifications:
