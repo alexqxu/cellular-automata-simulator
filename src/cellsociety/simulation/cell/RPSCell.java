@@ -8,11 +8,12 @@ public class RPSCell extends Cell {
   public static final String RPS_THRESHHOLD = "RPSThreshhold";
   public static final String RANDOM_THRESHHOLD = "randomThreshhold";
   public static final String NUM_STATES = "numStates";
+  public static final double DEFAULT_THRESH = 3.0;
 
   public RPSCell() {
     super();
     defaultEdge = 0;
-    setParam(RPS_THRESHHOLD, 3.0);
+    setParam(RPS_THRESHHOLD, DEFAULT_THRESH);
     setParam(RANDOM_THRESHHOLD, 0.0);
     setParam(NUM_STATES, 3);
   }
@@ -57,6 +58,7 @@ public class RPSCell extends Cell {
 
   /**
    * Returns true if i beats state
+   *
    * @param i
    * @param state
    * @return
@@ -69,11 +71,11 @@ public class RPSCell extends Cell {
       return false;
     }
     int num = (int) getParam(NUM_STATES);
-    int tempstate = state-1;
-    int tempi = i-1;
-    if (Math.abs(tempstate-tempi)<=num/2){
-      return tempi>tempstate;
+    int tempstate = state - 1;
+    int tempi = i - 1;
+    if (Math.abs(tempstate - tempi) <= num / 2) {
+      return tempi > tempstate;
     }
-    return tempi<tempstate;
+    return tempi < tempstate;
   }
 }

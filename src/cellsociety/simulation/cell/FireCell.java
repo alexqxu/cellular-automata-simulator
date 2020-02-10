@@ -11,7 +11,7 @@ public class FireCell extends Cell {
   public FireCell() {
     super();
     defaultEdge = 0;
-    setMask(new int[]{1,0,1,0,1,0,1,0});
+    setMask(new int[]{1, 0, 1, 0, 1, 0, 1, 0});
   }
 
   public FireCell(double probCatch) {

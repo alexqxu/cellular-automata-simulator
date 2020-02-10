@@ -1,6 +1,6 @@
 package cellsociety.simulation.cell;
 
-public class ChouReggiaLoopCell extends RuleTableCell{
+public class ChouReggiaLoopCell extends RuleTableCell {
 
   public static final String RULE_TABLE = "000000 000440 000547 000100 000110 000330 004040 004445 "
       + "004100 001040 001010 001740 003000 003010 003030 007040 007030 007104 007110 040000 040070 "
