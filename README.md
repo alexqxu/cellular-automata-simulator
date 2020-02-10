@@ -161,6 +161,9 @@ Interesting data files:
 * ```InvalidStructureTest``` tests the exception handling for incorrect labelling in the XML (ie <Dymensionz> instead of <Dimensions>)
 
 Known Bugs:
+* Turning off the gridlines in a hex grid leaves a small 1-pixel line where the gridlines were.
+* Turning off the gridlines in a triangle grid leaves a small 1-pixel line where the diagonal gridlines were.
+* Running large grids at full speed causes significant lag.
 
 Extra credit:
 
