@@ -177,7 +177,7 @@ public class SimulationApp {
    */
   public void loadConfigFile(File file) {
     if (file == null) {
-      myStage.close();
+      return;
     } else {
       try {
         myConfig = new Config(file);
@@ -191,8 +191,6 @@ public class SimulationApp {
         retryLoadFile("Invalid Shape Specified");
       } catch (InvalidXMLStructureException e){
         retryLoadFile(e.getMessage());
-      } catch (NullPointerException e){
-        myStage.close();
       }
 
       Class visualizerClass = null;
@@ -202,6 +200,8 @@ public class SimulationApp {
             .newInstance(myConfig.getGrid()));
       } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
         retryLoadFile("Invalid Visualizer Specified");
+      } catch (NullPointerException e){
+        return;
       }
       myVisualizer.setColorMap(myConfig.getStates());
     }
@@ -232,7 +232,7 @@ public class SimulationApp {
         displayError(message);
         badFile = true;
       } catch (NullPointerException e){
-        myStage.close();
+        return;
       }
     } while (badFile);
   }
