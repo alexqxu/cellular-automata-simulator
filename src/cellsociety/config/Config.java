@@ -164,14 +164,13 @@ public class Config {
    * Based on the parameters set, creates a grid with a randomized configuration of CELLS
    * @throws InvalidCellException
    * @throws InvalidGridException
-   * @throws InvalidShapeException
    */
   public void createRandomGrid(int width, int height)  throws InvalidCellException, InvalidGridException{
     Class gridClass = null;
     try {
       gridClass = Class.forName(gridPrefixName + myShape + gridSuffix);
     } catch (ClassNotFoundException e) {
-      throw new InvalidShapeException(e);
+      throw new InvalidGridException(e);
     }
     try {
       myGrid = (Grid) (gridClass.getConstructor().newInstance());
@@ -192,7 +191,6 @@ public class Config {
    * Based on the parameters set, creates a grid with a randomized configuration of CELLS (with XML read dimensions)
    * @throws InvalidCellException
    * @throws InvalidGridException
-   * @throws InvalidShapeException
    */
   public void createRandomGrid() throws InvalidCellException, InvalidGridException{
     createRandomGrid(myWidth, myHeight);
@@ -431,7 +429,6 @@ public class Config {
    /**
    * Based on parameters AND Cell configuration, creates a grid.
    * @throws InvalidGridException
-   * @throws InvalidShapeException
    */
   private void createGrid()
       throws InvalidGridException {
@@ -439,7 +436,7 @@ public class Config {
     try {
       gridClass = Class.forName(gridPrefixName + myShape + gridSuffix);
     } catch (ClassNotFoundException e) {
-      throw new InvalidShapeException(e);
+      throw new InvalidGridException(e);
     }
     try {
       myGrid = (Grid) (gridClass.getConstructor().newInstance());
@@ -525,6 +522,7 @@ public class Config {
     }
     else{
       cell.setState(defaultState);
+      throw new InvalidCellException(new RuntimeException()); //FIXME added by maverick
     }
     cell.setDefaultEdge(myBorderType);
     cell.setMask(myMask);

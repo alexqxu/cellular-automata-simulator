@@ -45,6 +45,6 @@
 
 .menu-bar{
   -fx-min-height: 50;
-  -fx-background-color: linear-gradient(to bottom, #969696 0%, #6699ff 100%);
+  -fx-background-color: linear-gradient(to top, #969696 0%, #6699ff 100%);
 }
 
