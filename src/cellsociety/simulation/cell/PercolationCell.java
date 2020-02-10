@@ -4,14 +4,16 @@ import java.util.Queue;
 
 public class PercolationCell extends Cell {
 
+  public static final int WATER_EDGE_STATE = 3;
+
   public PercolationCell() {
     super();
-    defaultEdge = 3;
+    defaultEdge = WATER_EDGE_STATE;
   }
 
   @Override
   void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
-    if (neighbors[0].getState() == 3) {
+    if (neighbors[0].getState() == WATER_EDGE_STATE) {
       neighbors[0].setState(2); //this is okay because cells with state 3 are dummy cells
     }
     if (getState() == 1) {

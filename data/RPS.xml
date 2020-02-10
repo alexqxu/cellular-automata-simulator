@@ -17,8 +17,9 @@
 
     <!-- There can be extra parameters, only those relevant will be used. -->
     <SpecialParameters>
-      <Parameter name = "RPSThreshhold">2</Parameter>
-      <Parameter name = "randomThreshhold">0</Parameter>
+      <Parameter name = "RPSThreshhold">3</Parameter>
+      <Parameter name = "randomThreshhold">1</Parameter>
+      <Parameter name = "numStates">3</Parameter>
     </SpecialParameters>
 
     <!-- Default is the cells that are filled if there are not enough cells. Color names must be standard HTML Names -->
@@ -44,17 +45,6 @@
         <ID>3</ID>
         <Color>blue</Color>
       </State>
-
-      <State>
-        <ID>4</ID>
-        <Color>yellow</Color>
-      </State>
-
-      <State>
-        <ID>5</ID>
-        <Color>pink</Color>
-      </State>
-
     </States>
 
     <!-- Case insensitive. TRUE means you want to use custom cell locations, below in the <Cells> section. FALSE means you want to have a random grid based on parameters above -->

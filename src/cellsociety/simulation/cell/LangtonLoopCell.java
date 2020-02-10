@@ -1,9 +1,5 @@
 package cellsociety.simulation.cell;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
-
 public class LangtonLoopCell extends RuleTableCell {
 
   public static final String RULE_TABLE = "000000 000012 000020 000030 000050 000063 000071 000112 "

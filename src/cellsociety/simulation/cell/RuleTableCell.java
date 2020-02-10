@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 
-public abstract class RuleTableCell extends Cell{
+public abstract class RuleTableCell extends Cell {
+
   protected String ruleTable;
   protected Map<Integer, HashMap<String, Integer>> ruleMap;
 
-  public RuleTableCell(){
+  public RuleTableCell() {
     super();
     defaultEdge = Cell.INFINTE;
   }

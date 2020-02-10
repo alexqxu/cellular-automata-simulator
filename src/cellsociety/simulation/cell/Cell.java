@@ -89,7 +89,7 @@ public abstract class Cell {
     removeMask(neighbors);
   }
 
-  private void removeMask(Cell[] neighbors) {
+  protected void removeMask(Cell[] neighbors) {
     if (mask.length != neighbors.length) {
       return;
     }
@@ -101,13 +101,12 @@ public abstract class Cell {
     }
   }
 
-  private void applyMask(Cell[] neighbors) {
+  protected void applyMask(Cell[] neighbors) {
     if (mask.length != neighbors.length) {
       return;
     }
     for (int i = 0; i < mask.length; i++) {
       if (mask[i] == 0) {
-        System.out.println("mask[i] = " + mask[i]);
         mask[i] = -neighbors[i].state;
         neighbors[i].state = 0;
       }
@@ -136,7 +135,7 @@ public abstract class Cell {
    * @param value the double value of the param
    */
   public void setParam(String param, double value) {
-    paramMap.put(param, value);
+    paramMap.put(param.toLowerCase(), value);
   }
 
   /**
@@ -146,7 +145,7 @@ public abstract class Cell {
    * @return the value of the parameter
    */
   public double getParam(String param) {
-    Double ret = paramMap.get(param);
+    Double ret = paramMap.get(param.toLowerCase());
     if (ret == null) {
       throw new RuntimeException("param (" + param + ") asked for but not set.");
     }
@@ -182,21 +181,6 @@ public abstract class Cell {
     state = (state + 1) % (max + 1);
   }
 
-
-  protected int getSideOffset(int len) {
-    if (len % 4 == 0) {
-      return len / 3;
-    }
-    return 1;
-  }
-
-  /*protected Cell[] triAdjust(int r, int c, Cell[] arr) {
-    if ((r+c)%2==0 && arr.length==12) {
-      return rotateNeighbors(arr);
-    }
-    return arr;
-  }*/
-
   protected Cell[] rotateNeighbors(Cell[] arr) {
     Cell[] ret = new Cell[arr.length];
     for (int i = 0; i < arr.length; i++) {
@@ -208,8 +192,6 @@ public abstract class Cell {
   public void setPointUp(boolean point) {
     pointingUp = point;
   }
-
-
 
   public void setNextState(int st) {
     nextState = st;
