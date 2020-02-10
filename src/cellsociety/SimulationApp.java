@@ -157,7 +157,7 @@ public class SimulationApp {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Choose Simulation File");
     fileChooser.setInitialDirectory(new File(System.getProperty(XML_FILEPATH)));
-    //fileChooser.getExtensionFilters().add(new ExtensionFilter("XML Files", "*.xml"));
+    fileChooser.getExtensionFilters().add(new ExtensionFilter("XML Files", "*.xml"));
     File file = fileChooser.showOpenDialog(myStage);
     if (file != null) {
       myFile = file;

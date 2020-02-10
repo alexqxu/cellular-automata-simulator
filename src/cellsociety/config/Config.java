@@ -86,13 +86,17 @@ public class Config {
 
   /**
    * Constructor for the Config object. Sets the file and sets up the documentBuilder. Then loads the file content.
-   *
+   * Image Loading is currently not working.
    * @param file File object passed in, in XML format or Image
    */
   public Config(File file) throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidFileException, InvalidXMLStructureException, InvalidImageException, InvalidDimensionsException{
     if(isImageFile(file)){
       ImageReader imageReader = new ImageReader(file);
       myGrid = imageReader.generateGrid();
+      myStates = imageReader.getStates();
+      myShape = "Rect";
+      myTitle = "RPSCell";
+      myBorderType = 0;
     }
     else if(XMLValidator.validateXMLStructure(file)){
       myFile = file;
