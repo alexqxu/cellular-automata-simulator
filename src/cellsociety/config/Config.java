@@ -29,7 +29,6 @@ public class Config {
   public static final double RANDOM_GRID_VARIABLE_VALUE = 0.5;
   //private static final String INVALID_CELL = "Invalid Cell Thrown";
   //private static final String INVALID_FILE = "Invalid File Requested";
-  public static final String INVALID_XML_STRUCTURE = "Invalid XML Config Structure";
 
   public static final String CONFIG_NODE_NAME = "ConfigInfo";
   public static final String CELLS_NODE_NAME = "Cells";
@@ -89,9 +88,6 @@ public class Config {
       setupDocument();
       System.out.println(docSetUpConfirmationMessage);
       loadFile();
-    }
-    else{
-      throw new InvalidXMLStructureException(INVALID_XML_STRUCTURE, xmlFile);
     }
   }
 

@@ -7,6 +7,8 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.File;
 import java.io.IOException;
+
+import cellsociety.exceptions.InvalidXMLStructureException;
 import org.xml.sax.SAXException;
 
 
@@ -16,20 +18,21 @@ import org.xml.sax.SAXException;
  */
 public class XMLValidator {
     public static final String XSD_SCHEMA_FILEPATH = "src\\cellsociety\\config\\schema.xsd";
+    public static final String INVALID_XML_STRUCTURE = "(Invalid XML Config Structure)";
 
     /**
      * Validates a XML file against the XSD file that is given as part of the program.
      * @param xmlFile
      * @return true if the document structure is valid, false otherwise.
      */
-    public static boolean validateXMLStructure(File xmlFile){
+    public static boolean validateXMLStructure(File xmlFile) throws InvalidXMLStructureException{
         try {
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = factory.newSchema(new File(XSD_SCHEMA_FILEPATH));
             Validator validator = schema.newValidator();
             validator.validate(new StreamSource(xmlFile));
         }catch(IOException | SAXException e){
-            return false;
+            throw new InvalidXMLStructureException(e, INVALID_XML_STRUCTURE+e.getMessage());
         }
         return true;
     }
