@@ -29,34 +29,34 @@ public class Config {
   public static final double RANDOM_GRID_VARIABLE_VALUE = 0.5;
   //private static final String INVALID_CELL = "Invalid Cell Thrown";
   //private static final String INVALID_FILE = "Invalid File Requested";
-  private static final String INVALID_XML_STRUCTURE = "Invalid XML Config Structure";
-
-  private String packagePrefixName = "cellsociety.simulation.";
-  private String gridPrefixName = packagePrefixName+"grid.";
-  private String cellPrefixName = packagePrefixName+"cell.";
-  private String gridSuffix = "Grid";
-  private String visualizerSuffix = "Visualizer";
+  public static final String INVALID_XML_STRUCTURE = "Invalid XML Config Structure";
 
   public static final String CONFIG_NODE_NAME = "ConfigInfo";
   public static final String CELLS_NODE_NAME = "Cells";
   public static final String TITLE_NODE_NAME = "Title";
   public static final String AUTHOR_NODE_NAME = "Author";
   public static final String PARAMETERS_NODE_NAME = "SpecialParameters";
-  private String statesNodeName = "States";
+  public static final String STATES_NODE_NAME = "States";
   public static final String SINGLE_PARAMETER_NODE_NAME = "Parameter";
-  private String singleStateNodeName = "State";
+  public static final String SINGLE_STATE_NODE_NAME = "State";
   public static final String PARAMETER_NAME_ATTRIBUTE_NAME = "name";
-  private String rowNodeName = "Row";
-  private String stateIDNodeName = "ID";
-  private String colorNodeName = "Color";
+  public static final String ROW_NODE_NAME = "Row";
+  public static final String STATE_ID_NODE_NAME = "ID";
+  public static final String COLOR_NODE_NAME = "Color";
   public static final String DIMENSIONS_NODE_NAME = "Dimensions";
   public static final String SPEED_NODE_NAME = "Speed";
   public static final String WIDTH_NODE_NAME = "Width";
   public static final String HEIGHT_NODE_NAME = "Height";
-  private String cellNodeName = "Cell";
+  public static final String CELL_NODE_NAME = "Cell";
   public static final String SHAPE_NODE_NAME = "Shape";
-  private String defaultStateNodeName = "Default";
-  private String customNodeName = "Custom";
+  public static final String DEFAULT_STATE_NODE_NAME = "Default";
+  public static final String CUSTOM_NODE_NAME = "Custom";
+
+  private String packagePrefixName = "cellsociety.simulation.";
+  private String gridPrefixName = packagePrefixName+"grid.";
+  private String cellPrefixName = packagePrefixName+"cell.";
+  private String gridSuffix = "Grid";
+  private String visualizerSuffix = "Visualizer";
 
   private String docSetUpConfirmationMessage = "---Document Setup Complete---";
   private String configSetUpConfirmationMessage = "---Config Info Load Complete---";
@@ -139,13 +139,9 @@ public class Config {
   public String getShape(){
     return myShape;
   }
-  public int getWidth(){
-    return myWidth;
+  public int getDefaultState(){
+    return defaultState;
   }
-  public int getHeight(){
-    return myHeight;
-  }
-
 
   /**
    * Based on the parameters set, creates a grid with a randomized configuration of CELLS
@@ -274,20 +270,20 @@ public class Config {
   private void extractStates(Element startingElement) {
     myStates = new HashMap<>();
 
-    Node statesNode = startingElement.getElementsByTagName(statesNodeName).item(0);
+    Node statesNode = startingElement.getElementsByTagName(STATES_NODE_NAME).item(0);
     if (statesNode.getNodeType() == Node.ELEMENT_NODE) {
       Element statesElement = (Element) statesNode;
 
       extractDefaultState(statesElement);
-      NodeList statesNodeList = statesElement.getElementsByTagName(singleStateNodeName);
+      NodeList statesNodeList = statesElement.getElementsByTagName(SINGLE_STATE_NODE_NAME);
 
       for (int i = 0; i < statesNodeList.getLength(); i++) {
         Node singleStateNode = statesNodeList.item(i);
         if (singleStateNode.getNodeType() == Node.ELEMENT_NODE) {
           Element singleStateElement = (Element) singleStateNode;
           Integer stateID = Integer.valueOf(
-              singleStateElement.getElementsByTagName(stateIDNodeName).item(0).getTextContent());
-          String stateColor = singleStateElement.getElementsByTagName(colorNodeName).item(0)
+              singleStateElement.getElementsByTagName(STATE_ID_NODE_NAME).item(0).getTextContent());
+          String stateColor = singleStateElement.getElementsByTagName(COLOR_NODE_NAME).item(0)
               .getTextContent();
           myStates.put(stateID, Color.web(stateColor));
         }
@@ -308,7 +304,7 @@ public class Config {
   }
 
   private void extractDefaultState(Element statesElement){
-    defaultState = Integer.parseInt(extractElementValue(statesElement, defaultStateNodeName));
+    defaultState = Integer.parseInt(extractElementValue(statesElement, DEFAULT_STATE_NODE_NAME));
   }
 
   private void extractTitle(Element startingElement) {
@@ -324,7 +320,7 @@ public class Config {
   }
 
   private void extractCustom(Element startingElement){
-    customRequested = Boolean.parseBoolean(extractElementValue(startingElement, customNodeName));
+    customRequested = Boolean.parseBoolean(extractElementValue(startingElement, CUSTOM_NODE_NAME));
   }
 
   private void extractSpeed(Element dimensionsElement) {
@@ -399,13 +395,13 @@ public class Config {
       throw new InvalidGridException(e);
     }
     int row = 0;
-    NodeList rowNodeList = doc.getElementsByTagName(rowNodeName);
+    NodeList rowNodeList = doc.getElementsByTagName(ROW_NODE_NAME);
     for (int i = 0; i < rowNodeList.getLength(); i++) {
       if(i < myHeight) {
         int col = 0;
         Node singleRowNode = rowNodeList.item(i);
         Element singleRowElement = (Element) singleRowNode;
-        NodeList cellsNodeList = singleRowElement.getElementsByTagName(cellNodeName);
+        NodeList cellsNodeList = singleRowElement.getElementsByTagName(CELL_NODE_NAME);
 
         for (int k = 0; k < cellsNodeList.getLength(); k++) {
           if (k < myWidth) {
