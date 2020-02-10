@@ -1,6 +1,5 @@
 package cellsociety.visualizer;
 
-import static cellsociety.SimulationApp.DEFAULT_RESOURCE_FOLDER;
 import cellsociety.simulation.grid.Grid;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +43,7 @@ public abstract class Visualizer {
    * the step tracker for the graph
    */
   public Visualizer(Grid grid) {
+    bundle = new BorderPane();
     myGrid = grid;
     stepsElapsed = 0;
     gridLines = true;
@@ -118,7 +118,6 @@ public abstract class Visualizer {
    * @return a Node containing the Cell Grid render, a Graph, and a set of Text Fields for tuning parameters
    */
   public Node bundledUI() {
-    bundle = new BorderPane();
     bundle.setCenter(instantiateCellGrid());
     bundle.setRight(setGraph());
     bundle.setBottom(setParamBar());
@@ -146,6 +145,10 @@ public abstract class Visualizer {
         cellGrid.get(i).get(j).setFill(myColorMap.get(myGrid.getState(i, j)));
       }
     }
+  }
+
+  public void reDrawGrid() {
+    bundle.setCenter(instantiateCellGrid());
   }
 
   /**

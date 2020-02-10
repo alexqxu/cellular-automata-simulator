@@ -70,15 +70,27 @@ Features implemented:
     * Allow users to save the current state of the simulation as an XML configuration file that can be loaded in as the configuration of a simulation
     * Allow any aspect of a simulation to be "styled", such as the following examples:
         * Kind of grid to use, shapes, neighbors or edges with appropriate error checking
-        * Whether or not grid locations should be outlined
-* 
-    * 
+        * Whether or not grid locations should be outlined (in UI)
+        * Color of cell or patch states
+        * Shape of cells
+*Visualization
+    * Display a graph of stats about the populations of all the "kinds" of cells over the time of the simulation
+    * Allow users to interact with the simulation dynamically to change the values of its parameter
+    * Allow users to interact with the simulation dynamically to create or change a state at a grid location
+    * Allow users to run multiple simulations at the same time so they can compare the results side by side
+        * These simulations run independently of each other as separate applications. This was a design choice we made because having each individual application
+        be synchronized would require an element of the UI be contained inside the universal runner whereas the rest of the UI 
+        is unique to each instance of the application. This "global UI control" would violate the closed-ness of our UI design
+        and split functionality into different classes, making our code less focused.
+        * Furthermore, creating multiple windows allows for more flexibility and ease of use in terms of loading and closing new files/windows.
+        I decided to allow running independently as users can always run two simulations they want themselves and compare them, even if 
+        these simulations are not exactly in lock-step.
 
 
 ### Notes/Assumptions
 
 Assumptions or Simplifications:
-
+*
 Interesting data files:
 
 Known Bugs:

@@ -293,8 +293,7 @@ public class SimulationApp {
     });
     gridLines = makeButton("GridLines", e->{
       myVisualizer.setGridLines(!myVisualizer.getGridLines());
-      frame.setCenter(myVisualizer.bundledUI());
-      myVisualizer.drawGrid();
+      myVisualizer.reDrawGrid();
     });
     slider = new Slider();
     slider.setMin(0);
