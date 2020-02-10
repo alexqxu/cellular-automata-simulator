@@ -60,8 +60,17 @@ Features implemented:
 * Configuration
     * Implemented error checking for incorrect file data of the following forms:
         * Invalid or simulation type given
+        * Invalid cell state values given
         * Cell locations given that are outside the bounds of the grid's size (Config just crops)
-        * Appropriate default values when parameter values are invalid or not given
+        * Appropriate default values when parameter values are invalid or not given (Handles too many or too few numbers of parameters, and invalid numbers for each parameter)      
+    * Allow simulations initial configuration to be set by
+        * List of specific locations and states
+        * Completely randomly based on a total number of locations to occupy
+        * Randomly based on probability distributions, not concentration distributions 
+    * Allow users to save the current state of the simulation as an XML configuration file that can be loaded in as the configuration of a simulation
+    * Allow any aspect of a simulation to be "styled", such as the following examples:
+        * Kind of grid to use, shapes, neighbors or edges with appropriate error checking
+        * Whether or not grid locations should be outlined
 * 
     * 
 

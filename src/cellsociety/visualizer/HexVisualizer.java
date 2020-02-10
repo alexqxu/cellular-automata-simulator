@@ -59,9 +59,11 @@ public class HexVisualizer extends Visualizer {
           });
         }
         hex.setFill(colorgrid[i][j]);
-        hex.setStrokeType(StrokeType.INSIDE);
-        hex.setStroke(Color.GRAY);
-        hex.setStrokeWidth(.5);
+        if(gridLines) {
+          hex.setStrokeType(StrokeType.INSIDE);
+          hex.setStroke(Color.GRAY);
+          hex.setStrokeWidth(.5);
+        }
         final int r = i; //FIXME extract method into abstract class
         final int c = j;
         hex.setOnMouseClicked(e -> {

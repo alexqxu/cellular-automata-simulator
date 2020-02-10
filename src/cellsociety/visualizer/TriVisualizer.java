@@ -40,7 +40,6 @@ public class TriVisualizer extends Visualizer {
     double height = SIZE / (colorgrid.length);
     double yCoord = 0.0;
     double xCoord = 0.0;
-    boolean up = true;
     for (int i = 0; i < colorgrid.length; i++) {
       cellGrid.add(new ArrayList<Shape>());
       for (int j = 0; j < colorgrid[i].length; j++) {
@@ -60,9 +59,11 @@ public class TriVisualizer extends Visualizer {
           });
         }
         tri.setFill(colorgrid[i][j]);
-        tri.setStrokeType(StrokeType.INSIDE);
-        tri.setStroke(Color.GRAY);
-        tri.setStrokeWidth(.5);
+        if(gridLines) {
+          tri.setStrokeType(StrokeType.INSIDE);
+          tri.setStroke(Color.GRAY);
+          tri.setStrokeWidth(.5);
+        }
         final int r = i; //FIXME extract method into abstract class
         final int c = j;
         tri.setOnMouseClicked(e -> {

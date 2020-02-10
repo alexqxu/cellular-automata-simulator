@@ -37,9 +37,11 @@ public class RectVisualizer extends Visualizer {
       for (int j = 0; j < colorgrid[i].length; j++) {
         Rectangle cell = new Rectangle();
         cell.setFill(colorgrid[i][j]);
-        cell.setStrokeType(StrokeType.INSIDE);
-        cell.setStroke(Color.GRAY);
-        cell.setStrokeWidth(.5);
+        if(gridLines) {
+          cell.setStrokeType(StrokeType.INSIDE);
+          cell.setStroke(Color.GRAY);
+          cell.setStrokeWidth(.5);
+        }
         cell.setWidth(SIZE / colorgrid[i].length);
         cell.setHeight(SIZE / colorgrid.length);
         cell.setX(i * cell.getWidth());

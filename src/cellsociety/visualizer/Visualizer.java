@@ -29,7 +29,6 @@ import javafx.scene.shape.Shape;
 public abstract class Visualizer {
 
   protected static final int SIZE = 400;
-  private static final String STYLESHEET = "default.css";
 
   protected Grid myGrid;
   private BorderPane bundle;
@@ -38,6 +37,7 @@ public abstract class Visualizer {
   private LineChart<Number, Number> myGraph;
   private List<Series> mySeries;
   private long stepsElapsed;
+  protected boolean gridLines;
 
   /**
    * Constructor, gives Visualizer access to the grid created by the Config after reading the XML, and sets
@@ -45,7 +45,8 @@ public abstract class Visualizer {
    */
   public Visualizer(Grid grid) {
     myGrid = grid;
-    stepsElapsed = -1;
+    stepsElapsed = 0;
+    gridLines = true;
   }
 
   /**
@@ -82,15 +83,22 @@ public abstract class Visualizer {
       mySeries.add(tempSeries);
       myGraph.getData().add(tempSeries);
     }
-    updateChart();
+    addPoint();
     return myGraph;
   }
 
   /**
-   * Updates graph by placing a points at the next integer step representing the populations of each cell in the simulation
+   * Updates graph by placing a point at the next integer step representing the populations of each cell in the simulation
    */
   public void updateChart() {
     stepsElapsed += 1;
+    addPoint();
+  }
+
+  /**
+   * Places a point for each cell's population on the graph when called
+   */
+  private void addPoint() {
     for (int i = 0; i < mySeries.size(); i++) {
       XYChart.Data point = new XYChart.Data(stepsElapsed, myGrid.getPopulations()[i]);
       mySeries.get(i).getData().add(point);
@@ -235,5 +243,9 @@ public abstract class Visualizer {
   /**
    * @return the current Grid object
    */
-  public Grid getGrid() { return myGrid;}
+  public Grid getGrid() {return myGrid;}
+
+  public void setGridLines(boolean newGridLines) {gridLines = newGridLines;}
+
+  public boolean getGridLines(){return gridLines;}
 }
