@@ -483,6 +483,7 @@ public class Config {
       myStates.put(stateEntry.getKey(), stateEntry.getValue());
     }
     cell.setState(state);
+    cell.setDefaultEdge(myBorderType);
     return cell;
   }
 }
