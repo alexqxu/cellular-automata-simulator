@@ -169,6 +169,10 @@ public abstract class Cell {
     return defaultEdge;
   }
 
+  public void setDefaultEdge(int edge) {
+    defaultEdge = edge;
+  }
+
   @Override
   public String toString() {
     return "" + getState();
