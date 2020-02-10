@@ -21,7 +21,7 @@ February 9, 2020
 * Alex Oesterling:
     - Wrote Runner and Application class which integrate Modeling, Configuration, and Visualization components into the total simulation application. 
     These classes contain the UI element of the project, including all buttons, sliders, and menus aside from simulation-specific parameter fields
-    which the user interacts with. Wrote Visualizer class which takes data from Grid class and uses this data to render a visualization of
+    which the user interacts with. Wrote Visualizer class and inheritance hierarchy which takes data from Grid class and uses this data to render a visualization of
     the scene, as well as generating the graph of cell populations and the simulation-specific parameter-tuning text fields. This visualizer passes
     its generated nodes to the Application for placing in the stage along with the general UI controls.
 * Alex Xu:
@@ -68,6 +68,7 @@ Features implemented:
         * Invalid or simulation type given
         * Invalid cell state values given
         * Cell locations given that are outside the bounds of the grid's size (Config just crops)
+            * If cell size is smaller than grid size, config populates missing cells with the default state (user specifiable)
         * Appropriate default values when parameter values are invalid or not given (Handles too many or too few numbers of parameters, and invalid numbers for each parameter)      
     * Allow simulations initial configuration to be set by
         * List of specific locations and states
@@ -76,9 +77,21 @@ Features implemented:
     * Allow users to save the current state of the simulation as an XML configuration file that can be loaded in as the configuration of a simulation
     * Allow any aspect of a simulation to be "styled", such as the following examples:
         * Kind of grid to use, shapes, neighbors or edges with appropriate error checking
-        * Whether or not grid locations should be outlined
-* 
-    * 
+        * Whether or not grid locations should be outlined (in UI)
+        * Color of cell or patch states
+        * Shape of cells
+*Visualization
+    * Display a graph of stats about the populations of all the "kinds" of cells over the time of the simulation
+    * Allow users to interact with the simulation dynamically to change the values of its parameter
+    * Allow users to interact with the simulation dynamically to create or change a state at a grid location
+    * Allow users to run multiple simulations at the same time so they can compare the results side by side
+        * These simulations run independently of each other as separate applications. This was a design choice we made because having each individual application
+        be synchronized would require an element of the UI be contained inside the universal runner whereas the rest of the UI 
+        is unique to each instance of the application. This "global UI control" would violate the closed-ness of our UI design
+        and split functionality into different classes, making our code less focused.
+        * Furthermore, creating multiple windows allows for more flexibility and ease of use in terms of loading and closing new files/windows.
+        I decided to allow running independently as users can always run two simulations they want themselves and compare them, even if 
+        these simulations are not exactly in lock-step.
 
 ### XML Guide
 Note: In general, poorly formatted XML or bad options (e.g. setting size to `Pentagon`) will cause the XML reader
@@ -127,10 +140,21 @@ If it is larger than the stated dimensions, it will be truncated, and if it is s
 be filled in with the default state.
 
 ### Notes/Assumptions
-
 Assumptions or Simplifications:
+* Assuming that states are continuous (if there are 3 states they are always specified as 0, 1, 2, not 1, 3, 5): This allows us to click to cycle through cell states dynamically
+* Loop simulations assume the grid is of rectangles
+* Assuming that new windows will not have a universal play-pause button because it would violate certain design principles and make the class hierarchy more complicated. This 
+choice is justified because we assume that a user will never need to see two simulations running in lock step because they can play two near each other in time or even alternate
+back and forth using the step option
 
 Interesting data files:
+* ```LangtonLoop``` is an interesting example of an infinitely-scaling, growing loop
+* If you look at the smaller loops (```ChouReggia``` or ```Byl```) and put it on high speed, they form a fractal-like pattern which is really mesmerising to watch.
+* ```UpwardFire``` demonstrates masks (setting different arrangements of neighbor checking)
+* ```2BylLoop```is a bad xml files which demonstrate how error handling occurs.
+* ```InvalidCellTest``` tests the exception handling for specifying a nonexistent cell/simulation
+* ```InvalidShapeTest``` tests the exception handling for specifying an invalid shape for a grid (Circle)
+* ```InvalidStructureTest``` tests the exception handling for incorrect labelling in the XML (ie <Dymensionz> instead of <Dimensions>)
 
 Known Bugs:
 
@@ -138,4 +162,6 @@ Extra credit:
 
 
 ### Impressions
-
+* Cellular Autonoma is really interesting and mesmerising once you get the really nifty simulations running.
+ It shows the more concrete and scientific applications of computer science and application building as well as the importance
+ of separating the frontend and the backend.

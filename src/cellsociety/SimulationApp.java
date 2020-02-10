@@ -5,7 +5,6 @@ import cellsociety.config.XMLWriter;
 import cellsociety.exceptions.InvalidCellException;
 import cellsociety.exceptions.InvalidFileException;
 import cellsociety.exceptions.InvalidGridException;
-import cellsociety.exceptions.InvalidShapeException;
 import cellsociety.exceptions.InvalidXMLStructureException;
 import cellsociety.exceptions.XMLWriteException;
 import cellsociety.simulation.grid.Grid;
@@ -59,6 +58,9 @@ public class SimulationApp {
   private static final String ERROR_DIALOG = "Please Choose Another File";
   private static final String PACKAGE_PREFIX_NAME = "cellsociety.visualizer.";
   private static final String XML_FILEPATH = "user.dir";
+  public static final String INVALID_CELL = "Invalid Cell/Simulation Type Specified";
+  public static final String INVALID_SHAPE = "Invalid Shape Specified";
+  public static final String INVALID_FILE = "Invalid File Specified";
   private BorderPane frame;
   private Stage myStage;
   private Config myConfig;
@@ -158,6 +160,9 @@ public class SimulationApp {
     fileChooser.setTitle("Choose Simulation File");
     fileChooser.setInitialDirectory(new File(System.getProperty(XML_FILEPATH)));
     fileChooser.getExtensionFilters().add(new ExtensionFilter("XML Files", "*.xml"));
+    fileChooser.getExtensionFilters().add(new ExtensionFilter("PNG Files", "*.png"));
+    fileChooser.getExtensionFilters().add(new ExtensionFilter("JPG Files", "*.jpg"));
+    fileChooser.getExtensionFilters().add(new ExtensionFilter("JPEG Files", "*.jpeg"));
     File file = fileChooser.showOpenDialog(myStage);
     if (file != null) {
       myFile = file;
@@ -179,13 +184,11 @@ public class SimulationApp {
       try {
         myConfig = new Config(file);
       } catch (InvalidCellException e) {
-        retryLoadFile("Invalid Simulation Specified");
+        retryLoadFile(INVALID_CELL);
       } catch (InvalidGridException e) {
-        retryLoadFile("Invalid Shape Specified");
+        retryLoadFile(INVALID_SHAPE);
       } catch (InvalidFileException e) {
-        retryLoadFile("Invalid File Specified");
-      } catch (InvalidShapeException e) {
-        retryLoadFile("Invalid Shape Specified");
+        retryLoadFile(INVALID_FILE);
       } catch (InvalidXMLStructureException e){
         retryLoadFile(e.getMessage());
       } catch (Exception e){
@@ -198,7 +201,7 @@ public class SimulationApp {
         myVisualizer = (Visualizer) (visualizerClass.getConstructor(Grid.class)
             .newInstance(myConfig.getGrid()));
       } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-        retryLoadFile("Invalid Visualizer Specified");
+        retryLoadFile(INVALID_SHAPE);
       } catch (NullPointerException e){
         return;
       }
@@ -227,11 +230,11 @@ public class SimulationApp {
       } catch (InvalidFileException e) {
         displayError(message);
         badFile = true;
-      } catch (InvalidShapeException e){
-        displayError(message);
-        badFile = true;
       } catch (NullPointerException e){
         return;
+      } catch (Exception e){
+        displayError(message);
+        badFile = true;
       }
     } while (badFile);
   }
@@ -293,13 +296,11 @@ public class SimulationApp {
     });
     gridLines = makeButton("GridLines", e->{
       myVisualizer.setGridLines(!myVisualizer.getGridLines());
-      frame.setCenter(myVisualizer.bundledUI());
-      myVisualizer.drawGrid();
+      myVisualizer.reDrawGrid();
     });
     slider = new Slider();
     slider.setMin(0);
     slider.setMax(100);
-    slider.setValue(50);
     slider.setMajorTickUnit(50);
     slider.setMinorTickCount(5);
     slider.setBlockIncrement(10);
