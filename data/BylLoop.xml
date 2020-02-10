@@ -5,7 +5,11 @@
     <Author>Maverick Chung, mc608</Author>
     <Shape>Rect</Shape>
     <!-- 0: Normal -1: Toroidal -2:Infinite. Special simulations like Percolation take different values. Please see README for more info -->
+
     <BorderType>-2</BorderType>
+    <!-- Mask Defines the Neighborhood-->
+    <Mask>1 1 1 1 1 1 1 1</Mask>
+
 
     <Dimensions>
       <Width>6</Width>
