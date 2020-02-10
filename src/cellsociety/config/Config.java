@@ -346,7 +346,7 @@ public class Config {
   }
 
   private void extractBorderType(Element startingElement){
-    myBorderType = Integer.parseInt(extractElementValue(startingElement, BORDER_TYPE_NODE));
+    myBorderType = Integer.parseInt(extractElementValue(startingElement, BORDER_TYPE_NODE).trim());
   }
 
   private void extractMask(Element startingElement){
@@ -522,7 +522,7 @@ public class Config {
     }
     else{
       cell.setState(defaultState);
-      throw new InvalidCellException(new RuntimeException()); //FIXME added by maverick
+      throw new InvalidCellException(new RuntimeException());
     }
     cell.setDefaultEdge(myBorderType);
     cell.setMask(myMask);
