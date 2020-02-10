@@ -48,7 +48,7 @@ public class XMLWriter {
 
     /**
      * Saves an XML file at the given filepath
-     * @param filepath
+     * @param filepath where the user wants to save the XML created
      */
     public void saveXML(String filepath) throws XMLWriteException{
         addNodes();
@@ -82,7 +82,7 @@ public class XMLWriter {
         configInfo.appendChild(createEndNode(Config.AUTHOR_NODE_NAME, myConfig.getAuthor()));
         configInfo.appendChild(createEndNode(Config.SHAPE_NODE_NAME, myConfig.getShape()));
         configInfo.appendChild(createEndNode(Config.BORDER_TYPE_NODE, myConfig.getBorderType()));
-        configInfo.appendChild(createEndNode(Config.MASK_NODE_NAME, myConfig.getMask()));
+        configInfo.appendChild(createEndNode(Config.MASK_NODE_NAME, formatMask(myConfig.getMask())));
         configInfo.appendChild(getDimensionsInfo());
         configInfo.appendChild(getSpecialParametersInfo());
         configInfo.appendChild(getStatesInfo());
@@ -140,6 +140,14 @@ public class XMLWriter {
         stateNode.appendChild(createEndNode(Config.STATE_ID_NODE_NAME, ""+id));
         stateNode.appendChild(createEndNode(Config.COLOR_NODE_NAME, ""+color));
         return stateNode;
+    }
+
+    private String formatMask(int[] inputArray){
+        String returnString = "";
+        for(int i = 0; i < inputArray.length; i++){
+            returnString = returnString + inputArray[i] + " ";
+        }
+        return returnString;
     }
 
     private Node createEndNode(String name, String value){
