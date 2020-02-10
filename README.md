@@ -182,6 +182,8 @@ Interesting data files:
 * ```LangtonLoop``` is an interesting example of an infinitely-scaling, growing loop
 * If you look at the smaller loops (```ChouReggia``` or ```Byl```) and put it on high speed, they form a fractal-like pattern which is really mesmerising to watch.
 * ```UpwardFire``` demonstrates masks (setting different arrangements of neighbor checking)
+
+Files that test Error Handling (in badXML folder):
 * ```2BylLoop```is a bad xml files which demonstrate how error handling occurs.
 * ```InvalidCellTest``` tests the exception handling for specifying a nonexistent cell/simulation
 * ```InvalidShapeTest``` tests the exception handling for specifying an invalid shape for a grid (Circle)
