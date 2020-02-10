@@ -11,6 +11,7 @@ public class FireCell extends Cell {
   public FireCell() {
     super();
     defaultEdge = 0;
+    setMask(new int[]{1,0,1,0,1,0,1,0});
   }
 
   public FireCell(double probCatch) {
@@ -36,8 +37,7 @@ public class FireCell extends Cell {
     }
     if (getState() == 1) {
       boolean canBurn = false;
-      int offset = getSideOffset(neighbors.length);
-      for (int i = 0; i < neighbors.length; i += offset) {
+      for (int i = 0; i < neighbors.length; i++) {
         if (neighbors[i].getState() == 2) {
           canBurn = true;
         }

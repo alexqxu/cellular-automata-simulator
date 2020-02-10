@@ -30,8 +30,7 @@ public class WaTorCell extends Cell {
     updatedQueue.remove(this);
     ArrayList<Cell> open = new ArrayList<>();
     ArrayList<Cell> fish = new ArrayList<>();
-    int offset = getSideOffset(neighbors.length);
-    for (int i = 0; i < neighbors.length; i += offset) {
+    for (int i = 0; i < neighbors.length; i++) {
       if (neighbors[i].getState() == 0) {
         open.add(neighbors[i]);
       }

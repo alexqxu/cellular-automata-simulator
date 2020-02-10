@@ -107,7 +107,6 @@ public abstract class Cell {
     }
     for (int i = 0; i < mask.length; i++) {
       if (mask[i] == 0) {
-        System.out.println("mask[i] = " + mask[i]);
         mask[i] = -neighbors[i].state;
         neighbors[i].state = 0;
       }
@@ -182,21 +181,6 @@ public abstract class Cell {
     state = (state + 1) % (max + 1);
   }
 
-
-  protected int getSideOffset(int len) {
-    if (len % 4 == 0) {
-      return len / 3;
-    }
-    return 1;
-  }
-
-  /*protected Cell[] triAdjust(int r, int c, Cell[] arr) {
-    if ((r+c)%2==0 && arr.length==12) {
-      return rotateNeighbors(arr);
-    }
-    return arr;
-  }*/
-
   protected Cell[] rotateNeighbors(Cell[] arr) {
     Cell[] ret = new Cell[arr.length];
     for (int i = 0; i < arr.length; i++) {
@@ -208,8 +192,6 @@ public abstract class Cell {
   public void setPointUp(boolean point) {
     pointingUp = point;
   }
-
-
 
   public void setNextState(int st) {
     nextState = st;

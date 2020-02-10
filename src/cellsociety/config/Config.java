@@ -167,11 +167,7 @@ public class Config {
       throw new InvalidGridException(e);
     }
     try {
-<<<<<<< HEAD
-      myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, 0, new int[0], width, height);
-=======
       myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myBorderType, myMask, width, height);
->>>>>>> edc6dbfe2889768e8fe86c6816c4fa75d2a69ce6
     } catch (ClassNotFoundException e) {
       throw new InvalidCellException(e);
     }
