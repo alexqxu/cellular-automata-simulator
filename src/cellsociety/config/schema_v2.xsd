@@ -9,7 +9,7 @@
                             <xs:element name="Title" type="xs:string" />
                             <xs:element name="Author" type="xs:string" />
                             <xs:element name="Shape" type="xs:string" />
-                            <xs:element name="BorderType" type="xs:unsignedByte" />
+                            <xs:element name="BorderType" type="xs:byte" />
                             <xs:element name="Mask" type="xs:string" />
                             <xs:element name="Dimensions">
                                 <xs:complexType>
