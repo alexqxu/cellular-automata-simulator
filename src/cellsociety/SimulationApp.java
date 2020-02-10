@@ -179,7 +179,7 @@ public class SimulationApp {
       try {
         myConfig = new Config(file);
       } catch (InvalidCellException e) {
-        retryLoadFile("Invalid Simulation Specified");
+        retryLoadFile("Invalid Cell/Simulation Type Specified");
       } catch (InvalidGridException e) {
         retryLoadFile("Invalid Shape Specified");
       } catch (InvalidFileException e) {
@@ -232,6 +232,9 @@ public class SimulationApp {
         badFile = true;
       } catch (NullPointerException e){
         return;
+      } catch (Exception e){
+        displayError(message);
+        badFile = true;
       }
     } while (badFile);
   }

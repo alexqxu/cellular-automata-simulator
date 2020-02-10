@@ -21,7 +21,7 @@ February 9, 2020
 * Alex Oesterling:
     - Wrote Runner and Application class which integrate Modeling, Configuration, and Visualization components into the total simulation application. 
     These classes contain the UI element of the project, including all buttons, sliders, and menus aside from simulation-specific parameter fields
-    which the user interacts with. Wrote Visualizer class which takes data from Grid class and uses this data to render a visualization of
+    which the user interacts with. Wrote Visualizer class and inheritance hierarchy which takes data from Grid class and uses this data to render a visualization of
     the scene, as well as generating the graph of cell populations and the simulation-specific parameter-tuning text fields. This visualizer passes
     its generated nodes to the Application for placing in the stage along with the general UI controls.
 * Alex Xu:
@@ -62,6 +62,7 @@ Features implemented:
         * Invalid or simulation type given
         * Invalid cell state values given
         * Cell locations given that are outside the bounds of the grid's size (Config just crops)
+            * If cell size is smaller than grid size, config populates missing cells with the default state (user specifiable)
         * Appropriate default values when parameter values are invalid or not given (Handles too many or too few numbers of parameters, and invalid numbers for each parameter)      
     * Allow simulations initial configuration to be set by
         * List of specific locations and states
@@ -91,14 +92,21 @@ Features implemented:
 Assumptions or Simplifications:
 * Assuming that states are continuous (if there are 3 states they are always specified as 0, 1, 2, not 1, 3, 5): This allows us to click to cycle through cell states dynamically
 * Loop simulations assume the grid is of rectangles
-* 
+* Assuming that new windows will not have a universal play-pause button because it would violate certain design principles and make the class hierarchy more complicated. This 
+choice is justified because we assume that a user will never need to see two simulations running in lock step because they can play two near each other in time or even alternate
+back and forth using the step option
 
 Interesting data files:
-* LangtonLoop.xml is an interesting example of an infinitely-scaling, growing loop
-* If you look at the smaller loops (ChouReggia or Byl) and put it on high speed, they form a fractal-like pattern which is really mesmerising to watch.
+* ```LangtonLoop``` is an interesting example of an infinitely-scaling, growing loop
+* If you look at the smaller loops (```ChouReggia``` or ```Byl```) and put it on high speed, they form a fractal-like pattern which is really mesmerising to watch.
+* ```UpwardFire``` demonstrates masks (setting different arrangements of neighbor checking)
+* ```2BylLoop```is a bad xml files which demonstrate how error handling occurs.
+* ```InvalidCellTest``` tests the exception handling for specifying a nonexistent cell/simulation
+* ```InvalidShapeTest``` tests the exception handling for specifying an invalid shape for a grid (Circle)
+* ```InvalidStructureTest``` tests the exception handling for incorrect labelling in the XML (ie <Dymensionz> instead of <Dimensions>)
 
 Known Bugs:
-* Cannot specify size 0,0 in xml.
+
 Extra credit:
 
 
