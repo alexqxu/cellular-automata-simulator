@@ -93,7 +93,7 @@ public abstract class Visualizer {
     myGraph = new LineChart<>(xAxis, yAxis);
 
     myGraph.applyCss();
-//    myGraph.setCreateSymbols(false);
+    myGraph.setCreateSymbols(false);
     myGraph.getStylesheets()
         .add(getClass().getClassLoader().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET)
             .toExternalForm());

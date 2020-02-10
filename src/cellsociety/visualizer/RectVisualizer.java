@@ -29,8 +29,8 @@ public class RectVisualizer extends Visualizer {
         cell.setStrokeType(StrokeType.INSIDE);
         cell.setStroke(Color.GRAY);
         cell.setStrokeWidth(.5);
-        cell.setWidth(SIZE / colorgrid.length);
-        cell.setHeight(SIZE / colorgrid[i].length);
+        cell.setWidth(SIZE / colorgrid[i].length);
+        cell.setHeight(SIZE / colorgrid.length);
         cell.setX(i * cell.getWidth());
         cell.setY(j * cell.getHeight());
         final int r = i;

@@ -14,15 +14,20 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.css.Styleable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventTarget;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Skinnable;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -49,6 +54,8 @@ public class SimulationApp {
   public static final String DEFAULT_RESOURCE_FOLDER = RESOURCES + "/";
   private static final String RESOURCE_PACKAGE = "Image";
   private static final String STYLESHEET = "default.css";
+  private static final String IMAGEFILE_SUFFIXES = String
+      .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
   private static final int MAX_UPDATE_PERIOD = 2;
 
 
@@ -60,14 +67,15 @@ public class SimulationApp {
   private Visualizer myVisualizer;
   private Slider slider;
   private Button playpause;
-  private Button loadFile;
+  private MenuItem loadFile;
   private Button shuffle;
   private ResourceBundle myResources;
-  private Button newWindow;
-  private Button exit;
+  private MenuItem newWindow;
+  private MenuItem exit;
   private Button reset;
   private Button step;
   private MenuBar menuBar;
+  private Menu menu;
   private File myFile;
   private double secondsElapsed;
   private double speed;
@@ -191,16 +199,15 @@ public class SimulationApp {
 
   public Node setToolBar() {
     HBox toolbar = new HBox();
-//    final Pane spacer = new Pane();
-//    HBox.setHgrow(spacer, Priority.ALWAYS);
     menuBar = new MenuBar();
-    newWindow = makeButton("New", e -> makeWindow());
-    loadFile = makeButton("Load", e -> {
+    menu = makeMenu("Menu");
+    newWindow = makeMenuItem("New", e -> makeWindow());
+    loadFile = makeMenuItem("Load", e -> {
       loadConfigFile(chooseFile());
       frame.setCenter(myVisualizer.bundledUI());
       myVisualizer.drawGrid();
     });
-    exit = makeButton("Exit", e-> closeWindow());
+    exit = makeMenuItem("Exit", e-> closeWindow());
     playpause = makeButton("Play", e -> handlePlayPause(playpause));
     reset = makeButton("Reset", e -> {
       loadConfigFile(myFile);
@@ -229,15 +236,13 @@ public class SimulationApp {
         setSpeed(new_val.doubleValue() / 100);
       }
     });
-//    menuBar.getMenus().addAll(newWindow);
-    toolbar.getChildren().add(shuffle);
+    menuBar.getMenus().add(menu);
+    menu.getItems().addAll(newWindow, loadFile, exit);
     toolbar.getChildren().add(menuBar);
+    toolbar.getChildren().add(shuffle);
     toolbar.getChildren().add(playpause);
     toolbar.getChildren().add(step);
     toolbar.getChildren().add(reset);
-    toolbar.getChildren().add(loadFile);
-    toolbar.getChildren().add(newWindow);
-    toolbar.getChildren().add(exit);
     toolbar.getChildren().add(slider);
     return toolbar;
   }
@@ -308,12 +313,9 @@ public class SimulationApp {
     errorAlert.setContentText("Please Choose Another File");
     errorAlert.showAndWait();
   }
-
+  //FIXME Write about how I have duplicated code but Buttons and Menus inherit setGraphic() and setText() from different parents so cannot extract one unitary method
   private Button makeButton(String property, EventHandler<ActionEvent> handler) {
     Button result = new Button();
-
-    final String IMAGEFILE_SUFFIXES = String
-        .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     String label = myResources.getString(property);
     if (label.matches(IMAGEFILE_SUFFIXES)) {
       result.setGraphic(
@@ -324,26 +326,32 @@ public class SimulationApp {
     }
     result.setOnAction(handler);
     return result;
+  }
+
+  private void createGraphic(String property, MenuItem result) {
+    String label = myResources.getString(property);
+    if (label.matches(IMAGEFILE_SUFFIXES)) {
+      result.setGraphic(
+          new ImageView(new Image(
+              getClass().getClassLoader().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
+    } else {
+      result.setText(label);
+    }
   }
 
   //FIXME
-  private Menu makeMenu(String property, EventHandler<ActionEvent> handler) {
-    Menu result = new Menu();
-
-    final String IMAGEFILE_SUFFIXES = String
-        .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
-    String label = myResources.getString(property);
-    if (label.matches(IMAGEFILE_SUFFIXES)) {
-      result.setGraphic(
-          new ImageView(new Image(
-              getClass().getClassLoader().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
-    } else {
-      result.setText(label);
-    }
+  private MenuItem makeMenuItem(String property, EventHandler<ActionEvent> handler) {
+    MenuItem result = new MenuItem();
+    createGraphic(property, result);
     result.setOnAction(handler);
     return result;
   }
 
+  private Menu makeMenu(String property) {
+    Menu result = new Menu();
+    createGraphic(property, result);
+    return result;
+  }
   /**
    * Runner method, actually runs the game when a user presses play in the IDE
    *
