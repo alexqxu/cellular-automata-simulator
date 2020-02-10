@@ -7,6 +7,7 @@ import cellsociety.exceptions.InvalidFileException;
 import cellsociety.exceptions.InvalidGridException;
 import cellsociety.exceptions.InvalidShapeException;
 import cellsociety.exceptions.InvalidXMLStructureException;
+import cellsociety.exceptions.XMLWriteException;
 import cellsociety.simulation.grid.Grid;
 import cellsociety.visualizer.Visualizer;
 import java.io.File;
@@ -192,6 +193,8 @@ public class SimulationApp {
         retryLoadFile("Invalid Shape Specified");
       } catch (InvalidXMLStructureException e){
         retryLoadFile(e.getMessage());
+      } catch (Exception e){
+        retryLoadFile("Bad File");
       }
 
       Class visualizerClass = null;
@@ -270,7 +273,11 @@ public class SimulationApp {
       XMLWriter myWriter = new XMLWriter(myConfig, myVisualizer.getGrid());
       String filepath = saveFile();
       if(filepath != null){
-        myWriter.saveXML(filepath);
+        try {
+          myWriter.saveXML(filepath);
+        } catch (XMLWriteException x) {
+          displayError("Writing File caused exceptional error. Please check disk space, working libraries, and status of loaded XML file.");
+        }
         System.out.println(filepath);
       }
     });
