@@ -9,12 +9,23 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
 
+/**
+ * @author: axo
+ */
 public class HexVisualizer extends Visualizer {
 
+  /**
+   * Constructor for Hexagon Visualizer. Calls parent Visualizer constructor with the same grid object
+   * @param grid
+   */
   public HexVisualizer(Grid grid) {
     super(grid);
   }
 
+  /**
+   * Extended form of InstantiateCellGrid. Creates Hexagons with on-click actions and rendered colors and places them inside an AnchorPane
+   * @return an AnchorPane containing the desired size and configuration of Hexagons to be rendered in the scene.
+   */
   @Override
   public Node instantiateCellGrid() {
     AnchorPane anchorPane = new AnchorPane();

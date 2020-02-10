@@ -1,13 +1,17 @@
 package cellsociety;
 
 import cellsociety.config.Config;
+import cellsociety.config.XMLWriter;
 import cellsociety.exceptions.InvalidCellException;
 import cellsociety.exceptions.InvalidFileException;
 import cellsociety.exceptions.InvalidGridException;
 import cellsociety.exceptions.InvalidShapeException;
+import cellsociety.exceptions.InvalidXMLStructureException;
 import cellsociety.simulation.grid.Grid;
 import cellsociety.visualizer.Visualizer;
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
@@ -45,23 +49,21 @@ import javax.imageio.ImageIO;
  */
 public class SimulationApp {
 
-  public static final String TITLE = "Cell Simulator";
-  public static final int FRAMES_PER_SECOND = 60;
-  public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-  public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+  private static final String TITLE = "Cell Simulator";
+  private static final int FRAMES_PER_SECOND = 60;
+  private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+  private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
   private static final String RESOURCES = "resources";
-  public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
+  private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
   public static final String DEFAULT_RESOURCE_FOLDER = RESOURCES + "/";
   private static final String RESOURCE_PACKAGE = "Image";
   private static final String STYLESHEET = "default.css";
   private static final String IMAGEFILE_SUFFIXES = String
       .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
   private static final int MAX_UPDATE_PERIOD = 2;
-  private static final String ERRORDIALOG = "Please Choose Another File";
-
-
-  private String packagePrefixName = "cellsociety.visualizer.";
-
+  private static final String ERROR_DIALOG = "Please Choose Another File";
+  private static final String PACKAGE_PREFIX_NAME = "cellsociety.visualizer.";
+  private static final String XML_FILEPATH = "user.dir";
   private BorderPane frame;
   private Stage myStage;
   private Config myConfig;
@@ -73,6 +75,7 @@ public class SimulationApp {
   private ResourceBundle myResources;
   private MenuItem newWindow;
   private MenuItem exit;
+  private MenuItem save;
   private Button reset;
   private Button step;
   private MenuBar menuBar;
@@ -91,7 +94,6 @@ public class SimulationApp {
    */
   public SimulationApp(Stage stage) {
     myStage = stage;
-    System.out.println(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE);
     myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE);
 
     loadConfigFile(chooseFile());
@@ -138,7 +140,7 @@ public class SimulationApp {
    * @param elapsedTime - The elapsed time between frame calls made in the default start() method of
    *                    the Application
    */
-  public void update(double elapsedTime) {
+  private void update(double elapsedTime) {
     if (running) {
       secondsElapsed += elapsedTime;
       if (secondsElapsed > speed) {
@@ -155,12 +157,12 @@ public class SimulationApp {
    *
    * @return the File object representing the .xml file to be used by the simulation
    */
-  public File chooseFile() {
+  private File chooseFile() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Choose Simulation File");
-    fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+    fileChooser.setInitialDirectory(new File(System.getProperty(XML_FILEPATH)));
     fileChooser.getExtensionFilters().add(new ExtensionFilter("XML Files", "*.xml"));
-    File file = fileChooser.showOpenDialog(null);
+    File file = fileChooser.showOpenDialog(myStage);
     if (file != null) {
       myFile = file;
       return file;
@@ -174,9 +176,9 @@ public class SimulationApp {
    * Config object and handles errors in selecting an invalid XML file.
    * @param file - the XML file to be loaded into the Config object
    */
-  public void loadConfigFile(File file) {
+  private void loadConfigFile(File file) {
     if (file == null) {
-      myStage.close();
+      return;
     } else {
       try {
         myConfig = new Config(file);
@@ -188,15 +190,19 @@ public class SimulationApp {
         retryLoadFile("Invalid File Specified");
       } catch (InvalidShapeException e) {
         retryLoadFile("Invalid Shape Specified");
+      } catch (InvalidXMLStructureException e){
+        retryLoadFile(e.getMessage());
       }
 
       Class visualizerClass = null;
       try {
-        visualizerClass = Class.forName(packagePrefixName + myConfig.getVisualizer());
+        visualizerClass = Class.forName(PACKAGE_PREFIX_NAME + myConfig.getVisualizer());
         myVisualizer = (Visualizer) (visualizerClass.getConstructor(Grid.class)
             .newInstance(myConfig.getGrid()));
       } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
         retryLoadFile("Invalid Visualizer Specified");
+      } catch (NullPointerException e){
+        return;
       }
       myVisualizer.setColorMap(myConfig.getStates());
     }
@@ -226,6 +232,8 @@ public class SimulationApp {
       } catch (InvalidShapeException e){
         displayError(message);
         badFile = true;
+      } catch (NullPointerException e){
+        return;
       }
     } while (badFile);
   }
@@ -238,7 +246,7 @@ public class SimulationApp {
   private void displayError(String message) {
     Alert errorAlert = new Alert(AlertType.ERROR);
     errorAlert.setHeaderText(message);
-    errorAlert.setContentText(ERRORDIALOG);
+    errorAlert.setContentText(ERROR_DIALOG);
     errorAlert.showAndWait();
   }
 
@@ -247,7 +255,7 @@ public class SimulationApp {
    * and bundles them into one Pane to be rendered in the scene
    * @return - an HBox pane with all of the UI tools inside of it.
    */
-  public Node setToolBar() {
+  private Node setToolBar() {
     HBox toolbar = new HBox();
     menuBar = new MenuBar();
     menu = makeMenu("Menu");
@@ -258,6 +266,14 @@ public class SimulationApp {
       myVisualizer.drawGrid();
     });
     exit = makeMenuItem("Exit", e-> closeWindow());
+    save = makeMenuItem("Save", e->{
+      XMLWriter myWriter = new XMLWriter(myConfig, myVisualizer.getGrid());
+      String filepath = saveFile();
+      if(filepath != null){
+        myWriter.saveXML(filepath);
+        System.out.println(filepath);
+      }
+    });
     playpause = makeButton("Play", e -> handlePlayPause(playpause));
     reset = makeButton("Reset", e -> {
       loadConfigFile(myFile);
@@ -269,7 +285,7 @@ public class SimulationApp {
       myVisualizer.updateChart();
     });
     shuffle = makeButton("Shuffle", e->{
-      myConfig.createRandomGrid(myVisualizer.getHeight(), myVisualizer.getWidth());
+      myConfig.createRandomGrid(myVisualizer.getWidth(), myVisualizer.getHeight());
       myVisualizer.setGrid(myConfig.getGrid());
       myVisualizer.drawGrid();
     });
@@ -287,7 +303,7 @@ public class SimulationApp {
       }
     });
     menuBar.getMenus().add(menu);
-    menu.getItems().addAll(newWindow, loadFile, exit);
+    menu.getItems().addAll(newWindow, loadFile, save, exit);
     toolbar.getChildren().add(menuBar);
     toolbar.getChildren().add(shuffle);
     toolbar.getChildren().add(playpause);
@@ -295,6 +311,19 @@ public class SimulationApp {
     toolbar.getChildren().add(reset);
     toolbar.getChildren().add(slider);
     return toolbar;
+  }
+
+  private String saveFile() {
+    FileChooser fileSaver = new FileChooser();
+    fileSaver.setTitle("Save Simulation Configuration");
+    fileSaver.setInitialDirectory(new File(System.getProperty(XML_FILEPATH)));
+    fileSaver.getExtensionFilters().add(new ExtensionFilter("XML Files", "*.xml"));
+    File file = fileSaver.showSaveDialog(myStage);
+    if (file != null) {
+      return file.getPath();
+    } else {
+      return null;
+    }
   }
 
   //FIXME Write about how I have duplicated code but Buttons and Menus inherit setGraphic() and setText() from different parents so cannot extract one unitary method
@@ -323,7 +352,7 @@ public class SimulationApp {
    * Handles the toggling of the play/pause button. Switches between playing the animation and stopping it.
    * @param button - the button which gets its image swapped between play and pause when clicked
    */
-  public void handlePlayPause(Button button) {
+  private void handlePlayPause(Button button) {
     running = !running;
     final String IMAGEFILE_SUFFIXES = String
         .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
@@ -344,7 +373,7 @@ public class SimulationApp {
    * Takes in a double representing a percent value. This reflects a percent of the max speed.
    * @param percentSpeed the percent of the max speed to which to set the simulation
    */
-  public void setSpeed(double percentSpeed) {
+  private void setSpeed(double percentSpeed) {
     percentSpeed *= MAX_UPDATE_PERIOD;
     speed = MAX_UPDATE_PERIOD - percentSpeed;
   }
