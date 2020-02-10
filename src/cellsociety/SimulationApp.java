@@ -301,7 +301,6 @@ public class SimulationApp {
     slider = new Slider();
     slider.setMin(0);
     slider.setMax(100);
-    slider.setValue(50);
     slider.setMajorTickUnit(50);
     slider.setMinorTickCount(5);
     slider.setBlockIncrement(10);
