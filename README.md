@@ -15,7 +15,7 @@ January 26, 2020
 February 9, 2020
 #####Hours Spent:  
 * Alex Oesterling: 34  
-* Alex Xu: 35  
+* Alex Xu: 36  
 * Maverick Chung: 29
 ### Primary Roles
 * Alex Oesterling:
