@@ -1,5 +1,6 @@
 package cellsociety.config;
 
+import cellsociety.exceptions.XMLWriteException;
 import cellsociety.simulation.grid.Grid;
 import javafx.scene.paint.Color;
 import org.w3c.dom.Document;
@@ -35,23 +36,31 @@ public class XMLWriter {
      * @param config
      * @param grid
      */
-    public XMLWriter(Config config, Grid grid) throws ParserConfigurationException {
+    public XMLWriter(Config config, Grid grid){
         myGrid = grid;
         myConfig = config;
-        setupDocument();
+        try {
+            setupDocument();
+        } catch (ParserConfigurationException e) {
+            throw new XMLWriteException(e);
+        }
     }
 
     /**
      * Saves an XML file at the given filepath
      * @param filepath
      */
-    public void saveXML(String filepath) throws TransformerException {
+    public void saveXML(String filepath){
         addNodes();
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        DOMSource domSource = new DOMSource(myDocument);
-        StreamResult streamResult = new StreamResult(new File(filepath));
-        transformer.transform(domSource, streamResult);
+        try {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource domSource = new DOMSource(myDocument);
+            StreamResult streamResult = new StreamResult(new File(filepath));
+            transformer.transform(domSource, streamResult);
+        }catch(TransformerException e){
+            throw new XMLWriteException(e);
+        }
     }
 
     private void setupDocument() throws ParserConfigurationException {
@@ -120,8 +129,8 @@ public class XMLWriter {
         statesInfoNode.appendChild(createEndNode(Config.DEFAULT_STATE_NODE_NAME, myConfig.getDefaultState()));
 
         Map<Integer, Color> statesMap = myConfig.getStates();
-        for(Integer state : statesMap.keySet()){
-            statesInfoNode.appendChild(createStateNode(state, statesMap.get(state)));
+        for(Map.Entry<Integer, Color> entry : statesMap.entrySet()){
+            statesInfoNode.appendChild(createStateNode(entry.getKey(), entry.getValue()));
         }
         return statesInfoNode;
     }

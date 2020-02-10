@@ -28,6 +28,7 @@ import org.xml.sax.SAXException;
  */
 public class Config {
   public static final double RANDOM_GRID_VARIABLE_VALUE = 0.5;
+  public static final double FIRST_RANDOM_GRID_VARIABLE_VALUE = 0.25;
 
   public static final String CONFIG_NODE_NAME = "ConfigInfo";
   public static final String CELLS_NODE_NAME = "Cells";
@@ -204,7 +205,8 @@ public class Config {
 
   private void setRandomVariables() {
     randomGridVariables = new double[myStates.size()];
-    for(int i = 0; i<myStates.size(); i++){
+    randomGridVariables[0] = FIRST_RANDOM_GRID_VARIABLE_VALUE;
+    for(int i = 1; i<myStates.size(); i++){
       randomGridVariables[i] = RANDOM_GRID_VARIABLE_VALUE;
     }
   }
