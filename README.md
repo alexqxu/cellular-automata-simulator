@@ -174,6 +174,10 @@ However, it will ask for a new file if it is larger than 255. The cells list is 
 If it is larger than the stated dimensions, it will be truncated, and if it is smaller, the remaining cells will
 be filled in with the default state.
 
+### Individual Cells
+Each cell should have an integer representing the state that it should hold. An invalid state will ask for a new file. A
+non-integer will also ask for a new File, with a hint about where the error is.
+
 ### Simulation-specific notes
 * The loops must be run in rectangular grids, or they will not update.
 * The loops must be run in the initial configuration specified by their XML or else they will not self replicate.
