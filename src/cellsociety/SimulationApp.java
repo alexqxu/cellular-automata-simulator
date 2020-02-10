@@ -63,7 +63,7 @@ public class SimulationApp {
   private static final int MAX_UPDATE_PERIOD = 2;
   private static final String ERROR_DIALOG = "Please Choose Another File";
   private static final String PACKAGE_PREFIX_NAME = "cellsociety.visualizer.";
-  private static final String XML_FILEPATH = "user.dir\\data";
+  private static final String XML_FILEPATH = "user.dir";
   private BorderPane frame;
   private Stage myStage;
   private Config myConfig;
@@ -94,7 +94,6 @@ public class SimulationApp {
    */
   public SimulationApp(Stage stage) {
     myStage = stage;
-    System.out.println(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE);
     myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + RESOURCE_PACKAGE);
 
     loadConfigFile(chooseFile());
@@ -269,7 +268,11 @@ public class SimulationApp {
     exit = makeMenuItem("Exit", e-> closeWindow());
     save = makeMenuItem("Save", e->{
       XMLWriter myWriter = new XMLWriter(myConfig, myVisualizer.getGrid());
-      myWriter.saveXML(saveFile());
+      String filepath = saveFile();
+      if(filepath != null){
+        myWriter.saveXML(filepath);
+        System.out.println(filepath);
+      }
     });
     playpause = makeButton("Play", e -> handlePlayPause(playpause));
     reset = makeButton("Reset", e -> {
@@ -300,7 +303,7 @@ public class SimulationApp {
       }
     });
     menuBar.getMenus().add(menu);
-    menu.getItems().addAll(newWindow, loadFile, exit);
+    menu.getItems().addAll(newWindow, loadFile, save, exit);
     toolbar.getChildren().add(menuBar);
     toolbar.getChildren().add(shuffle);
     toolbar.getChildren().add(playpause);
