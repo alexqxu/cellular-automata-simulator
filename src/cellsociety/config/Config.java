@@ -86,7 +86,7 @@ public class Config {
    * @param xmlFile File object passed in, in XML format
    */
   public Config(File xmlFile) throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidFileException, InvalidXMLStructureException{
-    if(XMLValidator.validateXMLStructure(xmlFile)) {
+    if(XMLValidator.validateXMLStructure(xmlFile)){
       myFile = xmlFile;
       setupDocument();
       System.out.println(docSetUpConfirmationMessage);
