@@ -164,6 +164,7 @@ Known Bugs:
 * Turning off the gridlines in a hex grid leaves a small 1-pixel line where the gridlines were.
 * Turning off the gridlines in a triangle grid leaves a small 1-pixel line where the diagonal gridlines were.
 * Running large grids at full speed causes significant lag.
+* Graph legend only formats colors correctly after stepping the simulation at least once.
 
 Extra credit:
 
