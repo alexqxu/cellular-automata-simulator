@@ -9,26 +9,34 @@ Alex Xu, aqx
 Maverick Chung, mc608
 ### Timeline
 
-#####Start Date:   
+- Start Date:   
 January 26, 2020
-#####Finish Date:   
+- Finish Date:   
 February 9, 2020
-#####Hours Spent:  
+- Hours Spent:  
 * Alex Oesterling: 34  
-* Alex Xu: 32  
+* Alex Xu: 36  
 * Maverick Chung: 29
 ### Primary Roles
 * Alex Oesterling:
     - Wrote Runner and Application class which integrate Modeling, Configuration, and Visualization components into the total simulation application. 
     These classes contain the UI element of the project, including all buttons, sliders, and menus aside from simulation-specific parameter fields
-    which the user interacts with. Wrote Visualizer class and inheritance hierarchy which takes data from Grid class and uses this data to render a visualization of
+    which the user interacts with. 
+    - Wrote Visualizer class and inheritance hierarchy which takes data from Grid class and uses this data to render a visualization of
     the scene, as well as generating the graph of cell populations and the simulation-specific parameter-tuning text fields. This visualizer passes
     its generated nodes to the Application for placing in the stage along with the general UI controls.
 * Alex Xu:
-    - Wrote Configuration portion of assignment which reads XML files and uses their data to specify 
+    - Created XML formatting used for specifying simulations in the program
+    - Created XML files for different simulation types (e.g. Conway, Percolation, Fire, etc.)
+    - Wrote Configuration portion of assignment which reads XML files and uses their data to specify
     the creation of the correct shape, dimensions, parameters, and types of simulations.
-    - Created an XMLWrite class which saves a simulation's current status and parameters to a new XML file
-    - 
+    - Created an XMLWriter class which saves a simulation's current status and parameters to a new XML file that the user
+    can then load again in the future.
+    - Created an XMLValidator class which uses a XSD Schema file to validate an XML file before loading, to verify that the XML
+    is of the correct format (Element structure are correct, and Values are of the expected types).
+    - Implemented error handling for exceptions that can occur in XML configuration
+    - Created ImageReader, which initializes a grid based on pixels in an image. This is a work-in-progress feature that is
+    not currently activated in the code, but the framework for its functionality exists.
 * Maverick Chung:
     - Wrote Cell class and subclasses to implement the cellular simulations, including making a Rule Table subclass to read simulation
     rules from a String table.
@@ -50,6 +58,7 @@ Main class:
 
 Data files needed: 
  * Any of the XML files listed in the /data/ folder
+ * All Files in the cellsociety and resources packages should be present.
  
 Features implemented:
 * Simulation
@@ -69,11 +78,24 @@ Features implemented:
         * Chou Reggia Loop
 * Configuration
     * Implemented error checking for incorrect file data of the following forms:
-        * Invalid or simulation type given
+        * Invalid title or simulation type given
         * Invalid cell state values given
-        * Cell locations given that are outside the bounds of the grid's size (Config just crops)
-            * If cell size is smaller than grid size, config populates missing cells with the default state (user specifiable)
-        * Appropriate default values when parameter values are invalid or not given (Handles too many or too few numbers of parameters, and invalid numbers for each parameter)      
+        * Cell locations given that are outside the bounds of the grid's size
+            * Those cells will not be used.
+        * Not enough cells specified to fill the bounds of the grid's size
+            * If cell location is smaller than grid size, the Grid is populated missing cells with the default state (user specifiable)
+        * Appropriate default values when parameter values are invalid or not given (Handles too many or too few numbers of parameters, and invalid numbers for each parameter)
+        * XML Structure is incorrect
+            * Misspelled or missing Elements
+            * Data in text Nodes are not of the expected type (String, unsigned byte, etc.)
+        * Invalid grid size given (too small)
+        * <Custom> field, which specifies if the grid will be randomly generated or use custom configuration, is not a boolean
+            * Field defaults to false unless explicitly true.
+        * Incorrect Shape Requested
+        * Incorrect Mask or Border Type requested
+            * Default values are loaded based on simulation.
+        * Extra whitespace in text fields
+            * Whitespace is ignored when extracting information from XML.
     * Allow simulations initial configuration to be set by
         * List of specific locations and states
         * Completely randomly based on a total number of locations to occupy
@@ -84,7 +106,11 @@ Features implemented:
         * Whether or not grid locations should be outlined (in UI)
         * Color of cell or patch states
         * Shape of cells
-*Visualization
+        * Special parameters that are simulation-specific, like probCatch or happinessThresh
+    * Other ideas for initialization:
+        * Using an image to initialize a Rock-Paper-Scissors simulation (Work in Progress).
+        
+* Visualization
     * Display a graph of stats about the populations of all the "kinds" of cells over the time of the simulation
     * Allow users to interact with the simulation dynamically to change the values of its parameter
     * Allow users to interact with the simulation dynamically to create or change a state at a grid location
@@ -99,18 +125,22 @@ Features implemented:
 
 ### XML Guide
 Note: In general, poorly formatted XML or bad options (e.g. setting size to `Pentagon`) will cause the XML reader
-to ask you to pick a new file, while giving bad numbers will likely result in undesirable behavior (e.g. giving a 
+to ask you to pick a new file, while giving bad numbers will likely result in undesirable behavior, but not break the program (e.g. giving a 
 negative shark breeding time will result in sharks breeding every timestep.)
 
 #### Title and Author
-Self-explanatory, indicating the title and author.
+Self-explanatory, indicating the title and author. Title should correspond to a defined Simulation Type to work properly.
 
 #### Shape
 Can be one of Rect, Tri, or Hex. Inputting something else will cause the reader to ask for a new file.
 
 #### Border Type
 Indicates the edge type of the simulation. Inputting a non-negative number will treat all cells beyond the visible edge as that
-type. Inputting a -1 will treat the grid as a toroid, and inputting a -2 will make the grid scale infinitely.
+type. Inputting a -1 will treat the grid as a toroid, and inputting a -2 will make the grid scale infinitely. Inputting a non-number
+will prompt for a new file.
+
+Percolation must have a border type of 3, or else the system will not generate water from the top. It still functions in other ways
+(e.g. if the user clicks on a cell to change it to water).
 
 #### Mask
 Indicates the neighborhood of each cell. Must match in dimension to the maximum number of possible neighbors for the given shape
@@ -135,13 +165,25 @@ will cause the reader to ask for a new file.
 Deleting a required state will ask for a new file.
 
 #### Custom
-True or false, indicating whether or not the grid should use the custom configuration or be random.
+True or false, indicating whether or not the grid should use the custom configuration or be random. Inputting anything other
+than true or false defaults to false.
 
 #### Cell Rows
-Each row has a numbr field, which has no effect on the simulation and is purely there to be human readable.
+Each row has a "numbr" field, which has no effect on the simulation and is purely there to be human readable.
 However, it will ask for a new file if it is larger than 255. The cells list is the states of the cells to be put on each row.
 If it is larger than the stated dimensions, it will be truncated, and if it is smaller, the remaining cells will
 be filled in with the default state.
+
+### Individual Cells
+Each cell should have an integer representing the state that it should hold. An invalid state will ask for a new file. A
+non-integer will also ask for a new File, with a hint about where the error is.
+
+### Simulation-specific notes
+* The loops must be run in rectangular grids, or they will not update.
+* The loops must be run in the initial configuration specified by their XML or else they will not self replicate.
+* RPSImageCell is nonfunctional and is not used anywhere.
+* RPSCell can take any number of states, although even numbers will favor some types of cell.
+* Percolation will only percolate from the top.
 
 ### Notes/Assumptions
 Assumptions or Simplifications:
@@ -155,6 +197,8 @@ Interesting data files:
 * ```LangtonLoop``` is an interesting example of an infinitely-scaling, growing loop
 * If you look at the smaller loops (```ChouReggia``` or ```Byl```) and put it on high speed, they form a fractal-like pattern which is really mesmerising to watch.
 * ```UpwardFire``` demonstrates masks (setting different arrangements of neighbor checking)
+
+Files that test Error Handling (in badXML folder):
 * ```2BylLoop```is a bad xml files which demonstrate how error handling occurs.
 * ```InvalidCellTest``` tests the exception handling for specifying a nonexistent cell/simulation
 * ```InvalidShapeTest``` tests the exception handling for specifying an invalid shape for a grid (Circle)
@@ -167,7 +211,9 @@ Known Bugs:
 * Graph legend only formats colors correctly after stepping the simulation at least once.
 
 Extra credit:
-
+* Implemented more features than the minimum required
+* Work-in-progress of ImageReader, which uses an image to initialize the grid. There are small bugs that need to be fixed
+before this can be functional, which is planned if there is more time.
 
 ### Impressions
 * Cellular Autonoma is really interesting and mesmerising once you get the really nifty simulations running.
