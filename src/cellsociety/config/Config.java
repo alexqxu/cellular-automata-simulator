@@ -23,7 +23,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
- * Reads an XML file and sets up the Grid.
+ * Reads an XML file and sets up the Grid based on it
  *
  * @author Alex Xu aqx
  */
@@ -86,7 +86,8 @@ public class Config {
 
   /**
    * Constructor for the Config object. Sets the file and sets up the documentBuilder. Then loads the file content.
-   * Image Loading is currently not working.
+   * An additional "extra" feature we planned to implemente was the image loading, which is currently not fully implemented but the structure
+   * is included in this method for future flexibility.
    * @param file File object passed in, in XML format or Image
    */
   public Config(File file) throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidFileException, InvalidXMLStructureException, InvalidImageException, InvalidDimensionsException{
@@ -108,7 +109,6 @@ public class Config {
 
   /**
    * Returns the update speed of the simulation, as defined within the initial config XML document.
-   *
    * @return speed of the simulation
    */
   public double getSpeed() {
@@ -117,8 +117,7 @@ public class Config {
 
   /**
    * Returns the Grid created
-   *
-   * @return
+   * @return a grid object
    */
   public Grid getGrid() {
     return myGrid;
@@ -126,7 +125,6 @@ public class Config {
 
   /**
    * Returns a string representing the type of shape/visualizer
-   *
    * @return String, representing visualizer class name
    */
   public String getVisualizer() {
@@ -135,27 +133,57 @@ public class Config {
 
   /**
    * Returns color/state mappings.
-   * @return
+   * @return Map with the color mappings
    */
   public Map<Integer, Color> getStates() {
     return myStates;
   }
 
+  /**
+   * Returns the title of the simulation
+   * @return String, which represents the title.
+   */
   public String getTitle(){
     return myTitle;
   }
+
+  /**
+   * Returns the author of the simulation
+   * @return String, which represents the author of the simulation
+   */
   public String getAuthor(){
     return myAuthor;
   }
+
+  /**
+   * Returns the shape of the simulation
+   * @return String, which represents the shape requested in the XML
+   */
   public String getShape(){
     return myShape;
   }
+
+  /**
+   * Returns the default state of the simulation requested
+   * String, which represents the default state requested (a number)
+   * @return
+   */
   public String getDefaultState(){
     return ""+defaultState;
   }
+
+  /**
+   * Returns the border type of the simulation
+   * @return String, which represents the borderType requested (a number)
+   */
   public String getBorderType(){
     return ""+myBorderType;
   }
+
+  /**
+   * Returns the mask/neighborhood type requested of the simulation.
+   * @return an integer array that represents the mask.
+   */
   public int[] getMask(){
       return myMask;
   }
