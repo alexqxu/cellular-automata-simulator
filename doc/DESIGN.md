@@ -46,6 +46,13 @@ It sends this group of Nodes as a Pane back up to the SimulationApp for renderin
 * The Cell (Maverick)
 
 ## Assumptions that Affect the Design
+* One assumption made in the design of the UI is that there is no need for a global play/pause button.
+This assumption was made to simplify the design because adding a global play/pause button would
+require each SimulationApp to have access to all the other SimulationApps. This would either require
+each app to have access to a List of all the other Apps, or require the play/pause button to be in the 
+more overarching SimulationRunner class. The first option would significantly increase the complexity of the 
+project for little benefit for the user, and the second option would reduce the closedness of the program
+by putting half of the UI into a different class. 
 #### Features Affected by Assumptions
 
 
