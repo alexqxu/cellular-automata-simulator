@@ -93,15 +93,7 @@ public class Config {
    * @param file File object passed in, in XML format or Image
    */
   public Config(File file) throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidFileException, InvalidXMLStructureException, InvalidImageException, InvalidDimensionsException{
-    if(isImageFile(file)){
-      ImageReader imageReader = new ImageReader(file);
-      myGrid = imageReader.generateGrid();
-      myStates = imageReader.getStates();
-      myShape = "Rect";
-      myTitle = "RPSCell";
-      myBorderType = 0;
-    }
-    else if(XMLValidator.validateXMLStructure(file)){
+    if(XMLValidator.validateXMLStructure(file)){
       myFile = file;
       setupDocument();
       System.out.println(docSetUpConfirmationMessage);
@@ -199,12 +191,8 @@ public class Config {
     Class gridClass = null;
     try {
       gridClass = Class.forName(gridPrefixName + myShape + gridSuffix);
-    } catch (ClassNotFoundException e) {
-      throw new InvalidGridException(e);
-    }
-    try {
       myGrid = (Grid) (gridClass.getConstructor().newInstance());
-    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
       throw new InvalidGridException(e);
     }
     try {
@@ -465,12 +453,8 @@ public class Config {
     Class gridClass = null;
     try {
       gridClass = Class.forName(gridPrefixName + myShape + gridSuffix);
-    } catch (ClassNotFoundException e) {
-      throw new InvalidGridException(e);
-    }
-    try {
       myGrid = (Grid) (gridClass.getConstructor().newInstance());
-    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
       throw new InvalidGridException(e);
     }
     int row = 0;
@@ -486,7 +470,7 @@ public class Config {
           if (k < myWidth) {
             Node singleCellNode = cellsNodeList.item(k);
             Integer cellState = Integer.valueOf(singleCellNode.getTextContent());
-            Cell myCell = makeCell(cellState);
+            Cell myCell = CellFactory.makeCell(cellState, cellPrefixName, myTitle, myParameters, myStates.keySet(), defaultState, myBorderType, myMask);
             myGrid.placeCell(col, row, myCell);
             col++;
           }
@@ -510,7 +494,7 @@ public class Config {
    */
   private void fillRow(int col, int row) {
     while (col < myWidth) {
-      Cell myCell = makeCell(defaultState);
+      Cell myCell = CellFactory.makeCell(defaultState, cellPrefixName, myTitle, myParameters, myStates.keySet(), defaultState, myBorderType, myMask);
       myGrid.placeCell(col, row, myCell);
       col++;
     }
@@ -521,57 +505,5 @@ public class Config {
       fillRow(0, row);
       row++;
     }
-  }
-
-  /**
-   * Creates a cell and sets all relevant parameters to it from the config XML.
-   * @param state the specific state of the particular cell
-   * @return a cell made from given information
-   * @throws InvalidCellException
-   */
-  private Cell makeCell(int state)
-      throws InvalidCellException {
-    Class cellClass = null;
-    try {
-      cellClass = Class.forName(cellPrefixName + myTitle);
-    } catch (ClassNotFoundException e) {
-      throw new InvalidCellException(e);
-    }
-    Cell cell = null;
-    try {
-      cell = (Cell) (cellClass.getConstructor().newInstance());
-    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-      throw new InvalidCellException(e);
-    }
-    for (Map.Entry<String, Double> parameterEntry : myParameters.entrySet()) {
-      cell.setParam(parameterEntry.getKey(), parameterEntry.getValue());
-    }
-    if(myStates.keySet().contains(state)) {
-      cell.setState(state);
-    }
-    else{
-      cell.setState(defaultState);
-      throw new InvalidCellException(new RuntimeException());
-    }
-    cell.setDefaultEdge(myBorderType);
-    cell.setMask(myMask);
-    return cell;
-  }
-
-  private String getFileExtension(File file) {
-    String fileName = file.getName();
-    if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
-      return fileName.substring(fileName.lastIndexOf(".")+1);
-    else return "";
-  }
-
-  private boolean isImageFile(File file){
-    String fileExtension = getFileExtension(file);
-    for(String extension : ImageIO.getReaderFileSuffixes()){
-      if(fileExtension.equals(extension)) {
-        return true;
-      }
-    }
-    return false;
   }
 }
