@@ -9,7 +9,8 @@
     the creation of the set of shapes and their colors to be rendered in the scene based on data from
     the Grid class. 
     
- * Team Member #2
+ * Team Member #2: Alex Xu, aqx
+    * 
 
  * Team Member #3
 

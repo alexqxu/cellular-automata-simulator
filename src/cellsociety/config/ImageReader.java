@@ -15,7 +15,8 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 /**
- *Reads Images and Creates a Grid based on Image.
+ *This "extra" feature reads Images and Creates a Grid based on Image (currently not fully functional)
+ * @author Alex Xu, aqx
  */
 public class ImageReader {
     private File myFile;
@@ -27,7 +28,7 @@ public class ImageReader {
 
     /**
      * Creates an Image
-     * @param imageFile
+     * @param imageFile image file that is passed in
      * @throws IOException
      */
     public ImageReader(File imageFile) throws InvalidImageException{
@@ -72,6 +73,10 @@ public class ImageReader {
         return myGrid;
     }
 
+    /**
+     * Returns a mapping of states/colors for the visualizer
+     * @return Map representing the mapping of colors to cell states
+     */
     public Map<Integer, Color> getStates(){
         return myStates;
     }

@@ -33,8 +33,8 @@ public class XMLWriter {
 
     /**
      * XMLWriter constructor. Takes a Grid object and a Config object as parameters.
-     * @param config
-     * @param grid
+     * @param config Config object that was originally responsible for creating the grid
+     * @param grid A grid that represents the states that the user wants to save
      */
     public XMLWriter(Config config, Grid grid) throws XMLWriteException{
         myGrid = grid;
