@@ -13,7 +13,8 @@ import org.xml.sax.SAXException;
 
 
 /**
- * Validates an XML configuration file against a defined XML Schema File (XSD)
+ * Validates an XML configuration file against a defined XML Schema File
+ * Example: The Config class calls the XML validator to validate the XMl structure before parsing.
  * @author Alex Xu, aqx
  */
 public class XMLValidator {
@@ -24,7 +25,7 @@ public class XMLValidator {
 
     /**
      * Validates a XML file against the XSD file that is given as part of the program.
-     * @param xmlFile
+     * @param xmlFile the file to be validated
      * @return true if the document structure is valid, false otherwise.
      */
     public static boolean validateXMLStructure(File xmlFile) throws InvalidXMLStructureException{
