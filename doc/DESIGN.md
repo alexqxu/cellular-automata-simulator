@@ -78,9 +78,17 @@ require each SimulationApp to have access to all the other SimulationApps. This 
 each app to have access to a List of all the other Apps, or require the play/pause button to be in the 
 more overarching SimulationRunner class. The first option would significantly increase the complexity of the 
 project for little benefit for the user, and the second option would reduce the closedness of the program
-by putting half of the UI into a different class. 
+by putting half of the UI into a different class.
+
+* Another assumption made was that rules for custom simulations that check neighbors should be limited to a one-cell
+radius. This means that a cell can not check for cells that are two or more cells away from itself. All of the required
+simulations abide by this assumption. (Maverick please expand on this as you see fit)
+
 #### Features Affected by Assumptions
 
+* Because of the assumption that rules for custom simulations should only check for neighbors within a 1-cell radius,
+the infinite grids feature expands the Grid to accommodate active cells that move toward its edges by one row/column.
+(Maverick please expand on this as you see fit).
 
 ## New Features HowTo
 * How to add additional shapes
@@ -92,4 +100,12 @@ by putting half of the UI into a different class.
 #### Easy to Add Features
 * New loops (Maverick)
 #### Other Features not yet Done
-* Loading an image (Alex X)
+* Loading an Image to initialize the Grid
+    * The purpose of this feature is to allow users to select image files to initialize the grid, as an alternative to regular
+    XML files. The work-in-progress ImageReader class is used for this purpose, which reads pixel information as cell states
+    and creates a grid based off of that information. 
+    * This is a work-in-progress feature that is not yet complete, as we decided to prioritize refining/debugging our program's
+    core features before the submission deadline.
+    * However, the other classes are already set up to "accept" this new feature. Once the ImageReader class is complete and
+    functional, all one has to do is change the type of file extension the File selector allows (to also allow image file extensions).
+    The main Config class has already implemented a file extension checker that looks for image file extensions.
