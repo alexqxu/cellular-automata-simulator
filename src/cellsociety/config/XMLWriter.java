@@ -20,6 +20,8 @@ import java.util.Map;
 
 /**
  * Responsible for Saving a user-created Simulation into an XML Config file
+ * Assumes that the user inputs a valid file name/path to save to, and has enough disk space there, otherwise exceptions are thrown.
+ * Example: The Visualizer calls the XMLWriter class when the user wants to save a File.
  * @Author Alex Xu, aqx
  */
 public class XMLWriter {

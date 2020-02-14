@@ -24,7 +24,9 @@ import org.xml.sax.SAXException;
 
 /**
  * Reads an XML file and sets up the Grid based on it
- *
+ * Will throw exceptions if the file is not valid (not an XML file or not of the correct structure)
+ * Depends on the XMLValidator working properly to validate XML Structure.
+ * Example: The Visualizer creates a Config object with a File and retrieves a Grid object from the class.
  * @author Alex Xu aqx
  */
 public class Config {
@@ -86,7 +88,7 @@ public class Config {
 
   /**
    * Constructor for the Config object. Sets the file and sets up the documentBuilder. Then loads the file content.
-   * An additional "extra" feature we planned to implemente was the image loading, which is currently not fully implemented but the structure
+   * An additional "extra" feature we planned to implement was the image loading, which is currently not fully implemented but the structure
    * is included in this method for future flexibility.
    * @param file File object passed in, in XML format or Image
    */
@@ -523,9 +525,8 @@ public class Config {
 
   /**
    * Creates a cell and sets all relevant parameters to it from the config XML.
-   *
    * @param state the specific state of the particular cell
-   * @return
+   * @return a cell made from given information
    * @throws InvalidCellException
    */
   private Cell makeCell(int state)
