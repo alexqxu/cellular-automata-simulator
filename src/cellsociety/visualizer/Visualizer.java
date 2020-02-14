@@ -23,7 +23,22 @@ import javafx.scene.shape.Shape;
 
 /**
  * @author: axo
- * Handles rendering of cell grid based on Grid object data and passes it up to the SimulationApp application
+ * Handles rendering of cell grid, graph, and parameter-tuning text fields
+ * based on Grid object data and passes it up to the SimulationApp application
+ *
+ * Assumptions: this class will fail if the Grid class does not have ways to give color information
+ * on individual cells (asked for with row-column indexing) and if it does not have ways to give a list
+ * of possible parameters to tune. This class also assumes that the Grid class is made externally and is
+ * passed into the constructor, and finally that the Config can give it a mapping between cell state and color.
+ *
+ * Dependencies: this class is dependent on JavaFX as well as the Grid class in the simulation package of cellsociety.
+ *
+ * Example usage: Create a visualizer with a certain grid passed into it based on data from config:
+ *         visualizerClass = Class.forName(PACKAGE_PREFIX_NAME + myConfig.getVisualizer());
+ *         myVisualizer = (Visualizer) (visualizerClass.getConstructor(Grid.class)
+ *             .newInstance(myConfig.getGrid()));
+ * This example creates a specific version of visualizer based on a String representing the name of the specific class required.
+ *
  */
 public abstract class Visualizer {
   protected static final int SIZE = 400;
@@ -39,7 +54,8 @@ public abstract class Visualizer {
 
   /**
    * Constructor, gives Visualizer access to the grid created by the Config after reading the XML, and sets
-   * the step tracker for the graph
+   * the step tracker for the graph, whether to render gridlines or not,
+   * and creates the pane to be passed back to the SimulationApp for rendering
    */
   public Visualizer(Grid grid) {
     bundle = new BorderPane();
@@ -51,9 +67,14 @@ public abstract class Visualizer {
   /**
    * Instantiates a grid of shapes in a pane to be rendered by the scene. Takes color data
    * from the Grid class and uses it to create scaled shapes at the correct size and dimension
-   * and collects these shapes into a pane
+   * and collects these shapes into a pane.
    *
-   * @return A node containing all the shapes in the simulation
+   * Assumptions: The getColorGrid method correctly works and creates a correctly-sized grid of the correct colors,
+   * requiring the Grid.getState, Grid.getWidth, and Grid.getHeight methods to work as well.
+   *
+   * Dependencies: JavaFX for shape rendering and placement in a Pane.
+   *
+   * @return A node containing all the shapes to be rendered for the simulation
    */
   protected abstract Node instantiateCellGrid();
 
@@ -87,7 +108,7 @@ public abstract class Visualizer {
   }
 
   /**
-   * Updates graph by placing a point at the next integer step representing the populations of each cell in the simulation
+   * Updates graph by placing points at the next integer step representing the populations of each cell in the simulation
    */
   public void updateChart() {
     stepsElapsed += 1;
@@ -137,6 +158,8 @@ public abstract class Visualizer {
   /**
    * Repaints the grid by iterating through every cell and checking its new color data, and then
    * sets the cell to this new color data.
+   * Assumes that the Grid object myGrid has a valid getState method which has equal or greater
+   * dimensions than the size of the cellGrid
    */
   public void drawGrid() {
     for (int i = 0; i < cellGrid.size(); i++) {
@@ -146,6 +169,11 @@ public abstract class Visualizer {
     }
   }
 
+  /**
+   * Redraws the entire cell grid (remakes shapes and sets them) instead of just repainting over the existing shapes.
+   * This allows methods to change HOW the cells are rendered, such as the GridLines on/off toggle.
+   * Again assumes that there is a valid set of colors created by the getColorGrid.
+   */
   public void reDrawGrid() {
     bundle.setCenter(instantiateCellGrid());
   }
@@ -162,6 +190,7 @@ public abstract class Visualizer {
 
   /**
    * Generates an array of Color objects used to generate the colored shapes in the visualizer
+   * Assumes the Grid class has a getWidth, getHeight, and getState method which accurately returns state and size information
    * @return an array of Color objects corresponding to the colors of different cells
    */
   protected Color[][] getColorGrid() {
