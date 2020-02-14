@@ -40,6 +40,20 @@ import javax.imageio.ImageIO;
 
 /**
  * @author: Alex Oesterling, axo
+ * Purpose: is the actual application which holds the entire simulation: creates the stage, scene, all UI elements, and
+ * passes information to the Config portion of the project for loading and saving of XML files.
+ * Assumptions: No failure cases, but simplified the design constraints by assuming that there is not a global play/pause button for all applications
+ *
+ * Dependencies: cellsociety.config.Config and cellsociety.config.XMLWriter in the config package
+ * as well as cellsociety.simulation.grid.Grid in the simulation package and cellsociety.visualizer.Visualizer in the v
+ * visualizer package. In addition this is dependent on the JavaFX library.
+ *
+ * Example usage: In the SimulationRunner, an initial SimulationApp is created upon starting.
+ * A new instance of the App is created in a new window every time the "new" menu option is selected, using the syntax:
+ * SimulationApp newApp = new SimulationApp(new Stage);
+ *
+ * SimulationApp object with a new stage in the constructor will create a new instance of the simulation
+ * in a new window.
  */
 public class SimulationApp {
 
@@ -84,11 +98,14 @@ public class SimulationApp {
   private boolean running;
 
   /**
-   * Constructor method. Runs game loop after setting up stage and scene data by creating
+   * Constructor method. Runs simulation loop after setting up stage and scene data by creating
    * Config and Visualizer objects.
    *
-   * @param stage the window in which the application runs
-   * @throws Exception
+   * Assumptions: There is a resource bundle which can be used to format the App.
+   * Also, I assume that each creation of the App passes in a new stage. I have not tested
+   * what happens if an existing stage object is used to create a new App.
+   *
+   * @param stage the window in which the application runs - to make a new copy of the app pass in a new stage (will create a new window)
    */
   public SimulationApp(Stage stage) {
     myStage = stage;
@@ -131,12 +148,12 @@ public class SimulationApp {
 
   /**
    * Update method which calls the model to update the states of all the cells on the backend, and
-   * redraws the rectangles with their new color values. Calls the inner update methods at a rate
+   * redraws the shapes with their new color values. Calls the inner update methods at a rate
    * dependent on the speed of the simulation (specified in the .xml config file and controlled by
    * the slider).
    *
-   * @param elapsedTime - The elapsed time between frame calls made in the default start() method of
-   *                    the Application
+   * @param elapsedTime - The elapsed time between frame calls made in the simulation loop of
+   *                    the App
    */
   private void update(double elapsedTime) {
     if (running) {
@@ -160,9 +177,6 @@ public class SimulationApp {
     fileChooser.setTitle("Choose Simulation File");
     fileChooser.setInitialDirectory(new File(System.getProperty(XML_FILEPATH)));
     fileChooser.getExtensionFilters().add(new ExtensionFilter("XML Files", "*.xml"));
-    fileChooser.getExtensionFilters().add(new ExtensionFilter("PNG Files", "*.png"));
-    fileChooser.getExtensionFilters().add(new ExtensionFilter("JPG Files", "*.jpg"));
-    fileChooser.getExtensionFilters().add(new ExtensionFilter("JPEG Files", "*.jpeg"));
     File file = fileChooser.showOpenDialog(myStage);
     if (file != null) {
       myFile = file;
@@ -276,7 +290,6 @@ public class SimulationApp {
         } catch (XMLWriteException x) {
           displayError("Writing File caused exceptional error. Please check disk space, working libraries, and status of loaded XML file.");
         }
-        System.out.println(filepath);
       }
     });
     playpause = makeButton("Play", e -> handlePlayPause(playpause));
@@ -322,6 +335,11 @@ public class SimulationApp {
     return toolbar;
   }
 
+  /**
+   * Creates filechooser dialog where the user can select the filepath for the current configuration of the simulation
+   * to be saved to.
+   * @return the filepath where the current simulation will be saved to.
+   */
   private String saveFile() {
     FileChooser fileSaver = new FileChooser();
     fileSaver.setTitle("Save Simulation Configuration");

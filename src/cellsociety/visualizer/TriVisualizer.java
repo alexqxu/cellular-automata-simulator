@@ -16,6 +16,7 @@ public class TriVisualizer extends Visualizer {
 
   /**
    * Constructor for Triangle Visualizer. Calls parent Visualizer constructor with the same grid object
+   * Same assumptions as parent Visualizer class.
    * @param grid
    */
   public TriVisualizer(Grid grid) {

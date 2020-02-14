@@ -16,6 +16,7 @@ public class HexVisualizer extends Visualizer {
 
   /**
    * Constructor for Hexagon Visualizer. Calls parent Visualizer constructor with the same grid object
+   * Same assumptions as parent Visualizer class.
    * @param grid
    */
   public HexVisualizer(Grid grid) {
