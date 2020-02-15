@@ -53,7 +53,7 @@ public class GridFactory {
      * @param width A int representing the width of the Grid
      * @param custom A boolean that stores if the user wants a random grid or a user defined one
      */
-    public GridFactory(Document doc, String title, Set<Integer> statesKeys, Map<String, Double> parameters, String shape, int[] mask, int height, int width, boolean custom){
+    public GridFactory(Document doc, String title, Set<Integer> statesKeys, Map<String, Double> parameters, String shape, int[] mask, int height, int width, boolean custom, int border){
         myDoc = doc;
         myTitle = title;
         myStatesKeys = statesKeys;
@@ -63,6 +63,7 @@ public class GridFactory {
         myWidth = width;
         myCustom = custom;
         myMask = mask;
+        myBorderType = border;
         myRandomGridVariables = setRandomVariables();
         myCellFactory = new CellFactory(myTitle, myParameters, myStatesKeys, defaultState, myBorderType, myMask);
     }

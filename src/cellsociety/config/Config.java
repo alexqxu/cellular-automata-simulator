@@ -179,7 +179,7 @@ public class Config {
    */
   private void loadFile() throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidDimensionsException{
     extractConfigInfo();
-    myGridFactory = new GridFactory(doc, myTitle, myStates.keySet(), myParameters, myShape, myMask, myHeight, myWidth, customRequested);
+    myGridFactory = new GridFactory(doc, myTitle, myStates.keySet(), myParameters, myShape, myMask, myHeight, myWidth, customRequested, myBorderType);
     myGrid = myGridFactory.createGrid();
   }
 
