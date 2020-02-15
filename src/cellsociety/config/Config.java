@@ -80,9 +80,7 @@ public class Config {
 
   /**
    * Constructor for the Config object. Sets the file and sets up the documentBuilder. Then loads the file content.
-   * An additional "extra" feature we planned to implement was the image loading, which is currently not fully implemented but the structure
-   * is included in this method for future flexibility.
-   * @param file File object passed in, in XML format or Image
+   * @param file File object passed in, in XML format
    */
   public Config(File file) throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidFileException, InvalidXMLStructureException, InvalidImageException, InvalidDimensionsException{
     if(XMLValidator.validateXMLStructure(file)){
@@ -170,7 +168,7 @@ public class Config {
    * @return an integer array that represents the mask.
    */
   public int[] getMask(){
-      return myMask;
+    return myMask;
   }
 
   /**
@@ -192,7 +190,7 @@ public class Config {
   }
 
   private void setupDocument()
-      throws InvalidFileException {
+          throws InvalidFileException {
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     DocumentBuilder builder = null;
     try {
@@ -265,9 +263,9 @@ public class Config {
         if (singleStateNode.getNodeType() == Node.ELEMENT_NODE) {
           Element singleStateElement = (Element) singleStateNode;
           Integer stateID = Integer.valueOf(
-              singleStateElement.getElementsByTagName(STATE_ID_NODE_NAME).item(0).getTextContent());
+                  singleStateElement.getElementsByTagName(STATE_ID_NODE_NAME).item(0).getTextContent());
           String stateColor = singleStateElement.getElementsByTagName(COLOR_NODE_NAME).item(0)
-              .getTextContent();
+                  .getTextContent();
           myStates.put(stateID, Color.web(stateColor));
         }
       }
@@ -311,11 +309,11 @@ public class Config {
   }
 
   private void extractMask(Element startingElement){
-      String[] maskStrings = extractElementValue(startingElement, MASK_NODE_NAME).split(" ");
-      myMask = new int[maskStrings.length];
-      for(int i = 0; i<maskStrings.length; i++){
-          myMask[i] = Integer.parseInt(maskStrings[i]);
-      }
+    String[] maskStrings = extractElementValue(startingElement, MASK_NODE_NAME).split(" ");
+    myMask = new int[maskStrings.length];
+    for(int i = 0; i<maskStrings.length; i++){
+      myMask[i] = Integer.parseInt(maskStrings[i]);
+    }
   }
 
   private void extractCustom(Element startingElement){
