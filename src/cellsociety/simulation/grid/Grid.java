@@ -22,7 +22,7 @@ public abstract class Grid {
     grid = new ArrayList<>();
   }
 
-  public static Cell getRandomCell(String className, Map<String, Double> paramMap,
+  private static Cell getRandomCell(String className, Map<String, Double> paramMap,
       double[] stateChances) throws ClassNotFoundException {
     Class cellClass = null;
     Cell cell = null;
@@ -53,6 +53,10 @@ public abstract class Grid {
     return cell;
   }
 
+  /**
+   * Steps the grid by 1 timestep. Returns true if the gridsize has changed, and false otherwise
+   * @return boolean value, true if the grid size has changed
+   */
   public boolean update() {
     LinkedList<Cell> emptyQueue = getEmptyQueue();
     boolean padded = false;
@@ -73,18 +77,32 @@ public abstract class Grid {
     return padded;
   }
 
+  /**
+   * Increases the state of the cell by 1, looping around to 0 if it gets too high.
+   * Used to click on cells to change their state.
+   * @param r Row of the cell to be changed
+   * @param c Column of the cell to be changed
+   */
   public void incrementCellState(int r, int c) {
-    grid.get(r).get(c).incrementState(getHighestState()); //FIXME
+    grid.get(r).get(c).incrementState(getHighestState());
   }
 
   private int getHighestState() {
     return Collections.max(states);
   }
 
+  /**
+   * Adds a valid state to the grid. Used in incrementing states
+   * @param st State to be added
+   */
   public void addState(int st) {
     states.add(st);
   }
 
+  /**
+   * Returns an int array, where the ith value of the returned array is the number of state i cells
+   * @return an int array, where the ith value of the returned array is the number of state i cells
+   */
   public int[] getPopulations() {
     int[] ret = new int[getHighestState() + 1];
     for (int r = 0; r < getHeight(); r++) {
@@ -95,15 +113,28 @@ public abstract class Grid {
     return ret;
   }
 
-  //FIXME: By Alex X to make XMLWriterWork. Modeled after getParams()
+  /**
+   * Returns the value of a simulation parameter. Used in saving to XML
+   * @param param The parameter to be read
+   * @return the double value of the parameter
+   */
   public double getParam(String param) {
     return getCell(0, 0).getParam(param);
   }
 
+  /**
+   * Returns an array of the parameters being used in simulation
+   * @return an array of the parameters being used in simulation
+   */
   public String[] getParams() {
     return getCell(0, 0).getParams();
   }
 
+  /**
+   * Sets the value of a simulation parameter
+   * @param param the parameter to be set
+   * @param value the double value of the parameter
+   */
   public void setParam(String param, double value) {
     for (int r = 0; r < getHeight(); r++) {
       for (int c = 0; c < getWidth(); c++) {
@@ -112,16 +143,15 @@ public abstract class Grid {
     }
   }
 
+  /**
+   * Returns the Cell[] of neighbors of the cell at r,c. Should start with the northmost Cell and
+   * rotate clockwise
+   * @param r Row of the cell
+   * @param c Column of the cell
+   * @return the Cell[] of neighbors of the cell at r,c
+   */
   abstract Cell[] getNeighbors(int r, int c);
 
-  /**
-   * Returns the 8 neighbors of the cell at r,c starting with North and rotating clockwise Acts as
-   * though the grid is toroidal
-   *
-   * @param r
-   * @param c
-   * @return
-   */
   protected Cell[] getSpecificNeighbors(int r, int c, int[] dr, int[] dc) {
     Cell[] ret = new Cell[dr.length];
     if (getCell(r, c).getDefaultEdge() == Cell.TOROIDAL
@@ -255,6 +285,17 @@ public abstract class Grid {
     throw new RuntimeException("cell wasn't in the grid");
   }
 
+  /**
+   * Creates a random grid with the given parameters
+   * @param className name of the class of the Cell for the simulation
+   * @param paramMap <String, Double> map of parameters for the simulation
+   * @param stateChances An int[] where the value of the ith element is the probability of state i. Automatically normalizes
+   * @param borderState The state of cells on the border. Can be Cell.INFINITE or Cell.TOROIDAL
+   * @param mask The array neighbor mask for this simulation
+   * @param rows Number of rows for the grid
+   * @param cols Number of columns for the grid
+   * @throws ClassNotFoundException if the className does not exist
+   */
   public void setRandomGrid(String className, Map<String, Double> paramMap, double[] stateChances,
       int borderState, int[] mask, int rows, int cols) throws ClassNotFoundException {
     ArrayList<ArrayList<Cell>> ret = new ArrayList<>();
@@ -271,10 +312,18 @@ public abstract class Grid {
     grid = ret;
   }
 
+  /**
+   * Returns the width of the grid.
+   * @return the width of the grid.
+   */
   public int getWidth() {
     return grid.get(0).size();
   }
 
+  /**
+   * Returns the height of the grid.
+   * @return the height of the grid.
+   */
   public int getHeight() {
     return grid.size();
   }
@@ -295,11 +344,23 @@ public abstract class Grid {
     return grid.get(r).get(c);
   }
 
+  /**
+   * Returns the state of the cell at r,c
+   * @param r row of the cell
+   * @param c column of the cell
+   * @return integer state of the cell
+   */
   public int getState(int r, int c) {
     return grid.get(r).get(c).getState();
   }
 
-  public void placeCell(int r, int c, Cell cell) { //FIXME r/c convention flipped here?
+  /**
+   * Places a cell at r,c in the grid
+   * @param r row of the cell to be placed
+   * @param c column of the cell to be placed
+   * @param cell cell to be placed
+   */
+  public void placeCell(int r, int c, Cell cell) {
     while (c >= grid.size()) {
       grid.add(new ArrayList<>());
     }

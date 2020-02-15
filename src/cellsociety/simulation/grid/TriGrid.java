@@ -5,7 +5,7 @@ import cellsociety.simulation.cell.Cell;
 public class TriGrid extends Grid {
 
   @Override
-  public Cell[] getNeighbors(int r, int c) {
+  protected Cell[] getNeighbors(int r, int c) {
     int[] dr;
     int[] dc;
     if ((r + c) % 2 == 0) {
@@ -32,6 +32,12 @@ public class TriGrid extends Grid {
     return ret;
   }
 
+  /**
+   * Places a cell in the triangular grid. Overridden so the cell knows it's orientation
+   * @param c column of the cell to be placed
+   * @param r row of the cell to be placed
+   * @param cell cell to be placed
+   */
   @Override
   public void placeCell(int c, int r, Cell cell) {
     super.placeCell(c, r, cell);

@@ -5,7 +5,7 @@ import cellsociety.simulation.cell.Cell;
 public class HexGrid extends Grid {
 
   @Override
-  public Cell[] getNeighbors(int r, int c) {
+  protected Cell[] getNeighbors(int r, int c) {
     int[] dr;
     int[] dc;
     if (c % 2 == 0) {
