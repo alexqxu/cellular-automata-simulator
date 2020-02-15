@@ -15,7 +15,7 @@ public abstract class RuleTableCell extends Cell {
   }
 
   @Override
-  void planUpdate(Cell[] neighbors, Queue<Cell> cellQueue) {
+  protected void planUpdate(Cell[] neighbors, Queue<Cell> cellQueue) {
     Map<String, Integer> stateRules = ruleMap.get(state);
     if (stateRules == null) {
       nextState = state;
@@ -33,7 +33,7 @@ public abstract class RuleTableCell extends Cell {
     return surround.toString();
   }
 
-  public Map<Integer, HashMap<String, Integer>> getRuleTableMap(String ruleTable) {
+  protected Map<Integer, HashMap<String, Integer>> getRuleTableMap(String ruleTable) {
     String[] rules = ruleTable.split(" ");
     HashMap<Integer, HashMap<String, Integer>> ret = new HashMap<>();
     for (String rule : rules) {

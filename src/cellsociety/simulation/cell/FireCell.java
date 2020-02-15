@@ -25,7 +25,7 @@ public class FireCell extends Cell {
   }
 
   @Override
-  void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
+  protected void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
     if (pointingUp) {
       neighbors = rotateNeighbors(neighbors);
     }

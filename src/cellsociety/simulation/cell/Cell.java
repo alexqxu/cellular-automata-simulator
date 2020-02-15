@@ -51,14 +51,27 @@ public abstract class Cell {
     return ret;
   }
 
+  /**
+   * Currently unused. Intended to return the parameters for the ground underneath the cell entity (e.g. sugar quantity)
+   * @return a String[] of the ground parameter names
+   */
   public String[] getGroundParams() {
     return groundParams;
   }
 
+  /**
+   * Currently unused. Sets the value of a ground parameter (e.g. sugar value)
+   * @param param parameter to be set
+   * @param value double value of the parameter
+   */
   public void setGroundParam(String param, double value) {
     groundParamMap.put(param, value);
   }
 
+  /**
+   * Swaps a cell's parameters with another, which gets updated on the next update
+   * @param other the other cell to be swapped with
+   */
   public void swap(Cell other) {
     Map<String, Double> tempMap = new HashMap<>();
     for (String s : other.getAllParams()) {
@@ -83,6 +96,11 @@ public abstract class Cell {
    */
   abstract void planUpdate(Cell[] neighbors, Queue<Cell> cellQueue);
 
+  /**
+   * Applies the neighbor mask to a cell before planning the update
+   * @param neighbors
+   * @param cellQueue
+   */
   public void planUpdateFull(Cell[] neighbors, Queue<Cell> cellQueue) {
     applyMask(neighbors);
     planUpdate(neighbors, cellQueue);
@@ -152,31 +170,59 @@ public abstract class Cell {
     return ret;
   }
 
+  /**
+   * Returns if the cell is empty or not. Used to tell if the grid should include this cell in the cell queue for planUpdate
+   * @return if the cell is empty
+   */
   public boolean isEmpty() {
     return state == 0;
   }
 
+  /**
+   * Returns the current state of the cell
+   * @return the integer state of the cell
+   */
   public int getState() {
     return state;
   }
 
+  /**
+   * Sets the state of the cell
+   * @param stat state to be set
+   */
   public void setState(int stat) {
     this.state = stat;
   }
 
+  /**
+   * Returns the default border type of the cell
+   * @return the default border type of the cell
+   */
   public int getDefaultEdge() {
     return defaultEdge;
   }
 
+  /**
+   * Sets the default border type of the cell
+   * @param edge the default border type of the cell
+   */
   public void setDefaultEdge(int edge) {
     defaultEdge = edge;
   }
 
+  /**
+   * Prints out the state of the cell
+   * @return
+   */
   @Override
   public String toString() {
     return "" + getState();
   }
 
+  /**
+   * Increases the state of the cell, looping around to 0 if the current value is the max
+   * @param max the highest allowed state
+   */
   public void incrementState(int max) {
     state = (state + 1) % (max + 1);
   }
@@ -189,14 +235,26 @@ public abstract class Cell {
     return ret;
   }
 
+  /**
+   * Intended for triangles. Tells the cell that it is pointing upwards
+   * @param point whether or not the cell is pointing upwards
+   */
   public void setPointUp(boolean point) {
     pointingUp = point;
   }
 
+  /**
+   * Sets the next state of the cell
+   * @param st the next state of the cell
+   */
   public void setNextState(int st) {
     nextState = st;
   }
 
+  /**
+   * Sets the neighbor mask of the cell
+   * @param msk the mask to be set
+   */
   public void setMask(int[] msk) {
     mask = msk;
   }

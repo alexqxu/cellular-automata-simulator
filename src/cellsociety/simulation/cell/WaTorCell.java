@@ -24,7 +24,7 @@ public class WaTorCell extends Cell {
   }
 
   @Override
-  void planUpdate(Cell[] neighbors, Queue<Cell> cellQueue) {
+  protected void planUpdate(Cell[] neighbors, Queue<Cell> cellQueue) {
     ArrayList<Cell> updatedQueue = new ArrayList<>(cellQueue);
     if (!updatedQueue.contains(this)) {
       return;
@@ -59,6 +59,10 @@ public class WaTorCell extends Cell {
     cellQueue.addAll(updatedQueue);
   }
 
+  /**
+   * Increments the state of the cell, and sets initial conditions if the cell becomes a shark
+   * @param max the highest allowed state
+   */
   @Override
   public void incrementState(int max) {
     super.incrementState(max);
@@ -147,17 +151,20 @@ public class WaTorCell extends Cell {
     }
   }
 
-  @Override
-  public void update() {
-    super.update();
-    nextState = -1;
-  }
-
+  /**
+   * All cells need to be added to the information queue so this always returns true
+   * @return true
+   */
   @Override
   public boolean isEmpty() {
     return true;
   }
 
+
+  /**
+   * Sets the state of the cell, as well as initial conditions
+   * @param stat state to be set
+   */
   @Override
   public void setState(int stat) {
     super.setState(stat);

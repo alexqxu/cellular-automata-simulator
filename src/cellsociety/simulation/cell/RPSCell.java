@@ -23,7 +23,7 @@ public class RPSCell extends Cell {
   }
 
   @Override
-  void planUpdate(Cell[] neighbors, Queue<Cell> cellQueue) {
+  protected void planUpdate(Cell[] neighbors, Queue<Cell> cellQueue) {
     int max = state;
     for (Cell cell : neighbors) {
       max = Math.max(max, cell.state);
@@ -62,11 +62,17 @@ public class RPSCell extends Cell {
   }
 
   /**
-   * Returns true if i beats state
+   * Returns true if i beats state in a rock-paper-scissors duel
    *
-   * @param i
-   * @param st
-   * @return
+   * Given an odd int number of "players", player i beats the floor(num/2) players below it and
+   * is beat by the floor(num/2) players above it.
+   *
+   * Ex: Given 5 players, 4 beats 2 and 3, and is beat by 5 and 1.
+   *
+   * @param i Challenging player
+   * @param st Defending player
+   * @param num The number of players
+   * @return whether or not i beats state
    */
   public static boolean rps(int i, int st, int num) {
     if (st == 0) {

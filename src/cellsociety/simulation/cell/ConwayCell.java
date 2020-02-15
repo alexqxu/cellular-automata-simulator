@@ -16,7 +16,7 @@ public class ConwayCell extends Cell {
 
 
   @Override
-  void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
+  protected void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
     int sum = 0;
     for (int i = 0; i < neighbors.length; i++) {
       sum += neighbors[i].getState();

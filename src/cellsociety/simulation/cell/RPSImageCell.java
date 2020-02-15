@@ -6,7 +6,7 @@ import java.util.Random;
 public class RPSImageCell extends Cell {
 
   @Override
-  void planUpdate(Cell[] neighbors, Queue<Cell> cellQueue) {
+  protected void planUpdate(Cell[] neighbors, Queue<Cell> cellQueue) {
     Random rand = new Random();
     Cell cell = neighbors[rand.nextInt(neighbors.length)];
     int[] myColors = getColors(state);

@@ -24,7 +24,7 @@ public class SegregationCell extends Cell {
   }
 
   @Override
-  void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
+  protected void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
     LinkedList<Cell> cellQueue = new LinkedList<>(emptyQueue);
     Collections.shuffle(cellQueue);
     emptyQueue.clear();

@@ -12,7 +12,7 @@ public class PercolationCell extends Cell {
   }
 
   @Override
-  void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
+  protected void planUpdate(Cell[] neighbors, Queue<Cell> emptyQueue) {
     if (neighbors[0].getState() == WATER_EDGE_STATE) {
       neighbors[0].setState(2); //this is okay because cells with state 3 are dummy cells
     }
