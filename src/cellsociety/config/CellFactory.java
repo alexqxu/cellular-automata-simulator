@@ -1,3 +1,16 @@
+/**
+ * The purpose of this class is to handle the creation of Cell objects,
+ * as defined/requested by the GridFactory class. I think that this code is well-designed
+ * (better designed than before), as this is a completely new class that I refactored/
+ * extracted out of the Config class. This class now specifically only handles the creation
+ * of Cell objects, rather than being in a the Config class that also handles other things
+ * (such as parsing through configuration parameters and creating the Grid by populating it with cells).
+ * This new class does a better job at delegating tasks to different classes and making classes single-purpose.
+ * It is also much shorter and straight-forward compared to what it was before. When used by the GridFactory
+ * class, the CellFactory only needs to be initialized once, and can be repeatedly used to create
+ * cells by calling the makeCell() method.
+ */
+
 package cellsociety.config;
 
 import cellsociety.exceptions.InvalidCellException;

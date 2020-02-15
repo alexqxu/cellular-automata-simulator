@@ -1,3 +1,19 @@
+/**
+ * The purpose of this class is to handle the creation of Grid objects (both random and user-defined),
+ * as defined/requested by the Config class. I think that this code is well-designed
+ * (better designed than before), as this is a completely new class that I refactored/
+ * extracted out of the Config class. This class now specifically only handles the creation
+ * of Grid objects, rather than being in a the Config class that also handles other things
+ * (such as parsing through configuration parameters). This new class does a better job
+ * at delegating tasks to different classes and making classes single-purpose.
+ *
+ * It also has refactored methods that help in the creation of creating the grid, such as
+ * fillRow() and fillRemainingRows().
+ *
+ * When used by the Config class, the GridFactory only needs to be initialized once, and can be
+ * used repeatedly by calling the createGrid() method.
+ */
+
 package cellsociety.config;
 
 import cellsociety.exceptions.InvalidCellException;
