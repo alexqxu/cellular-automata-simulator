@@ -8,12 +8,27 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * This is a refactored utility class that returns cell objects
+ * This is a refactored class that handles cell-making and returns cell objects.
  */
 
 public class CellFactory {
+    private String packagePrefixName = "cellsociety.simulation.";
+    private String myCellPrefixName = packagePrefixName+"cell.";
+    private String myTitle;
+    private Map<String, Double> myParameters;
+    private Set<Integer> myStates;
+    private int myDefaultState;
+    private int myBorderType;
+    private int[] myMask;
 
-    private CellFactory(){}
+    public CellFactory(String title, Map<String, Double> parameters, Set<Integer> states, int defaultState, int borderType, int[] mask){
+        myTitle = title;
+        myParameters = parameters;
+        myStates = states;
+        myDefaultState = defaultState;
+        myBorderType = borderType;
+        myMask = mask;
+    }
 
      /**
      * Creates a cell and sets all relevant parameters to it from the config XML.
@@ -21,11 +36,11 @@ public class CellFactory {
      * @return a cell made from given information
      * @throws InvalidCellException
      */
-    public static Cell makeCell(int state, String cellPrefixName, String myTitle, Map<String, Double> myParameters, Set<Integer> states, int defaultState, int myBorderType, int[] myMask)
+    public Cell makeCell(int state)
             throws InvalidCellException {
         Class cellClass = null;
         try {
-            cellClass = Class.forName(cellPrefixName + myTitle);
+            cellClass = Class.forName(myCellPrefixName + myTitle);
         } catch (ClassNotFoundException e) {
             throw new InvalidCellException(e);
         }
@@ -38,11 +53,11 @@ public class CellFactory {
         for (Map.Entry<String, Double> parameterEntry : myParameters.entrySet()) {
             cell.setParam(parameterEntry.getKey(), parameterEntry.getValue());
         }
-        if(states.contains(state)) {
+        if(myStates.contains(state)) {
             cell.setState(state);
         }
         else{
-            cell.setState(defaultState);
+            cell.setState(myDefaultState);
             throw new InvalidCellException(new RuntimeException());
         }
         cell.setDefaultEdge(myBorderType);

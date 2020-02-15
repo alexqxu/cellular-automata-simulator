@@ -30,8 +30,7 @@ import org.xml.sax.SAXException;
  * @author Alex Xu aqx
  */
 public class Config {
-  public static final double RANDOM_GRID_VARIABLE_VALUE = 0.5;
-  public static final double FIRST_RANDOM_GRID_VARIABLE_VALUE = 0.25;
+
   public static final int INVALID_DIMENSION_THRESHOLD = 1;
   public static final String INVALID_DIMENSION_MESSAGE = "You have requested an invalid Simulation Size in XML: ";
 
@@ -58,15 +57,7 @@ public class Config {
   public static final String BORDER_TYPE_NODE = "BorderType";
   public static final String MASK_NODE_NAME = "Mask";
 
-  private String packagePrefixName = "cellsociety.simulation.";
-  private String gridPrefixName = packagePrefixName+"grid.";
-  private String cellPrefixName = packagePrefixName+"cell.";
-  private String gridSuffix = "Grid";
   private String visualizerSuffix = "Visualizer";
-
-  private String docSetUpConfirmationMessage = "---Document Setup Complete---";
-  private String configSetUpConfirmationMessage = "---Config Info Load Complete---";
-  private String gridConfirmationMessage = "---Grid Created---";
 
   private File myFile;
   private Document doc;
@@ -83,8 +74,9 @@ public class Config {
   private Map<String, Double> myParameters;
   private int defaultState = 0;
   private int myBorderType = 0;
-  private double[] randomGridVariables;
   private int[] myMask;
+
+  private GridFactory myGridFactory;
 
   /**
    * Constructor for the Config object. Sets the file and sets up the documentBuilder. Then loads the file content.
@@ -96,7 +88,6 @@ public class Config {
     if(XMLValidator.validateXMLStructure(file)){
       myFile = file;
       setupDocument();
-      System.out.println(docSetUpConfirmationMessage);
       loadFile();
     }
   }
@@ -183,35 +174,12 @@ public class Config {
   }
 
   /**
-   * Based on the parameters set, creates a grid with a randomized configuration of CELLS
-   * @throws InvalidCellException
-   * @throws InvalidGridException
-   */
-  public void createRandomGrid(int width, int height)  throws InvalidCellException, InvalidGridException{
-    Class gridClass = null;
-    try {
-      gridClass = Class.forName(gridPrefixName + myShape + gridSuffix);
-      myGrid = (Grid) (gridClass.getConstructor().newInstance());
-    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
-      throw new InvalidGridException(e);
-    }
-    try {
-      myGrid.setRandomGrid(myTitle, myParameters, randomGridVariables, myBorderType, myMask, width, height);
-    } catch (ClassNotFoundException e) {
-      throw new InvalidCellException(e);
-    }
-    for (int i: myStates.keySet()) {
-      myGrid.addState(i);
-    }
-  }
-
-  /**
    * Based on the parameters set, creates a grid with a randomized configuration of CELLS (with XML read dimensions)
    * @throws InvalidCellException
    * @throws InvalidGridException
    */
-  public void createRandomGrid() throws InvalidCellException, InvalidGridException{
-    createRandomGrid(myWidth, myHeight);
+  public void createRandomGrid(int width, int height) throws InvalidCellException, InvalidGridException{
+    myGrid = myGridFactory.createRandomGrid(width, height);
   }
 
   /**
@@ -219,25 +187,9 @@ public class Config {
    */
   private void loadFile() throws InvalidShapeException, InvalidGridException, InvalidCellException, InvalidDimensionsException{
     extractConfigInfo();
-    System.out.println(configSetUpConfirmationMessage);
-    setRandomVariables();
-    if(customRequested) {
-      createGrid();
-    }
-    else{
-      createRandomGrid();
-    }
-    System.out.println(gridConfirmationMessage);
+    myGridFactory = new GridFactory(doc, myTitle, myStates.keySet(), myParameters, myShape, myMask, myHeight, myWidth, customRequested);
+    myGrid = myGridFactory.createGrid();
   }
-
-  private void setRandomVariables() {
-    randomGridVariables = new double[myStates.size()];
-    randomGridVariables[0] = FIRST_RANDOM_GRID_VARIABLE_VALUE;
-    for(int i = 1; i<myStates.size(); i++){
-      randomGridVariables[i] = RANDOM_GRID_VARIABLE_VALUE;
-    }
-  }
-
 
   private void setupDocument()
       throws InvalidFileException {
@@ -266,20 +218,14 @@ public class Config {
     if (configNode.getNodeType() == Node.ELEMENT_NODE) {
       Element configElement = (Element) configNode;
       extractTitle(configElement);
-      printTitle();
       extractAuthor(configElement);
-      printAuthor();
       extractShape(configElement);
-      printShape();
       extractBorderType(configElement);
-      printBorderType();
       extractMask(configElement);
-      printMask();
       extractDimensions(configElement);
       extractStates(configElement);
       extractParameters(configElement);
       extractCustom(configElement);
-      printCustom();
     }
   }
 
@@ -302,7 +248,6 @@ public class Config {
         }
       }
     }
-    printParameters();
   }
 
   private void extractStates(Element startingElement) {
@@ -327,7 +272,6 @@ public class Config {
         }
       }
     }
-    printStates();
   }
 
   private void extractDimensions(Element startingElement) throws InvalidDimensionsException {
@@ -343,7 +287,6 @@ public class Config {
       if(myWidth < INVALID_DIMENSION_THRESHOLD){
         throw new InvalidDimensionsException(INVALID_DIMENSION_MESSAGE, myWidth);
       }
-      printDimensions();
     }
   }
 
@@ -393,117 +336,5 @@ public class Config {
 
   private String extractElementValue(Element parentElement, String nodeName) {
     return parentElement.getElementsByTagName(nodeName).item(0).getTextContent();
-  }
-
-  private void printParameters() {
-    System.out.println("All Parameters Set (Debug):");
-    for (Map.Entry name : myParameters.entrySet()) {
-      System.out.println("Name: " + name.getKey() + " & Value: " + name.getValue());
-    }
-  }
-
-  private void printStates() {
-    System.out.println("All States (Debug):");
-    for (Map.Entry stateID : myStates.entrySet()) {
-      System.out.println("State: " + stateID.getKey() + " & Value: " + stateID.getValue());
-    }
-    System.out.println("Default State: " + defaultState);
-  }
-
-  private void printDimensions() {
-    System.out.println("Height:" + myHeight);
-    System.out.println("Width:" + myWidth);
-    System.out.println("Speed:" + mySpeed);
-  }
-
-  private void printTitle() {
-    System.out.println("Simulation Name: " + myTitle);
-  }
-
-  private void printAuthor() {
-    System.out.println("Author: " + myAuthor);
-  }
-
-  private void printShape() {
-    System.out.println("Cell Shape Requested: " + myShape);
-  }
-
-  private void printCustom(){
-    System.out.println("Custom cell locations? " + customRequested);
-  }
-
-  private void printBorderType(){
-    System.out.println("Border Type: " + myBorderType);
-  }
-
-  private void printMask(){
-      System.out.print("Mask applied: ");
-      for(int i : myMask){
-          System.out.print(i + " ");
-      }
-      System.out.println();
-  }
-
-   /**
-   * Based on parameters AND Cell configuration, creates a grid.
-   * @throws InvalidGridException
-   */
-  private void createGrid()
-      throws InvalidGridException {
-    Class gridClass = null;
-    try {
-      gridClass = Class.forName(gridPrefixName + myShape + gridSuffix);
-      myGrid = (Grid) (gridClass.getConstructor().newInstance());
-    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
-      throw new InvalidGridException(e);
-    }
-    int row = 0;
-    NodeList rowNodeList = doc.getElementsByTagName(ROW_NODE_NAME);
-    for (int i = 0; i < rowNodeList.getLength(); i++) {
-      if(i < myHeight) {
-        int col = 0;
-        Node singleRowNode = rowNodeList.item(i);
-        Element singleRowElement = (Element) singleRowNode;
-        NodeList cellsNodeList = singleRowElement.getElementsByTagName(CELL_NODE_NAME);
-
-        for (int k = 0; k < cellsNodeList.getLength(); k++) {
-          if (k < myWidth) {
-            Node singleCellNode = cellsNodeList.item(k);
-            Integer cellState = Integer.valueOf(singleCellNode.getTextContent());
-            Cell myCell = CellFactory.makeCell(cellState, cellPrefixName, myTitle, myParameters, myStates.keySet(), defaultState, myBorderType, myMask);
-            myGrid.placeCell(col, row, myCell);
-            col++;
-          }
-        }
-        fillRow(col, row);
-        row++;
-      }
-    }
-    fillRemainingRows(row);
-    for (int i: myStates.keySet()) {
-      myGrid.addState(i);
-    }
-  }
-
-  /**
-   * Fills the remaining row of cells with cells of the default state, if the XML file does not
-   * specify enough cells for a particular row.
-   *
-   * @param col the starting location in the row
-   * @param row the row to be filled
-   */
-  private void fillRow(int col, int row) {
-    while (col < myWidth) {
-      Cell myCell = CellFactory.makeCell(defaultState, cellPrefixName, myTitle, myParameters, myStates.keySet(), defaultState, myBorderType, myMask);
-      myGrid.placeCell(col, row, myCell);
-      col++;
-    }
-  }
-
-  private void fillRemainingRows(int row){
-    while(row < myHeight){
-      fillRow(0, row);
-      row++;
-    }
   }
 }
