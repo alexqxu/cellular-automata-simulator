@@ -1,19 +1,12 @@
 package cellsociety.config;
 
 import cellsociety.exceptions.*;
-import cellsociety.simulation.cell.Cell;
 import cellsociety.simulation.grid.Grid;
-
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.paint.Color;
-
-import javax.imageio.ImageIO;
-import javax.swing.text.html.parser.Parser;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
