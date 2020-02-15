@@ -13,6 +13,7 @@ import java.util.Map;
 import javafx.scene.paint.Color;
 
 import javax.imageio.ImageIO;
+import javax.swing.text.html.parser.Parser;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -195,12 +196,8 @@ public class Config {
     DocumentBuilder builder = null;
     try {
       builder = factory.newDocumentBuilder();
-    } catch (ParserConfigurationException e) {
-      throw new InvalidFileException(e);
-    }
-    try {
       doc = builder.parse(myFile);
-    } catch (SAXException | IOException e) {
+    } catch (SAXException | IOException | ParserConfigurationException e) {
       throw new InvalidFileException(e);
     }
     doc.getDocumentElement().normalize();
@@ -254,7 +251,6 @@ public class Config {
     Node statesNode = startingElement.getElementsByTagName(STATES_NODE_NAME).item(0);
     if (statesNode.getNodeType() == Node.ELEMENT_NODE) {
       Element statesElement = (Element) statesNode;
-
       extractDefaultState(statesElement);
       NodeList statesNodeList = statesElement.getElementsByTagName(SINGLE_STATE_NODE_NAME);
 
