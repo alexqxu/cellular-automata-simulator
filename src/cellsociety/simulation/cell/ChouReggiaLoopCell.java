@@ -14,14 +14,4 @@ public class ChouReggiaLoopCell extends RuleTableCell {
     ruleTable = RULE_TABLE;
     ruleMap = getRuleTableMap(RULE_TABLE);
   }
-
-  /*@Override
-  protected String getSurrounds(Cell[] neighbors) {
-    StringBuilder surround = new StringBuilder();
-    for (int i = neighbors.length-1; i >= 0; i -= 2) {
-      surround.append(neighbors[i]);
-    }
-    return surround.toString();
-  }*/
-
 }
