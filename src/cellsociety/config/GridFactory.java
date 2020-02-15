@@ -8,7 +8,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +15,9 @@ import java.util.Set;
 /**
  * This is a refactored class for the Code Masterpiece. The purpose of this class is to handle grid-making, which is now separated
  * from the parsing portion of the configuration component.
+ * Depends on CellFactory returning a Cell of a given state properly, and valid values passed into the constructor from the Caller method.
+ * Example: Used on the Config class to create Grid objects.
+ * @author Alex Xu, aqx
  */
 public class GridFactory {
     public static final double RANDOM_GRID_VARIABLE_VALUE = 0.5;
@@ -40,7 +42,7 @@ public class GridFactory {
     private CellFactory myCellFactory;
 
     /**
-     * Constructor for a GridFactory object, which is resposnible for creating a grid based on inputs (acquired from an XML, presumably).
+     * Constructor for a GridFactory object, which is responsible for creating a grid based on inputs (acquired from an XML, presumably).
      * @param doc Document object
      * @param title String representing the Title/type of simulation
      * @param statesKeys A set representing all of the states possible
@@ -67,7 +69,7 @@ public class GridFactory {
 
     /**
      * Returns a grid, either defined or random, based on the value of myCustom, which represents if the user wishes to make a custom grid.
-     * @return
+     * @return Grid
      */
     public Grid createGrid(){
         if(myCustom){
@@ -81,6 +83,8 @@ public class GridFactory {
 
     /**
      * Based on the parameters set, creates a grid with a randomized configuration of CELLS
+     * @param width the width of the grid
+     * @param height the height of the grid
      * @throws InvalidCellException
      * @throws InvalidGridException
      */

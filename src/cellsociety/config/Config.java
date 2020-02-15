@@ -25,7 +25,7 @@ import org.xml.sax.SAXException;
 /**
  * Reads an XML file and sets up the Grid based on it
  * Will throw exceptions if the file is not valid (not an XML file or not of the correct structure)
- * Depends on the XMLValidator working properly to validate XML Structure.
+ * Depends on the XMLValidator working properly to validate XML Structure, and that GridFactory returns a Grid properly.
  * Example: The Visualizer creates a Config object with a File and retrieves a Grid object from the class.
  * @author Alex Xu aqx
  */
