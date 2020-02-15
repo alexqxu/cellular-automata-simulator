@@ -3,6 +3,16 @@ package cellsociety.simulation.cell;
 import java.util.Queue;
 import java.util.Random;
 
+/**
+ * @author Maverick Chung, mc608
+ *
+ * Purpose: Currently unused. Models rock-paper-scissors with an image. States are the decimal representations
+ * of hex RGB values of pixels. If a random neighbor has a higher winning value, that value is absorbed by this cell.
+ *
+ * Assumptions: See Cell
+ *
+ * Dependencies: Cell
+ */
 public class RPSImageCell extends Cell {
 
   @Override

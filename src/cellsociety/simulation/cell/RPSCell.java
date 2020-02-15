@@ -3,6 +3,16 @@ package cellsociety.simulation.cell;
 import java.util.Queue;
 import java.util.Random;
 
+/**
+ * @author Maverick Chung, mc608
+ *
+ * Purpose: Represents cells playing rock-paper-scissors, for any number of states. If a cell is surrounded
+ * by RPS_THRESHHOLD number of a type of cell that beats it, it assumes that state.
+ *
+ * Assumptions: See Cell
+ *
+ * Dependencies: Cell
+ */
 public class RPSCell extends Cell {
 
   public static final String RPS_THRESHHOLD = "RPSThreshhold";

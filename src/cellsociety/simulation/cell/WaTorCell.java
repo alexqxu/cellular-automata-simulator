@@ -5,6 +5,17 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
+
+/**
+ * @author Maverick Chung, mc608
+ *
+ * Purpose: Models predator-prey relationships. Sharks swim about, eating fish. If sharks don't eat in a certain amount
+ * of time, they starve. All entities reproduce after certain amounts of time.
+ *
+ * Assumptions: See Cell. Also, assumes states are 0-2
+ *
+ * Dependencies: Cell
+ */
 public class WaTorCell extends Cell {
 
   public static final String FISH_BREED_TIME = "fishBreedTime";

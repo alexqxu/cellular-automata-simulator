@@ -2,6 +2,15 @@ package cellsociety.simulation.cell;
 
 import java.util.Queue;
 
+/**
+ * @author Maverick Chung, mc608
+ *
+ * Purpose: Implements Conway's Game of Life.
+ *
+ * Assumptions: See Cell. Additionally, assumes state is only 0 or 1.
+ *
+ * Dependencies: Cell
+ */
 public class ConwayCell extends Cell {
 
   /**

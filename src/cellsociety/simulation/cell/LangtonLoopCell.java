@@ -1,5 +1,16 @@
 package cellsociety.simulation.cell;
 
+
+/**
+ * @author Maverick Chung, mc608
+ *
+ * Purpose: Represents a self-replicating machine with a rule table developed by Langtom. Reads the rules
+ * from the rule table listed below.
+ *
+ * Assumptions: See Cell
+ *
+ * Dependencies: Cell
+ */
 public class LangtonLoopCell extends RuleTableCell {
 
   public static final String RULE_TABLE = "000000 000012 000020 000030 000050 000063 000071 000112 "

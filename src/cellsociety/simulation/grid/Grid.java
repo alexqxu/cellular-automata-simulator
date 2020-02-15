@@ -12,6 +12,16 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * @author Maverick Chung, mc608
+ *
+ * Purpose: Holds the cells in a two dimensional array. The relative positions in the arrays are used to
+ * determine the neighbors of each cell for updating the states of the cells.
+ *
+ * Assumptions: All cells are non-null and are of the same type. All methods assume row, column values are valid.
+ *
+ * Dependencies: Cell, FireCell (used as default if things go wrong), InvalidCellException
+ */
 public abstract class Grid {
 
   public static final String CELL_PREFIX = "cellsociety.simulation.cell.";

@@ -4,6 +4,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 
+
+/**
+ * @author Maverick Chung, mc608
+ *
+ * Purpose: Represents a simulation with a rule table.
+ *
+ * The rule table is of the format : C NESW C'
+ * Where C is the current state of the cell, NESW are the cardinal von Neumann neighbors, and C' is the
+ * new state of the cell given those conditions. Additionally, the cells are rotationally symmetric.
+ *
+ * Assumptions: See Cell. Additionally, assumes a valid rule table
+ *
+ * Dependencies: Cell
+ */
 public abstract class RuleTableCell extends Cell {
 
   protected String ruleTable;

@@ -2,6 +2,17 @@ package cellsociety.simulation.cell;
 
 import java.util.Queue;
 
+
+/**
+ * @author Maverick Chung, mc608
+ *
+ * Purpose: Represents a percolating system. Open cells near percolated cells become percolated.
+ * Blocked states remain blocked indefinitely
+ *
+ * Assumptions: See Cell. Additionally, assumes states are 0-2
+ *
+ * Dependencies: Cell
+ */
 public class PercolationCell extends Cell {
 
   public static final int WATER_EDGE_STATE = 3;

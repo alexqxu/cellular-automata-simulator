@@ -2,6 +2,16 @@ package cellsociety.simulation.grid;
 
 import cellsociety.simulation.cell.Cell;
 
+/**
+ * @author Maverick Chung, mc608
+ *
+ * Purpose: Holds cells in a grid and calculates their neighbors as though they were in a triangular grid.
+ * The top-left cell is treated as though its point was upwards, thus, if (rows+cols) is even, the cell points upwards
+ *
+ * Assumptions: See Grid
+ *
+ * Dependencies: Grid, Cell
+ */
 public class TriGrid extends Grid {
 
   @Override

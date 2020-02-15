@@ -6,6 +6,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
+
+/**
+ * @author Maverick Chung, mc608
+ *
+ * Purpose: Keeps track of the cell's state, its next state, its simulation parameters, and the ground parameters.
+ * Calculates the next state based on simulation rules, its neighbors, and other grid info depending on simulation.
+ *
+ * Assumptions: States are non-negative and contiguous. Default edge is non-negative, Cell.TOROIDAL,
+ * or Cell.INFINITE. All parameters are representable by double values.
+ *
+ * Dependencies: None
+ */
 public abstract class Cell {
 
   public static final int TOROIDAL = -1;

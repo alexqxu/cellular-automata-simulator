@@ -1,5 +1,15 @@
 package cellsociety.simulation.cell;
 
+/**
+ * @author Maverick Chung, mc608
+ *
+ * Purpose: Represents a self-replicating machine with a rule table developed by Byl. Reads the rules
+ * from the rule table listed below.
+ *
+ * Assumptions: See Cell
+ *
+ * Dependencies: Cell
+ */
 public class BylLoopCell extends RuleTableCell {
 
   public static final String RULE_TABLE = "000000 000010 000031 000420 000110 000120 000311 000330 "

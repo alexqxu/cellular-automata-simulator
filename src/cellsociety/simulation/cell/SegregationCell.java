@@ -4,6 +4,17 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
 
+
+/**
+ * @author Maverick Chung, mc608
+ *
+ * Purpose: Models segregation. Cells are "happy" with a certain percent of like neighbors, and will move about
+ * to open cells until they are "happy".
+ *
+ * Assumptions: See Cell. Additionally, assumes states are 0-2.
+ *
+ * Dependencies: Cell
+ */
 public class SegregationCell extends Cell {
 
   public static final String HAPPINESS_THRESH = "happinessThresh";

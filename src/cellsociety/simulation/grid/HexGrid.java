@@ -2,6 +2,16 @@ package cellsociety.simulation.grid;
 
 import cellsociety.simulation.cell.Cell;
 
+/**
+ * @author Maverick Chung, mc608
+ *
+ * Purpose: Holds cells in a grid and calculates their neighbors as though they were in a hexagonal grid.
+ * Uses "even-q" storage: The cells are stored in a grid, and even columns are shifted downwards to create the hexes.
+ *
+ * Assumptions: See Grid
+ *
+ * Dependencies: Grid, Cell
+ */
 public class HexGrid extends Grid {
 
   @Override

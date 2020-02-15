@@ -1,5 +1,16 @@
 package cellsociety.simulation.cell;
 
+
+/**
+ * @author Maverick Chung, mc608
+ *
+ * Purpose: Represents a self-replicating machine with a rule table developed by Chou and Reggia.
+ * Reads the rules from the rule table listed below.
+ *
+ * Assumptions: See Cell
+ *
+ * Dependencies: Cell
+ */
 public class ChouReggiaLoopCell extends RuleTableCell {
 
   public static final String RULE_TABLE = "000000 000440 000547 000100 000110 000330 004040 004445 "

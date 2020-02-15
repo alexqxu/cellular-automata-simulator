@@ -3,6 +3,17 @@ package cellsociety.simulation.cell;
 import java.util.Queue;
 import java.util.Random;
 
+
+/**
+ * @author Maverick Chung, mc608
+ *
+ * Purpose: Represents fire in a forest. Fire cells can set fire to adjacent tree cells, turning them into
+ * empty cells. Fire burns out after 1 timestep, becoming an empty cell.
+ *
+ * Assumptions: See Cell. Additionally, assumes states are 0-2.
+ *
+ * Dependencies: Cell
+ */
 public class FireCell extends Cell {
 
   public static final String PROB_CATCH = "probCatch";
