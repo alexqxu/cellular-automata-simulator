@@ -3,10 +3,12 @@ simulation
 
 This project implements a cellular automata simulator.
 
-Names:
-Alex Oesterling, axo
-Alex Xu, aqx
-Maverick Chung, mc608
+Creators:
+
+* Alex Oesterling
+* Alex Xu
+* Maverick Chung
+
 ### Timeline
 
 - Start Date:   
